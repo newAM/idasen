@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright 2019 Alex M.
+# Copyright 2020 Alex M.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,7 @@
 # SOFTWARE.
 ###############################################################################
 
+from typing import Optional
 import datetime
 import os
 import sys
@@ -34,6 +35,7 @@ from idasen.cli import get_parser  # noqa: E402
 
 # Sphinx extensions
 extensions = [
+    "sphinx.ext.linkcode",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",  # google style docstrings
 ]
@@ -73,3 +75,12 @@ html_context = {
 parser = get_parser()
 with open(os.path.join(this_dir, "cli.txt"), "w") as f:
     parser.print_help(f)
+
+
+def linkcode_resolve(domain: str, info: dict) -> Optional[str]:
+    if domain != "py":
+        return None
+    if not info["module"]:
+        return None
+    if info["module"] == "idasen":
+        return f"https://github.com/newAM/idasen/blob/v{version}/idasen/__init__.py"

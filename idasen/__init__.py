@@ -49,7 +49,6 @@ class IdasenDesk:
     Note:
         There is no locking to prevent you from running multiple movement
         coroutines simultaneously.
-        Locking may need to be implemented by the consumer of this library.
     """
 
     #: Minimum desk height in meters.
