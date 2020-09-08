@@ -1,0 +1,64 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: "1.0.10"
+      - name: Poetry Install
+        run: poetry install
+      - name: Run flake8
+        run: poetry run flake8
+      - name: Run black
+        run: poetry run black --check .
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: "1.0.10"
+      - name: Poetry Install
+        run: poetry install
+      - name: Install bluetooth
+        run: sudo apt install bluetooth
+      - name: Run sphinx
+        run: poetry run sphinx-build -W -b html docs public
+
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: "1.0.10"
+      - name: Install bluetooth
+        run: sudo apt install bluetooth
+      - name: Poetry Install
+        run: poetry install
+      - name: Run pytest
+        run: poetry run pytest -vvv --cov=idasen
+      - name: Upload Coverage
+        run: poetry run coveralls
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
+          COVERALLS_PARALLEL: true
