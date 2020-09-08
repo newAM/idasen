@@ -55,7 +55,7 @@ jobs:
       - name: Poetry Install
         run: poetry install
       - name: Run pytest
-        run: poetry run pytest -vvv --cov=idasen
+        run: poetry run pytest -vvv --cov=idasen --doctest-modules
       - name: Upload Coverage
         run: poetry run coveralls
         env:

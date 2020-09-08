@@ -49,6 +49,15 @@ class IdasenDesk:
     Note:
         There is no locking to prevent you from running multiple movement
         coroutines simultaneously.
+
+    Example:
+        Basic Usage::
+
+            from idasen import IdasenDesk
+
+
+            async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+                # call methods here...
     """
 
     #: Minimum desk height in meters.
@@ -88,6 +97,12 @@ class IdasenDesk:
 
         Returns:
             Boolean representing connection status.
+
+        >>> async def example() -> bool:
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         return await desk.is_connected()
+        >>> asyncio.run(example())
+        True
         """
         try:
             return await self._client.is_connected()
@@ -106,6 +121,11 @@ class IdasenDesk:
 
         This command moves the desk upwards for a fixed duration
         (approximate one second) as set by your desk controller.
+
+        >>> async def example():
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         await desk.move_up()
+        >>> asyncio.run(example())
         """
         await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_UP, response=False)
 
@@ -115,6 +135,11 @@ class IdasenDesk:
 
         This command moves the desk downwards for a fixed duration
         (approximate one second) as set by your desk controller.
+
+        >>> async def example():
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         await desk.move_down()
+        >>> asyncio.run(example())
         """
         await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_DOWN, response=False)
 
@@ -127,6 +152,11 @@ class IdasenDesk:
 
         Raises:
             ValueError: Target exceeds maximum or minimum limits.
+
+        >>> async def example():
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         await desk.move_to_target(1.1)
+        >>> asyncio.run(example())
         """
         if target > self.MAX_HEIGHT:
             raise ValueError(
@@ -167,5 +197,12 @@ class IdasenDesk:
 
         Returns:
             Desk height in meters.
+
+        >>> async def example() -> float:
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         await desk.move_to_target(1.0)
+        ...         return await desk.get_height()
+        >>> asyncio.run(example())
+        1.0
         """
         return _bytes_to_meters(await self._client.read_gatt_char(_UUID_HEIGHT))
