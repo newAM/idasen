@@ -1,7 +1,7 @@
 idasen
 ######
 
-|PyPi Version| |Build Status| |Documentation Status| |Coverage Status| |Black|
+|PyPi Version| |Build Status| |Documentation Status| |Black|
 
 This is a heavily modified fork of `rhyst/idasen-controller`_.
 
@@ -109,9 +109,7 @@ Assuming the config file is populated to move the desk to sitting position:
    :target: https://badge.fury.io/py/idasen
 .. |Build Status| image:: https://github.com/newAM/idasen/workflows/Tests/badge.svg
    :target: https://github.com/newAM/idasen/actions
-.. |Coverage Status| image:: https://coveralls.io/repos/github/newAM/idasen/badge.svg?branch=master
-   :target: https://coveralls.io/github/newAM/idasen?branch=master
 .. |Documentation Status| image:: https://readthedocs.org/projects/idasen/badge/?version=latest
    :target: https://idasen.readthedocs.io/en/latest/?badge=latest
 .. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-	:target: https://github.com/psf/black
+   :target: https://github.com/psf/black
