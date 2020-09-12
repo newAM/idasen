@@ -1,6 +1,13 @@
 Change Log
 ##########
 
+Unreleased
+**********
+
+Changed
+=======
+- Added URL to ``yaml`` file created with ``idasen init``.
+
 `0.1.0`_
 ********
 - Initial release

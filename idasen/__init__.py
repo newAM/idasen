@@ -120,7 +120,7 @@ class IdasenDesk:
         Move the desk upwards.
 
         This command moves the desk upwards for a fixed duration
-        (approximate one second) as set by your desk controller.
+        (approximately one second) as set by your desk controller.
 
         >>> async def example():
         ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
@@ -134,7 +134,7 @@ class IdasenDesk:
         Move the desk downwards.
 
         This command moves the desk downwards for a fixed duration
-        (approximate one second) as set by your desk controller.
+        (approximately one second) as set by your desk controller.
 
         >>> async def example():
         ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:

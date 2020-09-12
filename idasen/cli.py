@@ -104,6 +104,9 @@ async def init(args: argparse.Namespace) -> int:
     else:
         os.makedirs(idasen_config_directory, exist_ok=True)
         with open(idasen_config_path, "w") as f:
+            f.write(
+                "# https://idasen.readthedocs.io/en/latest/index.html#configuration\n"
+            )
             yaml.dump(default_config, f)
         sys.stderr.write(f"Created new configuration file at: {idasen_config_path}")
 
