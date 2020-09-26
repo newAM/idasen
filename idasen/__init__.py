@@ -73,23 +73,12 @@ class IdasenDesk:
         self._mac = mac
         self._client = BleakClient(self._mac)
 
-        # set by callbacks from notifications
-        self._height: Optional[float] = None
-
     async def __aenter__(self):
         await self._client.__aenter__()
-        await self._client.start_notify(_UUID_HEIGHT, self._height_callback)
         return self
 
     async def __aexit__(self, *args, **kwargs) -> Optional[bool]:
         return await self._client.__aexit__(*args, **kwargs)
-
-    def _height_callback(self, uuid: str, data: bytearray):
-        if uuid == _UUID_HEIGHT:
-            self._height = _bytes_to_meters(data)
-            self._logger.debug(f"updated height: {self._height}")
-        else:
-            self._logger.error(f"got a callback from an unknown source {uuid=} {data=}")
 
     async def is_connected(self) -> bool:
         """
