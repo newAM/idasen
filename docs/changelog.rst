@@ -7,6 +7,7 @@ Unreleased
 Changed
 =======
 - Added URL to ``yaml`` file created with ``idasen init``.
+- Updated bleak dependency to 0.8.0
 
 `0.1.0`_
 ********

@@ -104,11 +104,7 @@ class IdasenDesk:
         >>> asyncio.run(example())
         True
         """
-        try:
-            return await self._client.is_connected()
-        # https://github.com/hbldh/bleak/issues/259
-        except AttributeError:
-            return False
+        return await self._client.is_connected()
 
     @property
     def mac(self) -> str:

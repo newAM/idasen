@@ -17,6 +17,10 @@ def event_loop() -> AbstractEventLoop:
 class MockBleakClient:
     """ Mocks the bleak client for unit testing. """
 
+    def __init__(self):
+        self._height = 1.0
+        self._connected = False
+
     async def __aenter__(self):
         self._height = 1.0
         self._connected = True
