@@ -200,6 +200,7 @@ def main(args: Optional[List[str]] = None):
         formatter = logging.Formatter("{levelname} {name} {message}", style="{")
         handler.setFormatter(formatter)
         root_logger.addHandler(handler)
+        root_logger.setLevel(level)
 
     func = subcommand_to_callable(args.sub)
 
