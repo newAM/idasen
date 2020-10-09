@@ -1,4 +1,5 @@
 from bleak import BleakClient
+from bleak import discover
 from typing import Dict
 from typing import Optional
 from typing import Tuple
@@ -191,3 +192,15 @@ class IdasenDesk:
         1.0
         """
         return _bytes_to_meters(await self._client.read_gatt_char(_UUID_HEIGHT))
+
+    @classmethod
+    async def discover(cls) -> Optional[str]:
+        """Try to find desk's mac addr by discovering currently connected devices."""
+        try:
+            devices = await discover()
+        except Exception:
+            return None
+        return next(
+            (device.address for device in devices if device.name.startswith("Desk")),
+            None,
+        )

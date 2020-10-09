@@ -102,6 +102,12 @@ async def init(args: argparse.Namespace) -> int:
         sys.stderr.write("Use --force to overwrite existing configuration.\n")
         return 1
     else:
+        mac = await IdasenDesk.discover()
+        if mac:
+            sys.stderr.write(f"Discovered desk's mac address: {mac}")
+            default_config["mac_address"] = mac
+        else:
+            sys.stderr.write("Failed to discover desk's mac address")
         os.makedirs(idasen_config_directory, exist_ok=True)
         with open(idasen_config_path, "w") as f:
             f.write(
@@ -210,3 +216,7 @@ def main(args: Optional[List[str]] = None):
         rc = 0
 
     sys.exit(rc)
+
+
+if __name__ == "__main__":
+    main()

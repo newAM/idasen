@@ -42,7 +42,7 @@ Then install all the packages using poetry install:
 
     poetry install
 
-To install this as a command avaliable from the system build the package then
+To install this as a command available from the system build the package then
 install it with pip:
 
 
@@ -54,7 +54,7 @@ install it with pip:
 Configuration
 *************
 Configuration that is not expected to change frequency can be provided via a
-YAML configuraiton file located at ``~/.config/idasen/idasen.yaml``.
+YAML configuration file located at ``~/.config/idasen/idasen.yaml``.
 
 You can use this command to initialize a new configuartion file:
 
@@ -68,7 +68,8 @@ Configuartion options:
 * ``stand_height`` - The standing height from the floor of the desk in meters.
 * ``sit_height`` - The standing height from the floor of the desk in meters.
 
-Device MAC addresses can be found using ``blueoothctl`` and blueooth adapter
+The program will try to find the device address, but if it fails, it has to be done manually.
+Device MAC addresses can be found using ``blueoothctl`` and bluetooth adapter
 names can be found with ``hcitool dev`` on linux.
 
 Usage
