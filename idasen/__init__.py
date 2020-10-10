@@ -195,7 +195,12 @@ class IdasenDesk:
 
     @classmethod
     async def discover(cls) -> Optional[str]:
-        """Try to find desk's mac addr by discovering currently connected devices."""
+        """
+        Try to find the desk's MAC address by discovering currently connected devices.
+
+        Returns:
+            MAC address if found, ``None`` if not found.
+        """
         try:
             devices = await discover()
         except Exception:
