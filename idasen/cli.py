@@ -103,11 +103,11 @@ async def init(args: argparse.Namespace) -> int:
         return 1
     else:
         mac = await IdasenDesk.discover()
-        if mac:
-            sys.stderr.write(f"Discovered desk's mac address: {mac}")
+        if mac is not None:
+            sys.stderr.write(f"Discovered desk's MAC address: {mac}")
             default_config["mac_address"] = mac
         else:
-            sys.stderr.write("Failed to discover desk's mac address")
+            sys.stderr.write("Failed to discover desk's MAC address")
         os.makedirs(idasen_config_directory, exist_ok=True)
         with open(idasen_config_path, "w") as f:
             f.write(
@@ -196,17 +196,16 @@ def main(args: Optional[List[str]] = None):
     from_config(args, config, parser, "stand_height")
     from_config(args, config, parser, "sit_height")
 
-    if args.sub != "init":
-        level = count_to_level(args.verbose)
+    level = count_to_level(args.verbose)
 
-        root_logger = logging.getLogger()
+    root_logger = logging.getLogger()
 
-        handler = logging.StreamHandler(stream=sys.stderr)
-        handler.setLevel(level)
-        formatter = logging.Formatter("{levelname} {name} {message}", style="{")
-        handler.setFormatter(formatter)
-        root_logger.addHandler(handler)
-        root_logger.setLevel(level)
+    handler = logging.StreamHandler(stream=sys.stderr)
+    handler.setLevel(level)
+    formatter = logging.Formatter("{levelname} {name} {message}", style="{")
+    handler.setFormatter(formatter)
+    root_logger.addHandler(handler)
+    root_logger.setLevel(level)
 
     func = subcommand_to_callable(args.sub)
 
