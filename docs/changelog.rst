@@ -4,6 +4,17 @@ Change Log
 Unreleased
 **********
 
+`0.3.0`_ 2020-10-10
+*******************
+
+Added
+=====
+- Added ``discover`` class method to ``IdasenDesk``.
+
+Changed
+=======
+- The ``init`` subcommand will now attempt to discover the MAC address.
+
 `0.2.1`_ 2020-10-07
 *******************
 
@@ -23,6 +34,7 @@ Changed
 *******************
 - Initial release
 
+.. _0.3.0: https://github.com/newAM/idasen/releases/tag/v0.3.0
 .. _0.2.1: https://github.com/newAM/idasen/releases/tag/v0.2.1
 .. _0.2.0: https://github.com/newAM/idasen/releases/tag/v0.2.0
 .. _0.1.0: https://github.com/newAM/idasen/releases/tag/v0.1.0
