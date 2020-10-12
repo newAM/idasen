@@ -24,15 +24,22 @@ DEFAULT_CONFIG = {
 CONFIG_SCHEMA = vol.Schema(
     {
         "mac_address": vol.All(str, vol.Length(min=17, max=17)),
-        "positions": {str: vol.All(
-            vol.Any(float, int),
-            vol.Range(min=IdasenDesk.MIN_HEIGHT, max=IdasenDesk.MAX_HEIGHT),
-        )}
+        "positions": {
+            str: vol.All(
+                vol.Any(float, int),
+                vol.Range(min=IdasenDesk.MIN_HEIGHT, max=IdasenDesk.MAX_HEIGHT),
+            )
+        },
     },
     extra=False,
 )
 
 RESERVED_NAMES = {"init", "monitor", "height", "save", "delete"}
+
+
+def save_config(config: dict, path: str = IDASEN_CONFIG_PATH):
+    with open(path, "w") as f:
+        yaml.dump(config, f)
 
 
 def load_config(path: str = IDASEN_CONFIG_PATH) -> dict:
@@ -46,11 +53,14 @@ def load_config(path: str = IDASEN_CONFIG_PATH) -> dict:
     # convert old config file format
     if "positions" not in config:
         config["positions"] = {}
-        config["positions"]["sit"] = config.pop("sit_height", DEFAULT_CONFIG["positions"]["sit"])
-        config["positions"]["stand"] = config.pop("stand_height", DEFAULT_CONFIG["positions"]["stand"])
+        config["positions"]["sit"] = config.pop(
+            "sit_height", DEFAULT_CONFIG["positions"]["sit"]
+        )
+        config["positions"]["stand"] = config.pop(
+            "stand_height", DEFAULT_CONFIG["positions"]["stand"]
+        )
 
-        with open(path, "w") as f:
-            yaml.dump(config, f)
+        save_config(config, path)
 
     try:
         return CONFIG_SCHEMA(config)
@@ -78,6 +88,10 @@ def get_parser(config: dict) -> argparse.ArgumentParser:
     height_parser = sub.add_parser("height", help="Get the desk height.")
     monitor_parser = sub.add_parser("monitor", help="Monitor the desk position.")
     init_parser = sub.add_parser("init", help="Initialize a new configuration file.")
+    save_parser = sub.add_parser("save", help="Save current desk position.")
+    save_parser.add_argument("name", help="Position name")
+    delete_parser = sub.add_parser("delete", help="Remove position with given name.")
+    delete_parser.add_argument("name", help="Position name")
 
     positions = config.get("positions", {})
     for name, value in positions.items():
@@ -93,6 +107,8 @@ def get_parser(config: dict) -> argparse.ArgumentParser:
 
     add_common_args(height_parser)
     add_common_args(monitor_parser)
+    add_common_args(save_parser)
+    add_common_args(delete_parser)
 
     return parser
 
@@ -120,7 +136,7 @@ async def init(args: argparse.Namespace) -> int:
     return 0
 
 
-async def monitor(args: argparse.Namespace) -> int:
+async def monitor(args: argparse.Namespace) -> None:
     try:
         async with IdasenDesk(args.mac_address) as desk:
             previous_height = 0.0
@@ -140,9 +156,28 @@ async def height(args: argparse.Namespace):
         sys.stdout.write(f"{height:.3f} meters\n")
 
 
-async def move_to(args: argparse.Namespace, position: float):
+async def move_to(args: argparse.Namespace, position: float) -> None:
     async with IdasenDesk(args.mac_address) as desk:
         await desk.move_to_target(target=position)
+
+
+async def save(args: argparse.Namespace, config: dict) -> None:
+    async with IdasenDesk(args.mac_address) as desk:
+        height = await desk.get_height()
+
+    config["positions"][args.name] = height
+    save_config(config)
+
+    sys.stdout.write(f"Saved position '{args.name}' with height: {height}m.")
+
+
+async def delete(args: argparse.Namespace, config: dict) -> None:
+    position = config["positions"].pop(args.name, None)
+    if position is None:
+        sys.stderr.write(f"Position with name '{args.name}' doesn't exist.")
+    else:
+        save_config(config)
+        sys.stdout.write(f"Position with name '{args.name}' removed.")
 
 
 def from_config(
@@ -175,6 +210,10 @@ def subcommand_to_callable(sub: str, config: dict) -> Callable:
         return monitor
     elif sub == "height":
         return height
+    elif sub == "save":
+        return functools.partial(save, config=config)
+    elif sub == "delete":
+        return functools.partial(delete, config=config)
     elif sub in config.get("positions", {}):
         position = config["positions"][sub]
         return functools.partial(move_to, position=position)
