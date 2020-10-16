@@ -31,7 +31,7 @@ repo_root = os.path.abspath(os.path.join(this_dir, ".."))
 if repo_root not in sys.path:
     sys.path.insert(0, repo_root)
 
-from idasen.cli import get_parser  # noqa: E402
+from idasen.cli import get_parser, DEFAULT_CONFIG  # noqa: E402
 
 # Sphinx extensions
 extensions = [
@@ -72,7 +72,7 @@ html_context = {
     "github_repo": project,
 }
 
-parser = get_parser()
+parser = get_parser(DEFAULT_CONFIG)
 with open(os.path.join(this_dir, "cli.txt"), "w") as f:
     parser.print_help(f)
 

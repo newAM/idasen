@@ -1,4 +1,5 @@
 from idasen import cli
+from idasen.cli import DEFAULT_CONFIG
 from idasen.cli import count_to_level
 from idasen.cli import from_config
 from idasen.cli import get_parser
@@ -17,7 +18,7 @@ import yaml
 
 
 def test_get_parser_smoke():
-    assert isinstance(get_parser(), argparse.ArgumentParser)
+    assert isinstance(get_parser(DEFAULT_CONFIG), argparse.ArgumentParser)
 
 
 def test_load_config_no_file():
@@ -106,7 +107,7 @@ seen_it = []
 def test_subcommand_to_callable(sub: str):
     global seen_it
 
-    func = subcommand_to_callable(sub)
+    func = subcommand_to_callable(sub, DEFAULT_CONFIG)
     assert callable(func)
     assert func not in seen_it
     seen_it.append(func)
