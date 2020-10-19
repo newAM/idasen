@@ -168,16 +168,16 @@ async def save(args: argparse.Namespace, config: dict) -> None:
     config["positions"][args.name] = height
     save_config(config)
 
-    sys.stdout.write(f"Saved position '{args.name}' with height: {height}m.")
+    sys.stdout.write(f"Saved position '{args.name}' with height: {height}m.\n")
 
 
 async def delete(args: argparse.Namespace, config: dict) -> None:
     position = config["positions"].pop(args.name, None)
     if position is None:
-        sys.stderr.write(f"Position with name '{args.name}' doesn't exist.")
+        sys.stderr.write(f"Position with name '{args.name}' doesn't exist.\n")
     else:
         save_config(config)
-        sys.stdout.write(f"Position with name '{args.name}' removed.")
+        sys.stdout.write(f"Position with name '{args.name}' removed.\n")
 
 
 def from_config(
