@@ -12,6 +12,7 @@ Added
 Changed
 =======
 - Changed the configuration file format, see the README for details.
+- Updated bleak dependency to 0.9.0.
 
 Fixed
 =====
