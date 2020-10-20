@@ -115,6 +115,7 @@ def get_parser(config: dict) -> argparse.ArgumentParser:
         help="Overwrite any existing configuration files.",
     )
 
+    add_common_args(init_parser)
     add_common_args(height_parser)
     add_common_args(monitor_parser)
     add_common_args(save_parser)
