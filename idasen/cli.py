@@ -63,10 +63,20 @@ def load_config(path: str = IDASEN_CONFIG_PATH) -> dict:
         save_config(config, path)
 
     try:
-        return CONFIG_SCHEMA(config)
+        config = CONFIG_SCHEMA(config)
     except vol.Invalid as e:
         sys.stderr.write(f"Invalid configuration: {e}\n")
         sys.exit(1)
+    else:
+        for position in config["positions"]:
+            if position in RESERVED_NAMES:
+                sys.stderr.write(
+                    "Invalid configuration, "
+                    f"position with name '{position}' is a reserved name.\n"
+                )
+                sys.exit(1)
+
+        return config
 
 
 def add_common_args(parser: argparse.ArgumentParser):
@@ -161,7 +171,11 @@ async def move_to(args: argparse.Namespace, position: float) -> None:
         await desk.move_to_target(target=position)
 
 
-async def save(args: argparse.Namespace, config: dict) -> None:
+async def save(args: argparse.Namespace, config: dict) -> int:
+    if args.name in RESERVED_NAMES:
+        sys.stderr.write(f"Position with name '{args.name}' is a reserved name.\n")
+        return 1
+
     async with IdasenDesk(args.mac_address) as desk:
         height = await desk.get_height()
 
@@ -169,15 +183,21 @@ async def save(args: argparse.Namespace, config: dict) -> None:
     save_config(config)
 
     sys.stdout.write(f"Saved position '{args.name}' with height: {height}m.\n")
+    return 0
 
 
-async def delete(args: argparse.Namespace, config: dict) -> None:
+async def delete(args: argparse.Namespace, config: dict) -> int:
     position = config["positions"].pop(args.name, None)
-    if position is None:
+    if args.name in RESERVED_NAMES:
+        sys.stderr.write(f"Position with name '{args.name}' is a reserved name.\n")
+        return 1
+    elif position is None:
         sys.stderr.write(f"Position with name '{args.name}' doesn't exist.\n")
     else:
         save_config(config)
         sys.stdout.write(f"Position with name '{args.name}' removed.\n")
+
+    return 0
 
 
 def from_config(

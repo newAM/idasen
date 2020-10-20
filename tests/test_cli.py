@@ -1,6 +1,7 @@
 from idasen import cli
-from idasen.cli import DEFAULT_CONFIG
+from idasen import IdasenDesk
 from idasen.cli import count_to_level
+from idasen.cli import DEFAULT_CONFIG
 from idasen.cli import from_config
 from idasen.cli import get_parser
 from idasen.cli import init
@@ -34,6 +35,24 @@ def test_load_config_invalid_schema(tmpdir: str):
         load_config(file_path)
 
 
+def test_load_config_reserved_position(tmpdir: str):
+    file_path = os.path.join(tmpdir, "config.yaml")
+    config = {"mac_address": "AA:AA:AA:AA:AA:AA", "positions": {"sit": 0.90}}
+
+    with open(file_path, "w") as f:
+        yaml.dump(config, f)
+
+    assert load_config(file_path) == config
+
+    config["positions"]["init"] = 0.90
+
+    with open(file_path, "w") as f:
+        yaml.dump(config, f)
+
+    with pytest.raises(SystemExit):
+        load_config(file_path)
+
+
 @pytest.mark.asyncio
 async def test_init_exists_no_force():
     with mock.patch.object(os.path, "isfile", return_value=True):
@@ -44,7 +63,9 @@ async def test_init_exists_no_force():
 async def test_init():
     with mock.patch.object(os.path, "isfile", return_value=True), mock.patch.object(
         yaml, "dump"
-    ) as dump_mock, mock.patch("builtins.open"):
+    ) as dump_mock, mock.patch("builtins.open"), mock.patch.object(
+        IdasenDesk, "discover"
+    ):
         assert await init(args=SimpleNamespace(force=True)) == 0
         dump_mock.assert_called_once()
 
