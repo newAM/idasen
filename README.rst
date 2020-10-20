@@ -42,14 +42,13 @@ Then install all the packages using poetry install:
 
     poetry install
 
-To install this as a command available from the system build the package then
-install it with pip:
+To install this package locally build it then install with pip:
 
 
 .. code-block:: bash
 
     poetry build
-    python3.8 -m pip install dist/idasen-0.2.0-py3-none-any.whl
+    python3.8 -m pip install dist/idasen-0.4.0-py3-none-any.whl
 
 Configuration
 *************
@@ -62,15 +61,24 @@ You can use this command to initialize a new configuartion file:
 
     idasen init
 
+.. code-block:: yaml
+
+    mac_address: AA:AA:AA:AA:AA:AA
+    positions:
+        sit: 0.75
+        stand: 1.1
+
 Configuartion options:
 
 * ``mac_address`` - The MAC address of the desk. This is required.
-* ``stand_height`` - The standing height from the floor of the desk in meters.
-* ``sit_height`` - The standing height from the floor of the desk in meters.
+* ``positions`` - A dictionary of positions with values of desk height from the
+  floor in meters, ``sit`` and ``stand`` are provided as examples.
 
-The program will try to find the device address, but if it fails, it has to be done manually.
-Device MAC addresses can be found using ``blueoothctl`` and bluetooth adapter
-names can be found with ``hcitool dev`` on linux.
+The program will try to find the device address,
+but if it fails, it has to be done manually.
+
+The device MAC addresses can be found using ``blueoothctl`` and bluetooth
+adapter names can be found with ``hcitool dev`` on linux.
 
 Usage
 *****
@@ -84,17 +92,23 @@ To print the current desk height:
 
     idasen height
 
-To monitor for changes to height :
+To monitor for changes to height:
 
 .. code-block:: bash
 
     idasen monitor
 
-Assuming the config file is populated to move the desk to standing position:
+To save the current height as the sitting position:
 
 .. code-block:: bash
 
-    idasen stand
+    idasen save sit
+
+To delete the saved sitting position:
+
+.. code-block:: bash
+
+    idasen delete sit
 
 Assuming the config file is populated to move the desk to sitting position:
 
