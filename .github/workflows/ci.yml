@@ -9,11 +9,11 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: "3.9"
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.0.0
+        uses: abatilo/actions-poetry@v2.1.0
         with:
-          poetry-version: "1.0.10"
+          poetry-version: "1.1.4"
       - name: Poetry Install
         run: poetry install
       - name: Run flake8
@@ -27,29 +27,33 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: "3.9"
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.0.0
+        uses: abatilo/actions-poetry@v2.1.0
         with:
-          poetry-version: "1.0.10"
-      - name: Poetry Install
-        run: poetry install
+          poetry-version: "1.1.4"
       - name: Install bluetooth
         run: sudo apt install bluetooth
+      - name: Poetry Install
+        run: poetry install
       - name: Run sphinx
         run: poetry run sphinx-build -W -b html docs public
 
   pytest:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: ${{ matrix.python-version }}
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.0.0
+        uses: abatilo/actions-poetry@v2.1.0
         with:
-          poetry-version: "1.0.10"
+          poetry-version: "1.1.4"
       - name: Install bluetooth
         run: sudo apt install bluetooth
       - name: Poetry Install
@@ -60,5 +64,26 @@ jobs:
         run: poetry run coveralls
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
+          COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
           COVERALLS_PARALLEL: true
+
+  release:
+    name: PyPi Release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [pytest, docs, style]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.1.0
+        with:
+          poetry-version: "1.1.4"
+      - name: Poetry Install
+        run: poetry install
+      - name: Poetry publish
+        run: poetry publish --build
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}

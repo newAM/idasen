@@ -1,6 +1,14 @@
 Change Log
 ##########
 
+Unreleased
+**********
+
+Added
+=====
+- Added python 3.9 support.
+
+
 `0.4.0`_ 2020-10-20
 *******************
 
