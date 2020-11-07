@@ -92,7 +92,7 @@ class IdasenDesk:
             try:
                 await self._client.__aenter__()
                 return
-            except Exception:
+            except Exception:  # pragma: no cover
                 if i >= self.RETRY_COUNT:
                     print("Connection failed.", file=sys.stderr)
                     sys.exit(1)
