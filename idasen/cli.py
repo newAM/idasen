@@ -65,14 +65,14 @@ def load_config(path: str = IDASEN_CONFIG_PATH) -> dict:
     try:
         config = CONFIG_SCHEMA(config)
     except vol.Invalid as e:
-        sys.stderr.write(f"Invalid configuration: {e}\n")
+        print(f"Invalid configuration: {e}", file=sys.stderr)
         sys.exit(1)
     else:
         for position in config["positions"]:
             if position in RESERVED_NAMES:
-                sys.stderr.write(
+                print(
                     "Invalid configuration, "
-                    f"position with name '{position}' is a reserved name.\n"
+                    f"position with name '{position}' is a reserved name.", file=sys.stderr
                 )
                 sys.exit(1)
 
@@ -126,23 +126,23 @@ def get_parser(config: dict) -> argparse.ArgumentParser:
 
 async def init(args: argparse.Namespace) -> int:
     if not args.force and os.path.isfile(IDASEN_CONFIG_PATH):
-        sys.stderr.write("Configuration file already exists.\n")
-        sys.stderr.write("Use --force to overwrite existing configuration.\n")
+        print("Configuration file already exists.", file=sys.stderr)
+        print("Use --force to overwrite existing configuration.", file=sys.stderr)
         return 1
     else:
         mac = await IdasenDesk.discover()
         if mac is not None:
-            sys.stderr.write(f"Discovered desk's MAC address: {mac}")
+            print(f"Discovered desk's MAC address: {mac}", file=sys.stderr)
             DEFAULT_CONFIG["mac_address"] = mac
         else:
-            sys.stderr.write("Failed to discover desk's MAC address")
+            print("Failed to discover desk's MAC address", file=sys.stderr)
         os.makedirs(IDASEN_CONFIG_DIRECTORY, exist_ok=True)
         with open(IDASEN_CONFIG_PATH, "w") as f:
             f.write(
                 "# https://idasen.readthedocs.io/en/latest/index.html#configuration\n"
             )
             yaml.dump(DEFAULT_CONFIG, f)
-        sys.stderr.write(f"Created new configuration file at: {IDASEN_CONFIG_PATH}")
+        print(f"Created new configuration file at: {IDASEN_CONFIG_PATH}", file=sys.stderr)
 
     return 0
 
@@ -154,7 +154,7 @@ async def monitor(args: argparse.Namespace) -> None:
             while True:
                 height = await desk.get_height()
                 if abs(height - previous_height) > 0.001:
-                    sys.stdout.write(f"{height:.3f} meters\n")
+                    print(f"{height:.3f} meters")
                     sys.stdout.flush()
                 previous_height = height
     except KeyboardInterrupt:
@@ -164,7 +164,7 @@ async def monitor(args: argparse.Namespace) -> None:
 async def height(args: argparse.Namespace):
     async with IdasenDesk(args.mac_address) as desk:
         height = await desk.get_height()
-        sys.stdout.write(f"{height:.3f} meters\n")
+        print(f"{height:.3f} meters")
 
 
 async def move_to(args: argparse.Namespace, position: float) -> None:
@@ -174,7 +174,7 @@ async def move_to(args: argparse.Namespace, position: float) -> None:
 
 async def save(args: argparse.Namespace, config: dict) -> int:
     if args.name in RESERVED_NAMES:
-        sys.stderr.write(f"Position with name '{args.name}' is a reserved name.\n")
+        print(f"Position with name '{args.name}' is a reserved name.", file=sys.stderr)
         return 1
 
     async with IdasenDesk(args.mac_address) as desk:
@@ -183,20 +183,20 @@ async def save(args: argparse.Namespace, config: dict) -> int:
     config["positions"][args.name] = height
     save_config(config)
 
-    sys.stdout.write(f"Saved position '{args.name}' with height: {height}m.\n")
+    print(f"Saved position '{args.name}' with height: {height}m.")
     return 0
 
 
 async def delete(args: argparse.Namespace, config: dict) -> int:
     position = config["positions"].pop(args.name, None)
     if args.name in RESERVED_NAMES:
-        sys.stderr.write(f"Position with name '{args.name}' is a reserved name.\n")
+        print(f"Position with name '{args.name}' is a reserved name.", file=sys.stderr)
         return 1
     elif position is None:
-        sys.stderr.write(f"Position with name '{args.name}' doesn't exist.\n")
+        print(f"Position with name '{args.name}' doesn't exist.", file=sys.stderr)
     else:
         save_config(config)
-        sys.stdout.write(f"Position with name '{args.name}' removed.\n")
+        print(f"Position with name '{args.name}' removed.")
 
     return 0
 
