@@ -126,3 +126,26 @@ async def test_move_to_target(desk: IdasenDesk, target: float):
 )
 def test_bytes_to_meters(raw: bytearray, result: float):
     assert _bytes_to_meters(raw) == result
+
+
+@pytest.mark.asyncio
+async def test_fail_to_connect(capsys):
+    async def raise_exception(*_):
+        raise Exception
+
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    client.__aenter__ = raise_exception
+    desk._client = client
+
+    with pytest.raises(SystemExit):
+        async with desk:
+            pass
+
+    out, err = capsys.readouterr()
+    assert out.splitlines() == [
+        "Failed to connect, retrying (1/3)...",
+        "Failed to connect, retrying (2/3)...",
+        "Failed to connect, retrying (3/3)...",
+    ]
+    assert err == "Connection failed.\n"
