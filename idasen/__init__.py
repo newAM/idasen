@@ -92,7 +92,7 @@ class IdasenDesk:
             try:
                 await self._client.__aenter__()
                 return
-            except:
+            except Exception:
                 if i >= self.RETRY_COUNT:
                     print("Connection failed.", file=sys.stderr)
                     sys.exit(1)
