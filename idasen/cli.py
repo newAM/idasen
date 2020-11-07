@@ -72,7 +72,8 @@ def load_config(path: str = IDASEN_CONFIG_PATH) -> dict:
             if position in RESERVED_NAMES:
                 print(
                     "Invalid configuration, "
-                    f"position with name '{position}' is a reserved name.", file=sys.stderr
+                    f"position with name '{position}' is a reserved name.",
+                    file=sys.stderr,
                 )
                 sys.exit(1)
 
@@ -142,7 +143,9 @@ async def init(args: argparse.Namespace) -> int:
                 "# https://idasen.readthedocs.io/en/latest/index.html#configuration\n"
             )
             yaml.dump(DEFAULT_CONFIG, f)
-        print(f"Created new configuration file at: {IDASEN_CONFIG_PATH}", file=sys.stderr)
+        print(
+            f"Created new configuration file at: {IDASEN_CONFIG_PATH}", file=sys.stderr
+        )
 
     return 0
 
