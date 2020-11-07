@@ -202,12 +202,16 @@ async def delete(args: argparse.Namespace, config: dict) -> int:
 
 
 def from_config(
-    args: argparse.Namespace, config: dict, parser: argparse.ArgumentParser, key: str
+    args: argparse.Namespace,
+    config: dict,
+    parser: argparse.ArgumentParser,
+    key: str,
+    raise_error: bool = True,
 ):
     if hasattr(args, key) and getattr(args, key) is None:
         if key in config:
             setattr(args, key, config[key])
-        else:
+        elif raise_error:
             parser.error(f"{key} must be provided via the CLI or the config file")
 
 
@@ -247,7 +251,7 @@ def main(args: Optional[List[str]] = None):
     parser = get_parser(config)
     args = parser.parse_args(args)
 
-    from_config(args, config, parser, "mac_address")
+    from_config(args, config, parser, "mac_address", raise_error=args.sub != "init")
 
     level = count_to_level(args.verbose)
 
