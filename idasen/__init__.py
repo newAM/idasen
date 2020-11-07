@@ -1,3 +1,6 @@
+import sys
+import time
+
 from bleak import BleakClient
 from bleak import discover
 from typing import Dict
@@ -67,6 +70,8 @@ class IdasenDesk:
     #: Maximum desk height in meters.
     MAX_HEIGHT: float = 1.27
 
+    RETRY_COUNT: int = 3
+
     def __init__(self, mac: str):
         self._logger = _DeskLoggingAdapter(
             logger=logging.getLogger(__name__), extra={"mac": mac}
@@ -75,11 +80,25 @@ class IdasenDesk:
         self._client = BleakClient(self._mac)
 
     async def __aenter__(self):
-        await self._client.__aenter__()
+        await self.connect()
         return self
 
     async def __aexit__(self, *args, **kwargs) -> Optional[bool]:
         return await self._client.__aexit__(*args, **kwargs)
+
+    async def connect(self):
+        i = 0
+        while True:
+            try:
+                await self._client.__aenter__()
+                return
+            except:
+                if i >= self.RETRY_COUNT:
+                    print("Connection failed.", file=sys.stderr)
+                    sys.exit(1)
+                i += 1
+                print(f"Failed to connect, retrying ({i}/{self.RETRY_COUNT})...")
+                time.sleep(0.3 * i)
 
     async def is_connected(self) -> bool:
         """
