@@ -149,7 +149,7 @@ async def init(args: argparse.Namespace) -> int:
 
 async def monitor(args: argparse.Namespace) -> None:
     try:
-        async with IdasenDesk(args.mac_address) as desk:
+        async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
             previous_height = 0.0
             while True:
                 height = await desk.get_height()
@@ -162,13 +162,13 @@ async def monitor(args: argparse.Namespace) -> None:
 
 
 async def height(args: argparse.Namespace):
-    async with IdasenDesk(args.mac_address) as desk:
+    async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
         height = await desk.get_height()
         sys.stdout.write(f"{height:.3f} meters\n")
 
 
 async def move_to(args: argparse.Namespace, position: float) -> None:
-    async with IdasenDesk(args.mac_address) as desk:
+    async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
         await desk.move_to_target(target=position)
 
 
@@ -177,7 +177,7 @@ async def save(args: argparse.Namespace, config: dict) -> int:
         sys.stderr.write(f"Position with name '{args.name}' is a reserved name.\n")
         return 1
 
-    async with IdasenDesk(args.mac_address) as desk:
+    async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
         height = await desk.get_height()
 
     config["positions"][args.name] = height

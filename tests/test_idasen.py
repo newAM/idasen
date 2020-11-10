@@ -139,7 +139,7 @@ async def test_fail_to_connect(caplog, monkeypatch):
 
     caplog.set_level("WARNING")
 
-    desk = IdasenDesk(mac=desk_mac)
+    desk = IdasenDesk(mac=desk_mac, exit_on_fail=True)
     client = MockBleakClient()
     client.__aenter__ = raise_exception
     desk._client = client

@@ -75,7 +75,7 @@ class IdasenDesk:
     #: Number of times to retry upon failure to connect.
     RETRY_COUNT: int = 3
 
-    def __init__(self, mac: str, exit_on_fail: bool = True):
+    def __init__(self, mac: str, exit_on_fail: bool = False):
         self._logger = _DeskLoggingAdapter(
             logger=logging.getLogger(__name__), extra={"mac": mac}
         )
