@@ -1,3 +1,6 @@
+import sys
+import time
+
 from bleak import BleakClient
 from bleak import discover
 from typing import Dict
@@ -46,6 +49,8 @@ class IdasenDesk:
 
     Args:
         mac: Bluetooth MAC address of the desk.
+        exit_on_fail: If set to True, failing to connect will call ``sys.exit(1)``,
+            otherwise the exception will be raised.
 
     Note:
         There is no locking to prevent you from running multiple movement
@@ -67,19 +72,41 @@ class IdasenDesk:
     #: Maximum desk height in meters.
     MAX_HEIGHT: float = 1.27
 
-    def __init__(self, mac: str):
+    #: Number of times to retry upon failure to connect.
+    RETRY_COUNT: int = 3
+
+    def __init__(self, mac: str, exit_on_fail: bool = False):
         self._logger = _DeskLoggingAdapter(
             logger=logging.getLogger(__name__), extra={"mac": mac}
         )
         self._mac = mac
+        self._exit_on_fail = exit_on_fail
         self._client = BleakClient(self._mac)
 
     async def __aenter__(self):
-        await self._client.__aenter__()
+        await self._connect()
         return self
 
     async def __aexit__(self, *args, **kwargs) -> Optional[bool]:
         return await self._client.__aexit__(*args, **kwargs)
+
+    async def _connect(self):
+        i = 0
+        while True:
+            try:
+                await self._client.__aenter__()
+                return
+            except Exception:
+                if i >= self.RETRY_COUNT:
+                    self._logger.critical("Connection failed")
+                    if self._exit_on_fail:
+                        sys.exit(1)
+                    raise
+                i += 1
+                self._logger.warning(
+                    f"Failed to connect, retrying ({i}/{self.RETRY_COUNT})..."
+                )
+                time.sleep(0.3 * i)
 
     async def is_connected(self) -> bool:
         """

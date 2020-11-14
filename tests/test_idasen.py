@@ -1,3 +1,4 @@
+import time
 from asyncio import AbstractEventLoop
 from idasen import _bytes_to_meters
 from idasen import IdasenDesk
@@ -126,3 +127,32 @@ async def test_move_to_target(desk: IdasenDesk, target: float):
 )
 def test_bytes_to_meters(raw: bytearray, result: float):
     assert _bytes_to_meters(raw) == result
+
+
+@pytest.mark.asyncio
+async def test_fail_to_connect(caplog, monkeypatch):
+    async def raise_exception(*_):
+        raise Exception
+
+    # patch `time.sleep()` to prevent making the tests unnecessarily long.
+    monkeypatch.setattr(time, "sleep", lambda *_: None)
+
+    caplog.set_level("WARNING")
+
+    desk = IdasenDesk(mac=desk_mac, exit_on_fail=True)
+    client = MockBleakClient()
+    client.__aenter__ = raise_exception
+    desk._client = client
+
+    with pytest.raises(SystemExit):
+        async with desk:
+            pass
+
+    assert caplog.messages == [
+        "[AA:AA:AA:AA:AA:AA] Failed to connect, retrying (1/3)...",
+        "[AA:AA:AA:AA:AA:AA] Failed to connect, retrying (2/3)...",
+        "[AA:AA:AA:AA:AA:AA] Failed to connect, retrying (3/3)...",
+        "[AA:AA:AA:AA:AA:AA] Connection failed",
+    ]
+
+    caplog.clear()
