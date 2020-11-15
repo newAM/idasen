@@ -1,13 +1,20 @@
 Change Log
 ##########
 
-Unreleased
-**********
+`0.5.0`_ 2020-11-14
+*******************
 
 Added
 =====
 - Added python 3.9 support.
 
+Changed
+=======
+- Added automatic retry to failed connections.
+
+Fixed
+=====
+- Allow the ``init`` subcommand to work without a MAC address.
 
 `0.4.0`_ 2020-10-20
 *******************
@@ -56,6 +63,7 @@ Changed
 *******************
 - Initial release
 
+.. _0.5.0: https://github.com/newAM/idasen/releases/tag/v0.5.0
 .. _0.4.0: https://github.com/newAM/idasen/releases/tag/v0.4.0
 .. _0.3.0: https://github.com/newAM/idasen/releases/tag/v0.3.0
 .. _0.2.1: https://github.com/newAM/idasen/releases/tag/v0.2.1
