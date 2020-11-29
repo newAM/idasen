@@ -186,15 +186,15 @@ class IdasenDesk:
         will_move_up = target > previous_height
         while True:
             height = await self.get_height()
+            difference = target - height
+            self._logger.debug(f"{target=} {height=} {difference=}")
             if (height < previous_height and will_move_up) or (
                 height > previous_height and not will_move_up
             ):
-                self._logger.info(
+                self._logger.warning(
                     "stopped moving because desk safety feature kicked in"
                 )
                 return
-            difference = target - height
-            self._logger.debug(f"{target=} {height=} {difference=}")
             if abs(difference) < 0.005:  # tolerance of 0.005 meters
                 self._logger.info(f"reached target of {target:.3f}")
                 await self.stop()
