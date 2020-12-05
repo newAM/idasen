@@ -1,6 +1,13 @@
 Change Log
 ##########
 
+`0.6.0`_ 2020-12-05
+*******************
+
+Changed
+=======
+- Stop moving the desk if the safety feature kicks in.
+
 `0.5.0`_ 2020-11-14
 *******************
 
@@ -63,6 +70,7 @@ Changed
 *******************
 - Initial release
 
+.. _0.6.0: https://github.com/newAM/idasen/releases/tag/v0.6.0
 .. _0.5.0: https://github.com/newAM/idasen/releases/tag/v0.5.0
 .. _0.4.0: https://github.com/newAM/idasen/releases/tag/v0.4.0
 .. _0.3.0: https://github.com/newAM/idasen/releases/tag/v0.3.0
