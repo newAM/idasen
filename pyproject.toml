@@ -38,7 +38,7 @@ pep8-naming = "^0.11.1"
 pytest = "^6.2.1"
 pytest-asyncio = "~0.14.0"
 pytest-cov = "^2.10.1"
-sphinx = "^3.4.2"
+sphinx = "^3.4.3"
 sphinx-rtd-theme = "~0.5.1"
 toml = "^0.10.2"
 
