@@ -61,7 +61,7 @@ jobs:
       - name: Run pytest
         run: poetry run pytest -vvv --cov=idasen --doctest-modules
       - name: Upload Coverage
-        run: poetry run coveralls
+        run: poetry run coveralls --service=github-actions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
