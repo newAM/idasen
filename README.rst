@@ -32,6 +32,7 @@ Install
 On Arch Linux, there is an `AUR package`_:
 
 .. code-block:: bash
+
     yay -Syu idasen || paru -Syu idasen
 
 
