@@ -54,7 +54,7 @@ To install this package locally build it then install with pip:
 .. code-block:: bash
 
     poetry build
-    python3.8 -m pip install dist/idasen-0.4.0-py3-none-any.whl
+    python3.8 -m pip install dist/idasen-0.6.0-py3-none-any.whl
 
 Configuration
 *************
