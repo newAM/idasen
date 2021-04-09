@@ -39,7 +39,7 @@ pytest = "^6.2.3"
 pytest-asyncio = "~0.14.0"
 pytest-cov = "^2.11.1"
 sphinx = "^3.5.3"
-sphinx-rtd-theme = "~0.5.1"
+sphinx-rtd-theme = "~0.5.2"
 toml = "^0.10.2"
 
 [tool.poetry.scripts]
