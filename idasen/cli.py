@@ -1,7 +1,9 @@
 import functools
 
 from . import IdasenDesk
+from typing import Any
 from typing import Callable
+from typing import Dict
 from typing import List
 from typing import Optional
 import argparse
@@ -16,7 +18,7 @@ HOME = os.path.expanduser("~")
 IDASEN_CONFIG_DIRECTORY = os.path.join(HOME, ".config", "idasen")
 IDASEN_CONFIG_PATH = os.path.join(IDASEN_CONFIG_DIRECTORY, "idasen.yaml")
 
-DEFAULT_CONFIG = {
+DEFAULT_CONFIG: Dict[str, Any] = {
     "positions": {"stand": 1.1, "sit": 0.75},
     "mac_address": "AA:AA:AA:AA:AA:AA",
 }
@@ -52,7 +54,7 @@ def load_config(path: str = IDASEN_CONFIG_PATH) -> dict:
 
     # convert old config file format
     if "positions" not in config:
-        config["positions"] = {}
+        config["positions"] = dict()
         config["positions"]["sit"] = config.pop(
             "sit_height", DEFAULT_CONFIG["positions"]["sit"]
         )
@@ -249,10 +251,10 @@ def subcommand_to_callable(sub: str, config: dict) -> Callable:
         raise AssertionError(f"internal error, please report this bug {sub=}")
 
 
-def main(args: Optional[List[str]] = None):
+def main(argv: Optional[List[str]] = None):
     config = load_config()
     parser = get_parser(config)
-    args = parser.parse_args(args)
+    args = parser.parse_args(argv)
 
     from_config(args, config, parser, "mac_address", raise_error=args.sub != "init")
 

@@ -9,6 +9,9 @@ from idasen.cli import load_config
 from idasen.cli import main
 from idasen.cli import subcommand_to_callable
 from types import SimpleNamespace
+from typing import Any
+from typing import Dict
+from typing import Optional
 from unittest import mock
 import argparse
 import logging
@@ -37,7 +40,10 @@ def test_load_config_invalid_schema(tmpdir: str):
 
 def test_load_config_reserved_position(tmpdir: str):
     file_path = os.path.join(tmpdir, "config.yaml")
-    config = {"mac_address": "AA:AA:AA:AA:AA:AA", "positions": {"sit": 0.90}}
+    config: Dict[str, Any] = {
+        "mac_address": "AA:AA:AA:AA:AA:AA",
+        "positions": {"sit": 0.90},
+    }
 
     with open(file_path, "w") as f:
         yaml.dump(config, f)
@@ -56,17 +62,20 @@ def test_load_config_reserved_position(tmpdir: str):
 @pytest.mark.asyncio
 async def test_init_exists_no_force():
     with mock.patch.object(os.path, "isfile", return_value=True):
-        assert await init(args=SimpleNamespace(force=False)) == 1
+        assert await init(args=argparse.Namespace(force=False)) == 1
 
 
 @pytest.mark.asyncio
-async def test_init():
+@pytest.mark.parametrize("discover_return", ["AA:AA:AA:AA:AA:AA", None])
+async def test_init(discover_return: Optional[str]):
     with mock.patch.object(os.path, "isfile", return_value=True), mock.patch.object(
         yaml, "dump"
     ) as dump_mock, mock.patch("builtins.open"), mock.patch.object(
-        IdasenDesk, "discover"
+        IdasenDesk,
+        "discover",
+        return_value=discover_return,
     ):
-        assert await init(args=SimpleNamespace(force=True)) == 0
+        assert await init(args=argparse.Namespace(force=True)) == 0
         dump_mock.assert_called_once()
 
 
