@@ -20,6 +20,8 @@ jobs:
         run: poetry run flake8
       - name: Run black
         run: poetry run black --check .
+      - name: Run mypy
+        run: poetry run mypy idasen tests
 
   docs:
     runs-on: ubuntu-latest

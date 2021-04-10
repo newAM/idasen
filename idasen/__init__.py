@@ -1,13 +1,13 @@
-import sys
-import time
-
 from bleak import BleakClient
 from bleak import discover
-from typing import Dict
+from typing import Any
+from typing import MutableMapping
 from typing import Optional
 from typing import Tuple
 import asyncio
 import logging
+import sys
+import time
 
 
 _UUID_HEIGHT: str = "99fa0021-338a-1024-8a49-009c0215f78a"
@@ -30,16 +30,18 @@ def _bytes_to_meters(raw: bytearray) -> float:
         raw_len == expected_len
     ), f"Expected raw value to be {expected_len} bytes long, got {raw_len} bytes"
 
-    high_byte = int(raw[1])
-    low_byte = int(raw[0])
-    raw = (high_byte << 8) + low_byte
-    return float(raw / 10000) + IdasenDesk.MIN_HEIGHT
+    high_byte: int = int(raw[1])
+    low_byte: int = int(raw[0])
+    int_raw: int = (high_byte << 8) + low_byte
+    return float(int_raw / 10000) + IdasenDesk.MIN_HEIGHT
 
 
 class _DeskLoggingAdapter(logging.LoggerAdapter):
     """ Prepends logging messages with the desk MAC address. """
 
-    def process(self, msg: str, kwargs: Dict[str, str]) -> Tuple[str, Dict[str, str]]:
+    def process(
+        self, msg: str, kwargs: MutableMapping[str, Any]
+    ) -> Tuple[str, MutableMapping[str, Any]]:
         return f"[{self.extra['mac']}] {msg}", kwargs
 
 
@@ -230,13 +232,16 @@ class IdasenDesk:
         """
         return _bytes_to_meters(await self._client.read_gatt_char(_UUID_HEIGHT))
 
-    @classmethod
-    async def discover(cls) -> Optional[str]:
+    @staticmethod
+    async def discover() -> Optional[str]:
         """
         Try to find the desk's MAC address by discovering currently connected devices.
 
         Returns:
             MAC address if found, ``None`` if not found.
+
+        >>> asyncio.run(IdasenDesk.discover())
+        'AA:AA:AA:AA:AA:AA'
         """
         try:
             devices = await discover()

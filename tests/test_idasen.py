@@ -2,6 +2,8 @@ import time
 from asyncio import AbstractEventLoop
 from idasen import _bytes_to_meters
 from idasen import IdasenDesk
+from typing import AsyncGenerator
+from typing import Generator
 from typing import Callable
 import asyncio
 import idasen
@@ -9,7 +11,7 @@ import pytest
 
 
 @pytest.fixture(scope="session")
-def event_loop() -> AbstractEventLoop:
+def event_loop() -> Generator[AbstractEventLoop, None, None]:
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
@@ -62,7 +64,7 @@ desk_mac: str = "AA:AA:AA:AA:AA:AA"
 
 
 @pytest.fixture(scope="session")
-async def desk(event_loop: AbstractEventLoop) -> IdasenDesk:
+async def desk(event_loop: AbstractEventLoop) -> AsyncGenerator[IdasenDesk, None]:
     desk = IdasenDesk(mac=desk_mac)
     if desk_mac == "AA:AA:AA:AA:AA:AA":
         desk._client = MockBleakClient()
