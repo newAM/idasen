@@ -18,7 +18,7 @@ def event_loop() -> Generator[AbstractEventLoop, None, None]:
 
 
 class MockBleakClient:
-    """ Mocks the bleak client for unit testing. """
+    """Mocks the bleak client for unit testing."""
 
     def __init__(self):
         self._height = 1.0
