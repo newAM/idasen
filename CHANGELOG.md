@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated bleak dependency from `0.9` to `0.11`.
-- Changed changelog to markdwon from rst.
+- Changed changelog from rst to markdown.
 
 ## [0.6.0] - 2020-12-05
 ### Changed
