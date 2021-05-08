@@ -1,6 +1,12 @@
 name: Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
 
 jobs:
   style:
@@ -13,7 +19,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.2
         with:
-          poetry-version: "1.1.4"
+          poetry-version: "1.1.6"
       - name: Poetry Install
         run: poetry install
       - name: Run flake8
@@ -33,7 +39,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.2
         with:
-          poetry-version: "1.1.4"
+          poetry-version: "1.1.6"
       - name: Install bluetooth
         run: sudo apt install bluetooth
       - name: Poetry Install
@@ -55,7 +61,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.2
         with:
-          poetry-version: "1.1.4"
+          poetry-version: "1.1.6"
       - name: Install bluetooth
         run: sudo apt install bluetooth
       - name: Poetry Install
@@ -82,7 +88,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.2
         with:
-          poetry-version: "1.1.4"
+          poetry-version: "1.1.6"
       - name: Poetry Install
         run: poetry install
       - name: Poetry publish

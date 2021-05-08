@@ -1,6 +1,13 @@
 Change Log
 ##########
 
+`0.7.0`_ 2021-05-08
+*******************
+
+Changed
+=======
+- Updated bleak dependency from `0.9` to `0.11`.
+
 `0.6.0`_ 2020-12-05
 *******************
 
@@ -70,6 +77,7 @@ Changed
 *******************
 - Initial release
 
+.. _0.7.0: https://github.com/newAM/idasen/releases/tag/v0.7.0
 .. _0.6.0: https://github.com/newAM/idasen/releases/tag/v0.6.0
 .. _0.5.0: https://github.com/newAM/idasen/releases/tag/v0.5.0
 .. _0.4.0: https://github.com/newAM/idasen/releases/tag/v0.4.0

@@ -45,7 +45,7 @@ def save_config(config: dict, path: str = IDASEN_CONFIG_PATH):
 
 
 def load_config(path: str = IDASEN_CONFIG_PATH) -> dict:
-    """ Load user config. """
+    """Load user config."""
     try:
         with open(path, "r") as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
