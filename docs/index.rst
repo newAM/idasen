@@ -6,7 +6,6 @@
 
    api
    cli
-   changelog
    license
    references
 

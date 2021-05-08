@@ -133,7 +133,9 @@ def test_count_to_level(count: int, level: int):
 seen_it = []
 
 
-@pytest.mark.parametrize("sub", ["init", "monitor", "sit", "height", "stand"])
+@pytest.mark.parametrize(
+    "sub", ["init", "monitor", "sit", "height", "stand", "save", "delete"]
+)
 def test_subcommand_to_callable(sub: str):
     global seen_it
 
@@ -144,7 +146,7 @@ def test_subcommand_to_callable(sub: str):
 
 
 def test_main_to_exit():
-    mock_args = SimpleNamespace(sub="not_a_real_sub_command", verbose=0)
+    mock_args = SimpleNamespace(sub="not_a_real_sub_command", version=False, verbose=0)
 
     async def do_nothing(args: argparse.Namespace):
         assert args == mock_args
@@ -166,6 +168,31 @@ def test_main_internal_error():
     with mock.patch.object(
         argparse.ArgumentParser,
         "parse_args",
-        return_value=SimpleNamespace(sub="not_a_real_sub_command", verbose=0),
+        return_value=SimpleNamespace(
+            sub="not_a_real_sub_command", version=False, verbose=0
+        ),
     ), pytest.raises(AssertionError):
         main()
+
+
+@pytest.mark.parametrize(
+    "sub", ["init", "monitor", "sit", "height", "stand", "add", "delete", None]
+)
+def test_main_version(sub: Optional[str]):
+    with mock.patch.object(
+        argparse.ArgumentParser,
+        "parse_args",
+        return_value=SimpleNamespace(sub=sub, version=True, verbose=0, force=False),
+    ), mock.patch.object(sys, "exit") as sys_exit_mock:
+        main()
+        sys_exit_mock.assert_called_once_with(0)
+
+
+def test_main_no_sub():
+    with mock.patch.object(
+        argparse.ArgumentParser,
+        "parse_args",
+        return_value=SimpleNamespace(sub=None, version=False, verbose=0, force=False),
+    ), mock.patch.object(sys, "exit") as sys_exit_mock:
+        main()
+        sys_exit_mock.assert_called_once_with(1)
