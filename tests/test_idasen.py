@@ -1,13 +1,15 @@
-import time
 from asyncio import AbstractEventLoop
 from idasen import _bytes_to_meters
 from idasen import IdasenDesk
 from typing import AsyncGenerator
-from typing import Generator
 from typing import Callable
+from typing import Generator
+from unittest import mock
 import asyncio
+import bleak
 import idasen
 import pytest
+import time
 
 
 @pytest.fixture(scope="session")
@@ -158,3 +160,19 @@ async def test_fail_to_connect(caplog, monkeypatch):
     ]
 
     caplog.clear()
+
+
+@pytest.mark.asyncio
+async def test_discover_exception():
+    with mock.patch.object(bleak, "discover", side_effect=Exception) as mock_discover:
+        result = await IdasenDesk.discover()
+        mock_discover.assert_awaited_once_with()
+        assert result is None
+
+
+@pytest.mark.asyncio
+async def test_discover_empty():
+    with mock.patch.object(bleak, "discover", result=[]) as mock_discover:
+        result = await IdasenDesk.discover()
+        mock_discover.assert_awaited_once_with()
+        assert result is None

@@ -1,10 +1,10 @@
 from bleak import BleakClient
-from bleak import discover
 from typing import Any
 from typing import MutableMapping
 from typing import Optional
 from typing import Tuple
 import asyncio
+import bleak
 import logging
 import sys
 import time
@@ -244,7 +244,7 @@ class IdasenDesk:
         'AA:AA:AA:AA:AA:AA'
         """
         try:
-            devices = await discover()
+            devices = await bleak.discover()
         except Exception:
             return None
         return next(

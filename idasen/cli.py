@@ -8,6 +8,7 @@ from typing import List
 from typing import Optional
 import argparse
 import asyncio
+import importlib.metadata
 import logging
 import os
 import sys
@@ -92,11 +93,15 @@ def add_common_args(parser: argparse.ArgumentParser):
     parser.add_argument(
         "--verbose", "-v", action="count", default=0, help="Increase logging verbosity."
     )
+    parser.add_argument(
+        "--version", action="store_true", help="Prints version information."
+    )
 
 
 def get_parser(config: dict) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="ikea IDÅSEN desk control")
-    sub = parser.add_subparsers(dest="sub", help="Subcommands", required=True)
+    add_common_args(parser)
+    sub = parser.add_subparsers(dest="sub", help="Subcommands", required=False)
 
     height_parser = sub.add_parser("height", help="Get the desk height.")
     monitor_parser = sub.add_parser("monitor", help="Monitor the desk position.")
@@ -269,14 +274,24 @@ def main(argv: Optional[List[str]] = None):
     root_logger.addHandler(handler)
     root_logger.setLevel(level)
 
-    func = subcommand_to_callable(args.sub, config)
+    if args.version:
+        version = importlib.metadata.version("idasen")
+        print(version)
+        sys.exit(0)
+    elif args.sub is None:
+        print("A subcommand is required")
+        parser.print_usage()
+        sys.exit(1)
+    else:
 
-    rc = asyncio.run(func(args))
+        func = subcommand_to_callable(args.sub, config)
 
-    if rc is None:
-        rc = 0
+        rc = asyncio.run(func(args))
 
-    sys.exit(rc)
+        if rc is None:
+            rc = 0
+
+        sys.exit(rc)
 
 
 if __name__ == "__main__":
