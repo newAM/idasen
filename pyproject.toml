@@ -6,14 +6,14 @@ target-version = ["py38"]
 name = "idasen"
 description = "ikea IDÅSEN desk API and CLI."
 authors = ["Alex M. <alexmgit@protonmail.com>"]
-version = "0.6.0"
+version = "0.7.0"
 license = "MIT"
 readme = "README.rst"
 repository = "https://github.com/newAM/idasen"
 homepage = "https://github.com/newAM/idasen"
 keywords = ["ikea", "idasen", "bluetooth", "linak", "ble"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
@@ -25,12 +25,12 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.8"
 
-bleak = "~0.11.0"
+bleak = "^0.11"
 pyyaml = "^5.3.1"
-voluptuous = "~0.12.0"
+voluptuous = "^0.12"
 
 [tool.poetry.dev-dependencies]
-black = { version = "20.8b1", allow-prereleases = true }
+black = { version = "21.5b0", allow-prereleases = true }
 coveralls = "^2.2.0"
 flake8 = "^3.9.1"
 flake8-bugbear = "^21.4.3"
@@ -48,4 +48,4 @@ idasen = "idasen.cli:main"
 
 [build-system]
 requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+build-backend = "poetry.core.masonry.api"

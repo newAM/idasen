@@ -23,7 +23,7 @@ _COMMAND_STOP: bytearray = bytearray([0xFF, 0x00])
 
 
 def _bytes_to_meters(raw: bytearray) -> float:
-    """ Converts a value read from the desk in bytes to meters. """
+    """Converts a value read from the desk in bytes to meters."""
     raw_len = len(raw)
     expected_len = 4
     assert (
@@ -37,7 +37,7 @@ def _bytes_to_meters(raw: bytearray) -> float:
 
 
 class _DeskLoggingAdapter(logging.LoggerAdapter):
-    """ Prepends logging messages with the desk MAC address. """
+    """Prepends logging messages with the desk MAC address."""
 
     def process(
         self, msg: str, kwargs: MutableMapping[str, Any]
@@ -127,7 +127,7 @@ class IdasenDesk:
 
     @property
     def mac(self) -> str:
-        """ Desk MAC address. """
+        """Desk MAC address."""
         return self._mac
 
     async def move_up(self):
@@ -208,7 +208,7 @@ class IdasenDesk:
             previous_height = height
 
     async def stop(self):
-        """ Stop desk movement. """
+        """Stop desk movement."""
         await asyncio.gather(
             self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_STOP, response=False),
             self._client.write_gatt_char(
