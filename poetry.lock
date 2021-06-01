@@ -49,7 +49,7 @@ pytz = ">=2015.7"
 
 [[package]]
 name = "black"
-version = "21.5b1"
+version = "21.5b2"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
@@ -65,8 +65,9 @@ toml = ">=0.10.1"
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
-d = ["aiohttp (>=3.6.0)", "aiohttp-cors"]
+d = ["aiohttp (>=3.6.0)", "aiohttp-cors (>=0.4.0)"]
 python2 = ["typed-ast (>=1.4.2)"]
+uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bleak"
@@ -693,7 +694,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "a22e997d21cc7e7522cdc8cb1dd485943cf6bdef3fb32d4ab47254956c0f0439"
+content-hash = "fafba59ad5cac9bf8f6e9c7212cebd093890d92e8a542ef377801fc4c4da1ae4"
 
 [metadata.files]
 alabaster = [
@@ -717,8 +718,8 @@ babel = [
     {file = "Babel-2.9.1.tar.gz", hash = "sha256:bc0c176f9f6a994582230df350aa6e05ba2ebe4b3ac317eab29d9be5d2768da0"},
 ]
 black = [
-    {file = "black-21.5b1-py3-none-any.whl", hash = "sha256:8a60071a0043876a4ae96e6c69bd3a127dad2c1ca7c8083573eb82f92705d008"},
-    {file = "black-21.5b1.tar.gz", hash = "sha256:23695358dbcb3deafe7f0a3ad89feee5999a46be5fec21f4f1d108be0bcdb3b1"},
+    {file = "black-21.5b2-py3-none-any.whl", hash = "sha256:e5cf21ebdffc7a9b29d73912b6a6a9a4df4ce70220d523c21647da2eae0751ef"},
+    {file = "black-21.5b2.tar.gz", hash = "sha256:1fc0e0a2c8ae7d269dfcf0c60a89afa299664f3e811395d40b1922dff8f854b5"},
 ]
 bleak = [
     {file = "bleak-0.11.0-py2.py3-none-any.whl", hash = "sha256:ed2cd4410740625ed70f17ff403767f4eeac532a1db2d2d6c2fbbc2571d4c7d7"},
