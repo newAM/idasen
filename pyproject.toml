@@ -41,7 +41,7 @@ pytest-cov = "^2.12.1"
 sphinx = "^4.0.2"
 sphinx-rtd-theme = "~0.5.2"
 toml = "^0.10.2"
-mypy = "^0.812"
+mypy = "^0.901"
 
 [tool.poetry.scripts]
 idasen = "idasen.cli:main"
