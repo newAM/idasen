@@ -70,10 +70,14 @@ async def test_init_exists_no_force():
 async def test_init(discover_return: Optional[str]):
     with mock.patch.object(os.path, "isfile", return_value=True), mock.patch.object(
         yaml, "dump"
-    ) as dump_mock, mock.patch("builtins.open"), mock.patch.object(
+    ) as dump_mock, mock.patch.object(
         IdasenDesk,
         "discover",
         return_value=discover_return,
+    ), mock.patch.object(
+        os, "makedirs"
+    ), mock.patch(
+        "builtins.open"
     ):
         assert await init(args=argparse.Namespace(force=True)) == 0
         dump_mock.assert_called_once()
