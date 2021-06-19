@@ -41,7 +41,9 @@ jobs:
         with:
           poetry-version: "1.1.6"
       - name: Install bluetooth
-        run: sudo apt install bluetooth
+        run: |
+            sudo apt update
+            sudo apt install bluetooth
       - name: Poetry Install
         run: poetry install
       - name: Run sphinx
@@ -63,7 +65,9 @@ jobs:
         with:
           poetry-version: "1.1.6"
       - name: Install bluetooth
-        run: sudo apt install bluetooth
+        run: |
+            sudo apt update
+            sudo apt install bluetooth
       - name: Poetry Install
         run: poetry install
       - name: Run pytest
