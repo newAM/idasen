@@ -71,7 +71,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bleak"
-version = "0.12.0"
+version = "0.12.1"
 description = "Bluetooth Low Energy platform Agnostic Klient"
 category = "main"
 optional = false
@@ -83,11 +83,11 @@ pyobjc-core = {version = "*", markers = "platform_system == \"Darwin\""}
 pyobjc-framework-CoreBluetooth = {version = "*", markers = "platform_system == \"Darwin\""}
 pyobjc-framework-libdispatch = {version = "*", markers = "platform_system == \"Darwin\""}
 pythonnet = {version = "*", markers = "platform_system == \"Windows\" and python_version < \"3.9.0\""}
-winrt = {version = ">=1.0.20330.1", markers = "platform_system == \"Windows\" and python_version >= \"3.9.0\""}
+winrt = {version = ">=1.0.21033.1", markers = "platform_system == \"Windows\" and python_version >= \"3.9.0\""}
 
 [package.extras]
 pythonnet = ["pythonnet (>=2.5.1)"]
-winrt = ["winrt (>=1.0.20330.1)"]
+winrt = ["winrt (>=1.0.21033.1)"]
 
 [[package]]
 name = "certifi"
@@ -737,8 +737,8 @@ black = [
     {file = "black-21.6b0.tar.gz", hash = "sha256:dc132348a88d103016726fe360cb9ede02cecf99b76e3660ce6c596be132ce04"},
 ]
 bleak = [
-    {file = "bleak-0.12.0-py2.py3-none-any.whl", hash = "sha256:bcdb94b885ea99c93978c9f6cf453b6e357b90c4285530d2797b99a243a86788"},
-    {file = "bleak-0.12.0.tar.gz", hash = "sha256:a4d1f3db862307a141f592c2dcba174bedaace17e8adf94d5f31ba39616a0af9"},
+    {file = "bleak-0.12.1-py2.py3-none-any.whl", hash = "sha256:09733060e7561bf852359eadf959cd496c64a87e8875d26b6545fd2e8e07cd2c"},
+    {file = "bleak-0.12.1.tar.gz", hash = "sha256:4a80a24cc944e52e856054639f298229c39a2fc720e5f7adbeebb117d10849ed"},
 ]
 certifi = [
     {file = "certifi-2021.5.30-py2.py3-none-any.whl", hash = "sha256:50b1e4f8446b06f41be7dd6338db18e0990601dce795c2b1686458aa7e8fa7d8"},
