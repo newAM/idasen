@@ -29,13 +29,6 @@ Install
 
     python3.8 -m pip install --upgrade idasen
 
-On Arch Linux, there is an `AUR package`_:
-
-.. code-block:: bash
-
-    yay -Syu idasen || paru -Syu idasen
-
-
 Developers Install
 ==================
 
@@ -122,10 +115,18 @@ Assuming the config file is populated to move the desk to sitting position:
 
     idasen sit
 
+Community
+*********
+
+Related projects and packaging:
+
+* Arch Linux package: https://aur.archlinux.org/packages/idasen/
+* NixOS package: https://search.nixos.org/packages?channel=unstable&show=idasen&from=0&size=50&sort=relevance&query=idasen
+* idasen-rest-bridge: https://github.com/huserben/idasen-rest-bridge
+
 .. _poetry: https://python-poetry.org/
 .. _install poetry: https://python-poetry.org/docs/#installation
 .. _rhyst/idasen-controller: https://github.com/rhyst/idasen-controller
-.. _AUR package: https://aur.archlinux.org/packages/idasen/
 
 .. |PyPi Version| image:: https://badge.fury.io/py/idasen.svg
    :target: https://badge.fury.io/py/idasen
