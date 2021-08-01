@@ -121,7 +121,7 @@ Community
 Related projects and packaging:
 
 * Arch Linux package: https://aur.archlinux.org/packages/idasen/
-* NixOS package: https://search.nixos.org/packages?channel=unstable&show=idasen&from=0&size=50&sort=relevance&query=idasen
+* NixOS package: https://search.nixos.org/packages?channel=unstable&show=idasen&query=idasen
 * idasen-rest-bridge: https://github.com/huserben/idasen-rest-bridge
 
 .. _poetry: https://python-poetry.org/
