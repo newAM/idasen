@@ -672,7 +672,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "types-pyyaml"
-version = "5.4.7"
+version = "5.4.8"
 description = "Typing stubs for PyYAML"
 category = "dev"
 optional = false
@@ -718,7 +718,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "3d8ba6242dca7c5474b38c79f3932062dfcfae5473ac54a13c2c79c73c381c42"
+content-hash = "ce5d24095c57d59554a4a0689201ae2e43b959393dc9f5ad0655f7d2ed575e6d"
 
 [metadata.files]
 alabaster = [
@@ -1172,8 +1172,8 @@ tomli = [
     {file = "tomli-1.0.4.tar.gz", hash = "sha256:be670d0d8d7570fd0ea0113bd7bb1ba3ac6706b4de062cc4c952769355c9c268"},
 ]
 types-pyyaml = [
-    {file = "types-PyYAML-5.4.7.tar.gz", hash = "sha256:9024d94239d52016fd485f5721cbc5b7f9d56cb585b7a0cd22a473f06365ea07"},
-    {file = "types_PyYAML-5.4.7-py3-none-any.whl", hash = "sha256:d3b4b555cbb13e98169137dae16079c9b4a32e7bdd9f1759289417bcd14a326c"},
+    {file = "types-PyYAML-5.4.8.tar.gz", hash = "sha256:f00ad122a78a7d41b0ad4e3fa481751c2b9bc3f34b8f71ea35232211057dd50f"},
+    {file = "types_PyYAML-5.4.8-py3-none-any.whl", hash = "sha256:e084cfc878c8c8b1d4e89011ae5d65ea962fc5745c3d08b931df2aaaa665de96"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.0-py2-none-any.whl", hash = "sha256:0ac0f89795dd19de6b97debb0c6af1c70987fd80a2d62d1958f7e56fcc31b497"},
