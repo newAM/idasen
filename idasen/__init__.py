@@ -255,5 +255,8 @@ class IdasenDesk:
         except Exception:
             return None
 
-        return device
+        if device is None:
+            return None
+
+        return device.address
 
