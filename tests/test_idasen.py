@@ -1,6 +1,7 @@
 from asyncio import AbstractEventLoop
-from idasen import _bytes_to_meters
+from idasen import _bytes_to_meters, _is_desk
 from idasen import IdasenDesk
+from types import SimpleNamespace
 from typing import AsyncGenerator
 from typing import Callable
 from typing import Generator
@@ -180,3 +181,15 @@ async def test_discover_empty():
         result = await IdasenDesk.discover()
         mock_discover.assert_awaited_once_with(idasen._is_desk)
         assert result is None
+
+
+@pytest.mark.parametrize(
+    "adv, is_desk",
+    [
+        (SimpleNamespace(service_uuids=[]), False),
+        (SimpleNamespace(service_uuids=["foo"]), False),
+        (SimpleNamespace(service_uuids=["foo", idasen._UUID_ADV_SVC, "bar"]), True),
+    ],
+)
+def test_is_desk(adv: SimpleNamespace, is_desk: bool):
+    assert _is_desk(None, adv) is is_desk
