@@ -164,15 +164,19 @@ async def test_fail_to_connect(caplog, monkeypatch):
 
 @pytest.mark.asyncio
 async def test_discover_exception():
-    with mock.patch.object(bleak, "discover", side_effect=Exception) as mock_discover:
+    with mock.patch.object(
+        bleak.BleakScanner, "find_device_by_filter", side_effect=Exception
+    ) as mock_discover:
         result = await IdasenDesk.discover()
-        mock_discover.assert_awaited_once_with()
+        mock_discover.assert_awaited_once_with(idasen._is_desk)
         assert result is None
 
 
 @pytest.mark.asyncio
 async def test_discover_empty():
-    with mock.patch.object(bleak, "discover", result=[]) as mock_discover:
+    with mock.patch.object(
+        bleak.BleakScanner, "find_device_by_filter", return_value=None
+    ) as mock_discover:
         result = await IdasenDesk.discover()
-        mock_discover.assert_awaited_once_with()
+        mock_discover.assert_awaited_once_with(idasen._is_desk)
         assert result is None

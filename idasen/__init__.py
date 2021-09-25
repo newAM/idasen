@@ -1,23 +1,21 @@
 from bleak import BleakClient
+from bleak import BleakScanner
+from bleak.backends.device import BLEDevice
+from bleak.backends.scanner import AdvertisementData
 from typing import Any
 from typing import MutableMapping
 from typing import Optional
 from typing import Tuple
 import asyncio
-import bleak
 import logging
 import sys
 import time
-
-from bleak import BleakScanner
-from bleak.backends.device import BLEDevice
-from bleak.backends.scanner import AdvertisementData
 
 
 _UUID_HEIGHT: str = "99fa0021-338a-1024-8a49-009c0215f78a"
 _UUID_COMMAND: str = "99fa0002-338a-1024-8a49-009c0215f78a"
 _UUID_REFERENCE_INPUT: str = "99fa0031-338a-1024-8a49-009c0215f78a"
-_UUID_ADV_SVC: str = '99fa0001-338a-1024-8a49-009c0215f78a'
+_UUID_ADV_SVC: str = "99fa0001-338a-1024-8a49-009c0215f78a"
 
 _COMMAND_REFERENCE_INPUT_STOP: bytearray = bytearray([0x01, 0x80])
 _COMMAND_UP: bytearray = bytearray([0x47, 0x00])
@@ -38,6 +36,7 @@ def _bytes_to_meters(raw: bytearray) -> float:
     low_byte: int = int(raw[0])
     int_raw: int = (high_byte << 8) + low_byte
     return float(int_raw / 10000) + IdasenDesk.MIN_HEIGHT
+
 
 def _is_desk(device: BLEDevice, adv: AdvertisementData) -> bool:
     return _UUID_ADV_SVC in adv.service_uuids
@@ -251,7 +250,7 @@ class IdasenDesk:
         'AA:AA:AA:AA:AA:AA'
         """
         try:
-            device = await BleakScanner.find_device_by_filter(_is_desk, timeout=30)
+            device = await BleakScanner.find_device_by_filter(_is_desk)
         except Exception:
             return None
 
@@ -259,4 +258,3 @@ class IdasenDesk:
             return None
 
         return device.address
-
