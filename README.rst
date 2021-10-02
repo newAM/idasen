@@ -51,7 +51,7 @@ To install this package locally build it then install with pip:
 
 Configuration
 *************
-Configuration that is not expected to change frequency can be provided via a
+Configuration that is not expected to change frequently can be provided via a
 YAML configuration file located at ``~/.config/idasen/idasen.yaml``.
 
 You can use this command to initialize a new configuartion file:
