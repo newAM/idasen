@@ -29,26 +29,6 @@ Install
 
     python3.8 -m pip install --upgrade idasen
 
-Developers Install
-==================
-
-Development is done with `poetry`_, a virtual environment manager.
-First, `install poetry`_ using their guide.
-
-Then install all the packages using poetry install:
-
-.. code-block:: bash
-
-    poetry install
-
-To install this package locally build it then install with pip:
-
-
-.. code-block:: bash
-
-    poetry build
-    python3.8 -m pip install dist/idasen-0.6.0-py3-none-any.whl
-
 Configuration
 *************
 Configuration that is not expected to change frequently can be provided via a
