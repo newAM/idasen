@@ -19,7 +19,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: "1.1.10"
+          poetry-version: "1.1.11"
       - name: Poetry Install
         run: poetry install
       - name: Run flake8
@@ -39,7 +39,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: "1.1.10"
+          poetry-version: "1.1.11"
       - name: Install bluetooth
         run: |
             sudo apt update
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python ${{ matrix.python-version }}
@@ -63,7 +63,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: "1.1.10"
+          poetry-version: "1.1.11"
       - name: Install bluetooth
         run: |
             sudo apt update
@@ -92,7 +92,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: "1.1.10"
+          poetry-version: "1.1.11"
       - name: Poetry Install
         run: poetry install
       - name: Finished
@@ -113,7 +113,7 @@ jobs:
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.4
         with:
-          poetry-version: "1.1.10"
+          poetry-version: "1.1.11"
       - name: Poetry Install
         run: poetry install
       - name: Poetry publish
