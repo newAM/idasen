@@ -164,8 +164,7 @@ async def monitor(args: argparse.Namespace) -> None:
             while True:
                 height = await desk.get_height()
                 if abs(height - previous_height) > 0.001:
-                    print(f"{height:.3f} meters")
-                    sys.stdout.flush()
+                    print(f"{height:.3f} meters", flush=True)
                 previous_height = height
     except KeyboardInterrupt:
         pass
