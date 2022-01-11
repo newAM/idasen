@@ -67,14 +67,14 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bleak"
-version = "0.13.0"
+version = "0.14.0"
 description = "Bluetooth Low Energy platform Agnostic Klient"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-bleak-winrt = {version = ">=1.0.1", markers = "platform_system == \"Windows\""}
+bleak-winrt = {version = ">=1.1.0", markers = "platform_system == \"Windows\""}
 dbus-next = {version = "*", markers = "platform_system == \"Linux\""}
 pyobjc-core = {version = "*", markers = "platform_system == \"Darwin\""}
 pyobjc-framework-CoreBluetooth = {version = "*", markers = "platform_system == \"Darwin\""}
@@ -665,7 +665,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "types-pyyaml"
-version = "6.0.2"
+version = "6.0.3"
 description = "Typing stubs for PyYAML"
 category = "dev"
 optional = false
@@ -703,7 +703,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "13ef71eeed012b251a0e36312fcf69a46d19b0c6187ad0290c94dcee3a277523"
+content-hash = "45d777e469f0f4a86df6353e51c7e0a18985b74cae45d8fcf6821e6cdd2c1435"
 
 [metadata.files]
 alabaster = [
@@ -727,8 +727,8 @@ black = [
     {file = "black-21.12b0.tar.gz", hash = "sha256:77b80f693a569e2e527958459634f18df9b0ba2625ba4e0c2d5da5be42e6f2b3"},
 ]
 bleak = [
-    {file = "bleak-0.13.0-py2.py3-none-any.whl", hash = "sha256:33e92739a8a117628fa1533bf973fd55ade2051c3a12ba3bbfee6ca9eca46959"},
-    {file = "bleak-0.13.0.tar.gz", hash = "sha256:eb0716852cad7e96613934680b6aff4f48d68671d6ab967155497387cd98dcee"},
+    {file = "bleak-0.14.0-py2.py3-none-any.whl", hash = "sha256:a328d6a7b25b90f5f924f7fec738e000a08d020cbf81e319420acd548394fba6"},
+    {file = "bleak-0.14.0.tar.gz", hash = "sha256:b449cc63f769c2d219c67e23ffb9f3a5b5f23eb2d68d05878743dbed83a14360"},
 ]
 bleak-winrt = [
     {file = "bleak-winrt-1.1.0.tar.gz", hash = "sha256:d0e68e9f882c4d18c07adbbb7f77dd30327a3a461f835001c5e83b5a0b379100"},
@@ -1085,8 +1085,8 @@ tomli = [
     {file = "tomli-1.2.3.tar.gz", hash = "sha256:05b6166bff487dc068d322585c7ea4ef78deed501cc124060e0f238e89a9231f"},
 ]
 types-pyyaml = [
-    {file = "types-PyYAML-6.0.2.tar.gz", hash = "sha256:86b1d13eed3a9841264376dae0fc3168b0b593a162a64effeba066efd7198572"},
-    {file = "types_PyYAML-6.0.2-py3-none-any.whl", hash = "sha256:87f2c64e4b2de3e134dce991f920f5c9ae2cbe06ec43f21e2866cc90b920230b"},
+    {file = "types-PyYAML-6.0.3.tar.gz", hash = "sha256:6ea4eefa8579e0ce022f785a62de2bcd647fad4a81df5cf946fd67e4b059920b"},
+    {file = "types_PyYAML-6.0.3-py3-none-any.whl", hash = "sha256:8b50294b55a9db89498cdc5a65b1b4545112b6cd1cf4465bd693d828b0282a17"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.0.1-py3-none-any.whl", hash = "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"},
