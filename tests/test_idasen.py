@@ -78,7 +78,6 @@ async def desk(event_loop: AbstractEventLoop) -> AsyncGenerator[IdasenDesk, None
         yield desk
 
 
-@pytest.mark.asyncio
 async def test_is_connected(desk: IdasenDesk):
     assert await desk.is_connected()
 
@@ -87,34 +86,29 @@ def test_mac(desk: IdasenDesk):
     assert desk.mac == desk_mac
 
 
-@pytest.mark.asyncio
 async def test_up(desk: IdasenDesk):
     initial = await desk.get_height()
     await desk.move_up()
     assert await desk.get_height() - initial > 0
 
 
-@pytest.mark.asyncio
 async def test_down(desk: IdasenDesk):
     initial = await desk.get_height()
     await desk.move_down()
     assert await desk.get_height() - initial < 0
 
 
-@pytest.mark.asyncio
 async def test_get_height(desk: IdasenDesk):
     height = await desk.get_height()
     assert isinstance(height, float)
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize("target", [0.0, 2.0])
 async def test_move_to_target_raises(desk: IdasenDesk, target: float):
     with pytest.raises(ValueError):
         await desk.move_to_target(target)
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize("target", [0.7, 1.1])
 async def test_move_to_target(desk: IdasenDesk, target: float):
     await desk.move_to_target(target)
@@ -134,7 +128,6 @@ def test_bytes_to_meters(raw: bytearray, result: float):
     assert _bytes_to_meters(raw) == result
 
 
-@pytest.mark.asyncio
 async def test_fail_to_connect(caplog, monkeypatch):
     async def raise_exception(*_):
         raise Exception
@@ -163,7 +156,6 @@ async def test_fail_to_connect(caplog, monkeypatch):
     caplog.clear()
 
 
-@pytest.mark.asyncio
 async def test_discover_exception():
     with mock.patch.object(
         bleak.BleakScanner, "find_device_by_filter", side_effect=Exception
@@ -173,7 +165,6 @@ async def test_discover_exception():
         assert result is None
 
 
-@pytest.mark.asyncio
 async def test_discover_empty():
     with mock.patch.object(
         bleak.BleakScanner, "find_device_by_filter", return_value=None

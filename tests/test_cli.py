@@ -59,13 +59,11 @@ def test_load_config_reserved_position(tmpdir: str):
         load_config(file_path)
 
 
-@pytest.mark.asyncio
 async def test_init_exists_no_force():
     with mock.patch.object(os.path, "isfile", return_value=True):
         assert await init(args=argparse.Namespace(force=False)) == 1
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize("discover_return", ["AA:AA:AA:AA:AA:AA", None])
 async def test_init(discover_return: Optional[str]):
     with mock.patch.object(os.path, "isfile", return_value=True), mock.patch.object(
