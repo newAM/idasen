@@ -67,14 +67,14 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bleak"
-version = "0.14.1"
+version = "0.14.2"
 description = "Bluetooth Low Energy platform Agnostic Klient"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-bleak-winrt = {version = ">=1.1.0", markers = "platform_system == \"Windows\""}
+bleak-winrt = {version = ">=1.1.1", markers = "platform_system == \"Windows\""}
 dbus-next = {version = "*", markers = "platform_system == \"Linux\""}
 pyobjc-core = {version = "*", markers = "platform_system == \"Darwin\""}
 pyobjc-framework-CoreBluetooth = {version = "*", markers = "platform_system == \"Darwin\""}
@@ -82,7 +82,7 @@ pyobjc-framework-libdispatch = {version = "*", markers = "platform_system == \"D
 
 [[package]]
 name = "bleak-winrt"
-version = "1.1.0"
+version = "1.1.1"
 description = "Python WinRT bindings for Bleak"
 category = "main"
 optional = false
@@ -756,19 +756,19 @@ black = [
     {file = "black-21.12b0.tar.gz", hash = "sha256:77b80f693a569e2e527958459634f18df9b0ba2625ba4e0c2d5da5be42e6f2b3"},
 ]
 bleak = [
-    {file = "bleak-0.14.1-py2.py3-none-any.whl", hash = "sha256:af5a57a3c93970525e3d2953c80d69489a2903f1fd28e30bf85e473f22fb657a"},
-    {file = "bleak-0.14.1.tar.gz", hash = "sha256:9794685d25f8f71d48fef04e2ca8ce8cc243b070f5b08ed70e70ae98341d24bb"},
+    {file = "bleak-0.14.2-py2.py3-none-any.whl", hash = "sha256:48cee8151ec505e02d13330db369b4b78e39dd66e0629e7a1c3d9277e57ac791"},
+    {file = "bleak-0.14.2.tar.gz", hash = "sha256:d04cedcfee67b46c5d1b09072478e102dc32617e1bb55655c457254d0a4678ba"},
 ]
 bleak-winrt = [
-    {file = "bleak-winrt-1.1.0.tar.gz", hash = "sha256:d0e68e9f882c4d18c07adbbb7f77dd30327a3a461f835001c5e83b5a0b379100"},
-    {file = "bleak_winrt-1.1.0-cp310-cp310-win32.whl", hash = "sha256:4f8f0558a8c21215b5cefdeaf731d2dfb6f12dfc7238f18ced5c00f9b096cea8"},
-    {file = "bleak_winrt-1.1.0-cp310-cp310-win_amd64.whl", hash = "sha256:1f0a92952ca1aa75d4a4eb0eeb81a957db3498abb57f80d1032d6cdc0693cb4d"},
-    {file = "bleak_winrt-1.1.0-cp37-cp37m-win32.whl", hash = "sha256:e91d07742e508aa4ebbc139f5c8dceaa1955f7002bd233c848fe181d7599a4a5"},
-    {file = "bleak_winrt-1.1.0-cp37-cp37m-win_amd64.whl", hash = "sha256:a24b1c854975fed5fa6e1142a96bc35eda2674ac54eddb5b0373acba58e61d85"},
-    {file = "bleak_winrt-1.1.0-cp38-cp38-win32.whl", hash = "sha256:9d60b2d5a39bfd0d54719f8dc871194f3e0929e3f821f6b45c4f3b6e7404d3c2"},
-    {file = "bleak_winrt-1.1.0-cp38-cp38-win_amd64.whl", hash = "sha256:2f5cb4743c5826fc2431097a6ffbedf3f5ed3366a6e6b68f497b48bbd185739a"},
-    {file = "bleak_winrt-1.1.0-cp39-cp39-win32.whl", hash = "sha256:95fddeee74acb9e20aa531aeef96af56518cf4b9bd2caf5a6d8ebca4c1fc71ae"},
-    {file = "bleak_winrt-1.1.0-cp39-cp39-win_amd64.whl", hash = "sha256:4039a5ffc099cd2520cd79ecf4f07fa4e605f02d0cb53a7d32a0f1b1486e8330"},
+    {file = "bleak-winrt-1.1.1.tar.gz", hash = "sha256:3e7765f98d71b5229d95bd3b197931994dead40f3144e7186de7b8f664e26df0"},
+    {file = "bleak_winrt-1.1.1-cp310-cp310-win32.whl", hash = "sha256:f1ab6641cfdadce69126b459c5d30f1a934384bc0c37632393163eea3c94d7a8"},
+    {file = "bleak_winrt-1.1.1-cp310-cp310-win_amd64.whl", hash = "sha256:79a87c7fcc99838bf7f71765e855a74a80e085c4aedde14d0931d56a9f87be77"},
+    {file = "bleak_winrt-1.1.1-cp37-cp37m-win32.whl", hash = "sha256:1cf652fe38822216c093d4322b9899f54bff3169c4fc48ee8dd10bc1938ec59c"},
+    {file = "bleak_winrt-1.1.1-cp37-cp37m-win_amd64.whl", hash = "sha256:09b64b9b768dfa3abab16e67f7e0d476a0e9d86da2975a2487e033ce2be96663"},
+    {file = "bleak_winrt-1.1.1-cp38-cp38-win32.whl", hash = "sha256:1c4a9ee0c3195d07a3fd8f994953075443563c2c5c8e608cd09f3d0eaac540ed"},
+    {file = "bleak_winrt-1.1.1-cp38-cp38-win_amd64.whl", hash = "sha256:e75b8d5aad3169bd528be9ccbacb775fb0d07f1714ca93b1efa6687c47a1b755"},
+    {file = "bleak_winrt-1.1.1-cp39-cp39-win32.whl", hash = "sha256:e0da28651f8e83aaaea4113d084880f1fafae75c29c2a70429ae1f0b8681dc52"},
+    {file = "bleak_winrt-1.1.1-cp39-cp39-win_amd64.whl", hash = "sha256:7481aed7d17e8c2aa2bf9e3786206e382f710f516e00887d825df1b7a4c613d5"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
