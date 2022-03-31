@@ -18,7 +18,7 @@ python = "^3.8"
 
 bleak = ">=0.12,<0.15"
 pyyaml = ">=5.3.1,<7"
-voluptuous = "^0.12"
+voluptuous = ">=0.12,<0.14"
 
 [tool.poetry.dev-dependencies]
 black = "22.3.0"

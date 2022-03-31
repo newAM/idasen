@@ -708,7 +708,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
 name = "voluptuous"
-version = "0.12.2"
+version = "0.13.0"
 description = ""
 category = "main"
 optional = false
@@ -729,7 +729,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "6667867d79832a76409b09eb89ca6da10baa107227b4dd0ce084b02f4473ffc4"
+content-hash = "e136d93af1971e11cbc8c0eb4f67a90430eec1fab7bbd5b485a8ea3d7a339313"
 
 [metadata.files]
 alabaster = [
@@ -1155,7 +1155,8 @@ urllib3 = [
     {file = "urllib3-1.26.8.tar.gz", hash = "sha256:0e7c33d9a63e7ddfcb86780aac87befc2fbddf46c58dbb487e0855f7ceec283c"},
 ]
 voluptuous = [
-    {file = "voluptuous-0.12.2.tar.gz", hash = "sha256:4db1ac5079db9249820d49c891cb4660a6f8cae350491210abce741fabf56513"},
+    {file = "voluptuous-0.13.0-py3-none-any.whl", hash = "sha256:e3b5f6cb68fcb0230701b5c756db4caa6766223fc0eaf613931fdba51025981b"},
+    {file = "voluptuous-0.13.0.tar.gz", hash = "sha256:cae6a4526b434b642816b34a00e1186d5a5f5e0c948ab94d2a918e01e5874066"},
 ]
 zipp = [
     {file = "zipp-3.7.0-py3-none-any.whl", hash = "sha256:b47250dd24f92b7dd6a0a8fc5244da14608f3ca90a5efcd37a3b1642fac9a375"},
