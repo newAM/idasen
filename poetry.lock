@@ -63,7 +63,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bleak"
-version = "0.14.2"
+version = "0.14.3"
 description = "Bluetooth Low Energy platform Agnostic Klient"
 category = "main"
 optional = false
@@ -774,8 +774,8 @@ black = [
     {file = "black-22.3.0.tar.gz", hash = "sha256:35020b8886c022ced9282b51b5a875b6d1ab0c387b31a065b84db7c33085ca79"},
 ]
 bleak = [
-    {file = "bleak-0.14.2-py2.py3-none-any.whl", hash = "sha256:48cee8151ec505e02d13330db369b4b78e39dd66e0629e7a1c3d9277e57ac791"},
-    {file = "bleak-0.14.2.tar.gz", hash = "sha256:d04cedcfee67b46c5d1b09072478e102dc32617e1bb55655c457254d0a4678ba"},
+    {file = "bleak-0.14.3-py2.py3-none-any.whl", hash = "sha256:1740c09039e58a65023a3c7141609bff1300dff2b5f7ab103a3218063803e965"},
+    {file = "bleak-0.14.3.tar.gz", hash = "sha256:760e5bb1e804087f762576b9b9563d63b47d521b1652988e28c3cb5e64b61990"},
 ]
 bleak-winrt = [
     {file = "bleak-winrt-1.1.1.tar.gz", hash = "sha256:3e7765f98d71b5229d95bd3b197931994dead40f3144e7186de7b8f664e26df0"},
