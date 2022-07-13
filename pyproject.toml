@@ -33,7 +33,7 @@ sphinx = "^5.0.1"
 sphinx-rtd-theme = "^1.0.0"
 toml = "^0.10.2"
 mypy = "^0.961"
-types-PyYAML = "^6.0.9"
+types-PyYAML = "^6.0.10"
 
 [tool.poetry.scripts]
 idasen = "idasen.cli:main"
