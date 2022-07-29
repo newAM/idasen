@@ -6,7 +6,7 @@ target-version = ["py38"]
 name = "idasen"
 description = "ikea IDÅSEN desk API and CLI."
 authors = ["Alex Martens <alex@thinglab.org>"]
-version = "0.8.3"
+version = "0.9.0"
 license = "MIT"
 readme = "README.rst"
 repository = "https://github.com/newAM/idasen"
@@ -16,7 +16,7 @@ keywords = ["ikea", "idasen", "bluetooth", "linak", "ble"]
 [tool.poetry.dependencies]
 python = "^3.8"
 
-bleak = ">=0.12,<0.15"
+bleak = "~0.15"
 pyyaml = ">=5.3.1,<7"
 voluptuous = ">=0.12,<0.14"
 
