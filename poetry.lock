@@ -63,7 +63,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bleak"
-version = "0.14.3"
+version = "0.15.0"
 description = "Bluetooth Low Energy platform Agnostic Klient"
 category = "main"
 optional = false
@@ -75,6 +75,7 @@ dbus-next = {version = "*", markers = "platform_system == \"Linux\""}
 pyobjc-core = {version = "*", markers = "platform_system == \"Darwin\""}
 pyobjc-framework-CoreBluetooth = {version = "*", markers = "platform_system == \"Darwin\""}
 pyobjc-framework-libdispatch = {version = "*", markers = "platform_system == \"Darwin\""}
+typing-extensions = ">=4.2.0"
 
 [[package]]
 name = "bleak-winrt"
@@ -677,7 +678,7 @@ python-versions = "*"
 name = "typing-extensions"
 version = "4.3.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -717,7 +718,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9e2eabefaf5ac1355092430b0f043ec08ce2ae7ee4f29ba3e56fa4d18dc2a29c"
+content-hash = "89dc22744009be5a3a2b8002acf9b9add4707b7dc387254b455e16bfc56a5abb"
 
 [metadata.files]
 alabaster = [
@@ -761,8 +762,8 @@ black = [
     {file = "black-22.6.0.tar.gz", hash = "sha256:6c6d39e28aed379aec40da1c65434c77d75e65bb59a1e1c283de545fb4e7c6c9"},
 ]
 bleak = [
-    {file = "bleak-0.14.3-py2.py3-none-any.whl", hash = "sha256:1740c09039e58a65023a3c7141609bff1300dff2b5f7ab103a3218063803e965"},
-    {file = "bleak-0.14.3.tar.gz", hash = "sha256:760e5bb1e804087f762576b9b9563d63b47d521b1652988e28c3cb5e64b61990"},
+    {file = "bleak-0.15.0-py2.py3-none-any.whl", hash = "sha256:98a9aa157917d99954dd1ba86159ab047a8236bcd0c3ba5aae42ebdb4ec70964"},
+    {file = "bleak-0.15.0.tar.gz", hash = "sha256:aad8748813db63bb604820ffd2b5370a06c9c02724a0dec56fb83510074fce39"},
 ]
 bleak-winrt = [
     {file = "bleak-winrt-1.1.1.tar.gz", hash = "sha256:3e7765f98d71b5229d95bd3b197931994dead40f3144e7186de7b8f664e26df0"},
