@@ -25,19 +25,16 @@ class MockBleakClient:
 
     def __init__(self):
         self._height = 1.0
-        self._connected = False
+        self.is_connected = False
 
     async def __aenter__(self):
         self._height = 1.0
-        self._connected = True
+        self.is_connected = True
         return self
 
     async def __aexit__(self, *args, **kwargs):
-        self._connected = False
+        self.is_connected = False
         return
-
-    async def is_connected(self) -> bool:
-        return self._connected
 
     async def start_notify(self, uuid: str, callback: Callable):
         callback(uuid, bytearray([0x00, 0x00, 0x00, 0x00]))
