@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.9.0] - 2022-07-29
 ### Added
-- Added support for bleak version `~0.16`.
+- Added support for bleak version `~0.15`.
 
 ### Changed
 - Changed `IdasenDesk.is_connected` from an async method to a property.
 
 ### Removed
-- Removed support for bleak versions `~0.12`, `~0.13`, `~0.14`, `~0.15`.
+- Removed support for bleak versions `~0.12`, `~0.13`, and `~0.14`.
 
 ## [0.8.3] - 2022-03-31
 ### Added
