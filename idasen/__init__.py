@@ -48,7 +48,7 @@ class _DeskLoggingAdapter(logging.LoggerAdapter):
     def process(
         self, msg: str, kwargs: MutableMapping[str, Any]
     ) -> Tuple[str, MutableMapping[str, Any]]:
-        return f"[{self.extra['mac']}] {msg}", kwargs
+        return f"[{self.extra['mac']}] {msg}", kwargs  # type: ignore
 
 
 class IdasenDesk:
@@ -116,7 +116,8 @@ class IdasenDesk:
                 )
                 time.sleep(0.3 * i)
 
-    async def is_connected(self) -> bool:
+    @property
+    def is_connected(self) -> bool:
         """
         Check connection status of the desk.
 
@@ -125,11 +126,11 @@ class IdasenDesk:
 
         >>> async def example() -> bool:
         ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
-        ...         return await desk.is_connected()
+        ...         return desk.is_connected
         >>> asyncio.run(example())
         True
         """
-        return await self._client.is_connected()
+        return self._client.is_connected
 
     @property
     def mac(self) -> str:

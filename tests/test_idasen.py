@@ -70,16 +70,16 @@ desk_mac: str = "AA:AA:AA:AA:AA:AA"
 async def desk(event_loop: AbstractEventLoop) -> AsyncGenerator[IdasenDesk, None]:
     desk = IdasenDesk(mac=desk_mac)
     if desk_mac == "AA:AA:AA:AA:AA:AA":
-        desk._client = MockBleakClient()
+        desk._client = MockBleakClient()  # type: ignore
 
-    assert not await desk.is_connected()
+    assert not desk.is_connected
 
     async with desk:
         yield desk
 
 
 async def test_is_connected(desk: IdasenDesk):
-    assert await desk.is_connected()
+    assert desk.is_connected
 
 
 def test_mac(desk: IdasenDesk):
@@ -183,4 +183,4 @@ async def test_discover_empty():
     ],
 )
 def test_is_desk(adv: SimpleNamespace, is_desk: bool):
-    assert _is_desk(None, adv) is is_desk
+    assert _is_desk(None, adv) is is_desk  # type: ignore
