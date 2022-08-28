@@ -108,7 +108,7 @@ Related projects and packaging:
 .. _rhyst/idasen-controller: https://github.com/rhyst/idasen-controller
 .. _NixOS package: https://search.nixos.org/packages?channel=unstable&show=idasen&query=idasen
 .. _Arch Linux package: https://aur.archlinux.org/packages/idasen
-.. _huserben/idasen-rest-bridge:https://github.com/huserben/idasen-rest-bridge
+.. _huserben/idasen-rest-bridge: https://github.com/huserben/idasen-rest-bridge
 
 .. |PyPi Version| image:: https://badge.fury.io/py/idasen.svg
    :target: https://badge.fury.io/py/idasen
