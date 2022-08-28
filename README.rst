@@ -111,7 +111,7 @@ Related projects and packaging:
    :target: https://badge.fury.io/py/idasen
 .. |Build Status| image:: https://github.com/newAM/idasen/workflows/Tests/badge.svg
    :target: https://github.com/newAM/idasen/actions
-.. |Documentation Status| image:: https://img.shields.io/badge/docs-stable-blue
+.. |Documentation Status| image:: https://img.shields.io/badge/docs-latest-blue
    :target: https://newam.github.io/idasen
 .. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
