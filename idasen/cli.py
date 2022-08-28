@@ -146,9 +146,7 @@ async def init(args: argparse.Namespace) -> int:
             print("Failed to discover desk's MAC address", file=sys.stderr)
         os.makedirs(IDASEN_CONFIG_DIRECTORY, exist_ok=True)
         with open(IDASEN_CONFIG_PATH, "w") as f:
-            f.write(
-                "# https://newam.github.io/idasen/index.html#configuration\n"
-            )
+            f.write("# https://newam.github.io/idasen/index.html#configuration\n")
             yaml.dump(DEFAULT_CONFIG, f)
         print(
             f"Created new configuration file at: {IDASEN_CONFIG_PATH}", file=sys.stderr
