@@ -98,14 +98,17 @@ Community
 
 Related projects and packaging:
 
-* Arch Linux package: https://aur.archlinux.org/packages/idasen/
-* NixOS package: https://search.nixos.org/packages?channel=unstable&show=idasen&query=idasen
-* idasen-rest-bridge: https://github.com/huserben/idasen-rest-bridge
-* Repository this was forked from: `rhyst/idasen-controller`_.
+* `Arch Linux package`_
+* `NixOS package`_
+* `huserben/idasen-rest-bridge`_
+* Repository this was forked from: `rhyst/idasen-controller`_
 
 .. _poetry: https://python-poetry.org/
 .. _install poetry: https://python-poetry.org/docs/#installation
 .. _rhyst/idasen-controller: https://github.com/rhyst/idasen-controller
+.. _NixOS package: https://search.nixos.org/packages?channel=unstable&show=idasen&query=idasen
+.. _Arch Linux package: https://aur.archlinux.org/packages/idasen
+.. _huserben/idasen-rest-bridge:https://github.com/huserben/idasen-rest-bridge
 
 .. |PyPi Version| image:: https://badge.fury.io/py/idasen.svg
    :target: https://badge.fury.io/py/idasen
