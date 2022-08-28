@@ -147,7 +147,7 @@ async def init(args: argparse.Namespace) -> int:
         os.makedirs(IDASEN_CONFIG_DIRECTORY, exist_ok=True)
         with open(IDASEN_CONFIG_PATH, "w") as f:
             f.write(
-                "# https://idasen.readthedocs.io/en/latest/index.html#configuration\n"
+                "# https://newam.github.io/idasen/index.html#configuration\n"
             )
             yaml.dump(DEFAULT_CONFIG, f)
         print(
