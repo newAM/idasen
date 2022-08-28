@@ -10,7 +10,7 @@ version = "0.9.0"
 license = "MIT"
 readme = "README.rst"
 repository = "https://github.com/newAM/idasen"
-homepage = "https://github.com/newAM/idasen"
+documentation = "https://newam.github.io/idasen"
 keywords = ["ikea", "idasen", "bluetooth", "linak", "ble"]
 
 [tool.poetry.dependencies]
