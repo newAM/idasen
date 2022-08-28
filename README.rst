@@ -3,8 +3,6 @@ idasen
 
 |PyPi Version| |Build Status| |Documentation Status| |Black|
 
-This is a heavily modified fork of `rhyst/idasen-controller`_.
-
 The IDÅSEN is an electric sitting standing desk with a Linak controller sold by
 ikea.
 
@@ -100,19 +98,23 @@ Community
 
 Related projects and packaging:
 
-* Arch Linux package: https://aur.archlinux.org/packages/idasen/
-* NixOS package: https://search.nixos.org/packages?channel=unstable&show=idasen&query=idasen
-* idasen-rest-bridge: https://github.com/huserben/idasen-rest-bridge
+* `Arch Linux package`_
+* `NixOS package`_
+* `huserben/idasen-rest-bridge`_
+* Repository this was forked from: `rhyst/idasen-controller`_
 
 .. _poetry: https://python-poetry.org/
 .. _install poetry: https://python-poetry.org/docs/#installation
 .. _rhyst/idasen-controller: https://github.com/rhyst/idasen-controller
+.. _NixOS package: https://search.nixos.org/packages?channel=unstable&show=idasen&query=idasen
+.. _Arch Linux package: https://aur.archlinux.org/packages/idasen
+.. _huserben/idasen-rest-bridge: https://github.com/huserben/idasen-rest-bridge
 
 .. |PyPi Version| image:: https://badge.fury.io/py/idasen.svg
    :target: https://badge.fury.io/py/idasen
 .. |Build Status| image:: https://github.com/newAM/idasen/workflows/Tests/badge.svg
    :target: https://github.com/newAM/idasen/actions
-.. |Documentation Status| image:: https://readthedocs.org/projects/idasen/badge/?version=latest
-   :target: https://idasen.readthedocs.io/en/latest/?badge=latest
+.. |Documentation Status| image:: https://img.shields.io/badge/docs-latest-blue
+   :target: https://newam.github.io/idasen
 .. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black

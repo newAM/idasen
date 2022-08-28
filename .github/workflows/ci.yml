@@ -18,8 +18,6 @@ jobs:
           python-version: "3.9"
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.6
-        with:
-          poetry-version: "1.1.11"
       - name: Poetry Install
         run: poetry install
       - name: Run flake8
@@ -38,8 +36,6 @@ jobs:
           python-version: "3.9"
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.6
-        with:
-          poetry-version: "1.1.11"
       - name: Install bluetooth
         run: |
             sudo apt update
@@ -48,6 +44,25 @@ jobs:
         run: poetry install
       - name: Run sphinx
         run: poetry run sphinx-build -W -b html docs public
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@fb03cce750065e6b3acf43606d5dd2d72e2356a4
+        with:
+          path: public
+
+  deploy_docs:
+    runs-on: ubuntu-latest
+    needs: docs
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
 
   pytest:
     runs-on: ubuntu-latest
@@ -62,8 +77,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.6
-        with:
-          poetry-version: "1.1.11"
       - name: Install bluetooth
         run: |
             sudo apt update
