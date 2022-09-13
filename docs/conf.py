@@ -22,6 +22,7 @@
 
 from typing import Optional
 import datetime
+import inspect
 import os
 import sys
 import toml
@@ -66,10 +67,14 @@ nitpicky = True
 html_theme = "sphinx_rtd_theme"
 htmlhelp_basename = pyproject["tool"]["poetry"]["name"]
 html_theme_options = {"display_version": True}
+github_user = "newAM"
 html_context = {
     "display_github": True,
-    "github_user": "newAM",
+    "github_user": github_user,
     "github_repo": project,
+    # https://github.com/readthedocs/sphinx_rtd_theme/issues/465
+    "github_version": "main",
+    "conf_py_path": "/docs/",  # needs leading and trailing slashes
 }
 
 parser = get_parser(DEFAULT_CONFIG)
@@ -78,9 +83,26 @@ with open(os.path.join(this_dir, "cli.txt"), "w") as f:
 
 
 def linkcode_resolve(domain: str, info: dict) -> Optional[str]:
-    if domain != "py":
+    # https://github.com/Lasagne/Lasagne/blob/5d3c63cb315c50b1cbd27a6bc8664b406f34dd99/docs/conf.py
+    import idasen
+
+    def find_source():
+        # try to find the file and line number, based on code from numpy:
+        # https://github.com/numpy/numpy/blob/master/doc/source/conf.py#L286
+        obj = sys.modules[info["module"]]
+        for part in info["fullname"].split("."):
+            obj = getattr(obj, part)
+        fn = inspect.getsourcefile(obj)
+        fn = os.path.relpath(fn, start=os.path.dirname(idasen.__file__))
+        source, lineno = inspect.getsourcelines(obj)
+        return fn, lineno, lineno + len(source) - 1
+
+    if domain != "py" or not info["module"]:
         return None
-    if not info["module"]:
-        return None
-    if info["module"] == "idasen":
-        return f"https://github.com/newAM/idasen/blob/v{version}/idasen/__init__.py"
+
+    try:
+        filename = f"{project}/%s#L%d-L%d" % find_source()
+    except Exception:
+        filename = f"{project}/__init__.py"
+    print(filename)
+    return f"https://github.com/{github_user}/{project}/blob/main/{filename}"
