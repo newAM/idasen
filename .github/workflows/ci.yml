@@ -15,17 +15,12 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.6
-      - name: Poetry Install
-        run: poetry install
-      - name: Run flake8
-        run: poetry run flake8
-      - name: Run black
-        run: poetry run black --check .
-      - name: Run mypy
-        run: poetry run mypy idasen tests
+          python-version: "3.10"
+      - uses: abatilo/actions-poetry@v2.1.6
+      - run: poetry install
+      - run: poetry run flake8
+      - run: poetry run black --check .
+      - run: poetry run mypy idasen tests
 
   docs:
     runs-on: ubuntu-latest
@@ -33,19 +28,16 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.6
+          python-version: "3.10"
+      - uses: abatilo/actions-poetry@v2.1.6
       - name: Install bluetooth
         run: |
             sudo apt update
             sudo apt install bluetooth
-      - name: Poetry Install
-        run: poetry install
+      - run: poetry install
       - name: Run sphinx
         run: poetry run sphinx-build -W -b html docs public
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - uses: actions/upload-pages-artifact@v1
         with:
           path: public
 
@@ -60,8 +52,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+      - uses: actions/deploy-pages@v1
         id: deployment
 
   pytest:
@@ -75,14 +66,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v2.1.6
+      - uses: abatilo/actions-poetry@v2.1.6
       - name: Install bluetooth
         run: |
             sudo apt update
             sudo apt install bluetooth
-      - name: Poetry Install
-        run: poetry install
+      - run: poetry install
       - name: Run pytest
         run: poetry run pytest -vvv --cov=idasen --doctest-modules
       - name: Upload coverage data to coveralls.io
@@ -98,16 +87,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Python 3.9
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.10"
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.6
-        with:
-          poetry-version: "1.1.11"
-      - name: Poetry Install
-        run: poetry install
+      - run: poetry install
       - name: Finished
         run: poetry run coveralls --finish --service=github
         env:
@@ -122,14 +107,10 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.10"
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.6
-        with:
-          poetry-version: "1.1.11"
-      - name: Poetry Install
-        run: poetry install
-      - name: Poetry publish
-        run: poetry publish --build
+      - run: poetry install
+      - run: poetry publish --build
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
