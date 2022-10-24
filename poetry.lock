@@ -471,7 +471,7 @@ testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.
 
 [[package]]
 name = "pytest-asyncio"
-version = "0.20.0"
+version = "0.20.1"
 description = "Pytest support for asyncio"
 category = "dev"
 optional = false
@@ -1079,8 +1079,8 @@ pytest = [
     {file = "pytest-7.1.3.tar.gz", hash = "sha256:4f365fec2dff9c1162f834d9f18af1ba13062db0c708bf7b946f8a5c76180c39"},
 ]
 pytest-asyncio = [
-    {file = "pytest-asyncio-0.20.0.tar.gz", hash = "sha256:cb2284c02f1d96f206847f2c1cfa40b4e984a727f9b88f04e1c95e4fb30f2de1"},
-    {file = "pytest_asyncio-0.20.0-py3-none-any.whl", hash = "sha256:746b320ffd25c179ae73f2a0ba983da35b18941d80144cff455834d6c37a23ff"},
+    {file = "pytest-asyncio-0.20.1.tar.gz", hash = "sha256:626699de2a747611f3eeb64168b3575f70439b06c3d0206e6ceaeeb956e65519"},
+    {file = "pytest_asyncio-0.20.1-py3-none-any.whl", hash = "sha256:2c85a835df33fda40fe3973b451e0c194ca11bc2c007eabff90bb3d156fc172b"},
 ]
 pytest-cov = [
     {file = "pytest-cov-4.0.0.tar.gz", hash = "sha256:996b79efde6433cdbd0088872dbc5fb3ed7fe1578b68cdbba634f14bb8dd0470"},
