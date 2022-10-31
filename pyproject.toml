@@ -44,3 +44,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.mypy]
+warn_unused_configs = true
+ignore_missing_imports = true
