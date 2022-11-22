@@ -25,7 +25,7 @@ Install
 
 .. code-block:: bash
 
-    python3.8 -m pip install --upgrade idasen
+    python3 -m pip install --upgrade idasen
 
 Configuration
 *************
