@@ -280,7 +280,6 @@ def main(argv: Optional[List[str]] = None):
         parser.print_usage()
         sys.exit(1)
     else:
-
         func = subcommand_to_callable(args.sub, config)
 
         rc = asyncio.run(func(args))
