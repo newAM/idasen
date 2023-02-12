@@ -32,7 +32,7 @@ pytest-cov = "^4.0.0"
 sphinx = "^5.3.0"
 sphinx-rtd-theme = "^1.2.0"
 toml = "^0.10.2"
-mypy = "^0.991"
+mypy = "^1.0"
 types-PyYAML = "^6.0.12"
 
 [tool.poetry.scripts]
