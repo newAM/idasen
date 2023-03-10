@@ -26,7 +26,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
 
 CONFIG_SCHEMA = vol.Schema(
     {
-        "mac_address": vol.All(str, vol.Length(min=17, max=17)),
+        "mac_address": vol.All(str, vol.Length(min=17, max=36)),
         "positions": {
             str: vol.All(
                 vol.Any(float, int),
