@@ -110,23 +110,23 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bleak"
-version = "0.19.5"
+version = "0.20.0"
 description = "Bluetooth Low Energy platform Agnostic Klient"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "bleak-0.19.5-py3-none-any.whl", hash = "sha256:31e92e6754379bb394b8544457c77ce09a8a7dbc5f9adf3119b34576c901ef1e"},
-    {file = "bleak-0.19.5.tar.gz", hash = "sha256:87845a96453c58c19031c735444a7b3156800534bcd3f23ba74e119e9ae3cd88"},
+    {file = "bleak-0.20.0-py3-none-any.whl", hash = "sha256:68e3de7fcde4ef2d206dc3611bf97ad613ae589a6e199129c09debd126e5e05d"},
+    {file = "bleak-0.20.0.tar.gz", hash = "sha256:7f6fe69454ad5d4c0ab05ae4a9aa1aabd6926d7128eab2fac4ef8a58a72999ee"},
 ]
 
 [package.dependencies]
-async-timeout = ">=3.0.0,<5"
+async-timeout = {version = ">=3.0.0,<5", markers = "python_version < \"3.11\""}
 bleak-winrt = {version = ">=1.2.0,<2.0.0", markers = "platform_system == \"Windows\""}
-dbus-fast = {version = ">=1.22.0,<2.0.0", markers = "platform_system == \"Linux\""}
-pyobjc-core = {version = ">=8.5.1,<9.0.0", markers = "platform_system == \"Darwin\""}
-pyobjc-framework-CoreBluetooth = {version = ">=8.5.1,<9.0.0", markers = "platform_system == \"Darwin\""}
-pyobjc-framework-libdispatch = {version = ">=8.5.1,<9.0.0", markers = "platform_system == \"Darwin\""}
+dbus-fast = {version = ">=1.83.0,<2.0.0", markers = "platform_system == \"Linux\""}
+pyobjc-core = {version = ">=9.0.1,<10.0.0", markers = "platform_system == \"Darwin\""}
+pyobjc-framework-CoreBluetooth = {version = ">=9.0.1,<10.0.0", markers = "platform_system == \"Darwin\""}
+pyobjc-framework-libdispatch = {version = ">=9.0.1,<10.0.0", markers = "platform_system == \"Darwin\""}
 
 [[package]]
 name = "bleak-winrt"
@@ -425,14 +425,14 @@ files = [
 
 [[package]]
 name = "exceptiongroup"
-version = "1.1.0"
+version = "1.1.1"
 description = "Backport of PEP 654 (exception groups)"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "exceptiongroup-1.1.0-py3-none-any.whl", hash = "sha256:327cbda3da756e2de031a3107b81ab7b3770a602c4d16ca618298c526f4bec1e"},
-    {file = "exceptiongroup-1.1.0.tar.gz", hash = "sha256:bcb67d800a4497e1b404c2dd44fca47d3b7a5e5433dbab67f96c1a685cdfdf23"},
+    {file = "exceptiongroup-1.1.1-py3-none-any.whl", hash = "sha256:232c37c63e4f682982c8b6459f33a8981039e5fb8756b2074364e5055c498c9e"},
+    {file = "exceptiongroup-1.1.1.tar.gz", hash = "sha256:d484c3090ba2889ae2928419117447a14daf3c1231d5e30d0aae34f354f01785"},
 ]
 
 [package.extras]
@@ -457,14 +457,14 @@ pyflakes = ">=2.5.0,<2.6.0"
 
 [[package]]
 name = "flake8-bugbear"
-version = "23.2.13"
+version = "23.3.12"
 description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "flake8-bugbear-23.2.13.tar.gz", hash = "sha256:39259814a83f33c8409417ee12dd4050c9c0bb4c8707c12fc18ae62b2f3ddee1"},
-    {file = "flake8_bugbear-23.2.13-py3-none-any.whl", hash = "sha256:f136bd0ca2684f101168bba2310dec541e11aa6b252260c17dcf58d18069a740"},
+    {file = "flake8-bugbear-23.3.12.tar.gz", hash = "sha256:e3e7f74c8a49ad3794a7183353026dabd68c74030d5f46571f84c1fb0eb79363"},
+    {file = "flake8_bugbear-23.3.12-py3-none-any.whl", hash = "sha256:beb5c7efcd7ccc2039ef66a77bb8db925e7be3531ff1cb4d0b7030d0e2113d72"},
 ]
 
 [package.dependencies]
@@ -693,14 +693,14 @@ files = [
 
 [[package]]
 name = "pathspec"
-version = "0.11.0"
+version = "0.11.1"
 description = "Utility library for gitignore style pattern matching of file paths."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pathspec-0.11.0-py3-none-any.whl", hash = "sha256:3a66eb970cbac598f9e5ccb5b2cf58930cd8e3ed86d393d541eaf2d8b1705229"},
-    {file = "pathspec-0.11.0.tar.gz", hash = "sha256:64d338d4e0914e91c1792321e6907b5a593f1ab1851de7fc269557a21b30ebbc"},
+    {file = "pathspec-0.11.1-py3-none-any.whl", hash = "sha256:d8af70af76652554bd134c22b3e8a1cc46ed7d91edcdd721ef1a0c51a84a5293"},
+    {file = "pathspec-0.11.1.tar.gz", hash = "sha256:2798de800fa92780e33acca925945e9a19a133b715067cf165b8866c15a31687"},
 ]
 
 [[package]]
@@ -791,81 +791,78 @@ plugins = ["importlib-metadata"]
 
 [[package]]
 name = "pyobjc-core"
-version = "8.5.1"
+version = "9.0.1"
 description = "Python<->ObjC Interoperability Module"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "pyobjc-core-8.5.1.tar.gz", hash = "sha256:f8592a12de076c27006700c4a46164478564fa33d7da41e7cbdd0a3bf9ddbccf"},
-    {file = "pyobjc_core-8.5.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:b62dcf987cc511188fc2aa5b4d3b9fd895361ea4984380463497ce4b0752ddf4"},
-    {file = "pyobjc_core-8.5.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:0accc653501a655f66c13f149a1d3d30e6cb65824edf852f7960a00c4f930d5b"},
-    {file = "pyobjc_core-8.5.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:f82b32affc898e9e5af041c1cecde2c99f2ce160b87df77f678c99f1550a4655"},
-    {file = "pyobjc_core-8.5.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:f7b2f6b6f3caeb882c658fe0c7098be2e8b79893d84daa8e636cb3e58a07df00"},
-    {file = "pyobjc_core-8.5.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:872c0202c911a5a2f1269261c168e36569f6ddac17e5d854ac19e581726570cc"},
-    {file = "pyobjc_core-8.5.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:21f92e231a4bae7f2d160d065f5afbf5e859a1e37f29d34ac12592205fc8c108"},
-    {file = "pyobjc_core-8.5.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:315334dd09781129af6a39641248891c4caa57043901750b0139c6614ce84ec0"},
+    {file = "pyobjc-core-9.0.1.tar.gz", hash = "sha256:5ce1510bb0bdff527c597079a42b2e13a19b7592e76850be7960a2775b59c929"},
+    {file = "pyobjc_core-9.0.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:b614406d46175b1438a9596b664bf61952323116704d19bc1dea68052a0aad98"},
+    {file = "pyobjc_core-9.0.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:bd397e729f6271c694fb70df8f5d3d3c9b2f2b8ac02fbbdd1757ca96027b94bb"},
+    {file = "pyobjc_core-9.0.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:d919934eaa6d1cf1505ff447a5c2312be4c5651efcb694eb9f59e86f5bd25e6b"},
+    {file = "pyobjc_core-9.0.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:67d67ca8b164f38ceacce28a18025845c3ec69613f3301935d4d2c4ceb22e3fd"},
+    {file = "pyobjc_core-9.0.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:39d11d71f6161ac0bd93cffc8ea210bb0178b56d16a7408bf74283d6ecfa7430"},
+    {file = "pyobjc_core-9.0.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:25be1c4d530e473ed98b15063b8d6844f0733c98914de6f09fe1f7652b772bbc"},
 ]
 
 [[package]]
 name = "pyobjc-framework-cocoa"
-version = "8.5.1"
+version = "9.0.1"
 description = "Wrappers for the Cocoa frameworks on macOS"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "pyobjc-framework-Cocoa-8.5.1.tar.gz", hash = "sha256:9a3de5cdb4644e85daf53f2ed912ef6c16ea5804a9e65552eafe62c2e139eb8c"},
-    {file = "pyobjc_framework_Cocoa-8.5.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:aa572acc2628488a47be8d19f4701fc96fce7377cc4da18316e1e08c3918521a"},
-    {file = "pyobjc_framework_Cocoa-8.5.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:cb3ae21c8d81b7f02a891088c623cef61bca89bd671eff58c632d2f926b649f3"},
-    {file = "pyobjc_framework_Cocoa-8.5.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:88f08f5bd94c66d373d8413c1d08218aff4cff0b586e0cc4249b2284023e7577"},
-    {file = "pyobjc_framework_Cocoa-8.5.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:063683b57e4bd88cb0f9631ae65d25ec4eecf427d2fe8d0c578f88da9c896f3f"},
-    {file = "pyobjc_framework_Cocoa-8.5.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:8f8806ddfac40620fb27f185d0f8937e69e330617319ecc2eccf6b9c8451bdd1"},
-    {file = "pyobjc_framework_Cocoa-8.5.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:7733a9a201df9e0cc2a0cf7bf54d76bd7981cba9b599353b243e3e0c9eefec10"},
-    {file = "pyobjc_framework_Cocoa-8.5.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:f0ab227f99d3e25dd3db73f8cde0999914a5f0dd6a08600349d25f95eaa0da63"},
+    {file = "pyobjc-framework-Cocoa-9.0.1.tar.gz", hash = "sha256:a8b53b3426f94307a58e2f8214dc1094c19afa9dcb96f21be12f937d968b2df3"},
+    {file = "pyobjc_framework_Cocoa-9.0.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:5f94b0f92a62b781e633e58f09bcaded63d612f9b1e15202f5f372ea59e4aebd"},
+    {file = "pyobjc_framework_Cocoa-9.0.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:f062c3bb5cc89902e6d164aa9a66ffc03638645dd5f0468b6f525ac997c86e51"},
+    {file = "pyobjc_framework_Cocoa-9.0.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:0b374c0a9d32ba4fc5610ab2741cb05a005f1dfb82a47dbf2dbb2b3a34b73ce5"},
+    {file = "pyobjc_framework_Cocoa-9.0.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:8928080cebbce91ac139e460d3dfc94c7cb6935be032dcae9c0a51b247f9c2d9"},
+    {file = "pyobjc_framework_Cocoa-9.0.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:9d2bd86a0a98d906f762f5dc59f2fc67cce32ae9633b02ff59ac8c8a33dd862d"},
+    {file = "pyobjc_framework_Cocoa-9.0.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:2a41053cbcee30e1e8914efa749c50b70bf782527d5938f2bc2a6393740969ce"},
 ]
 
 [package.dependencies]
-pyobjc-core = ">=8.5.1"
+pyobjc-core = ">=9.0.1"
 
 [[package]]
 name = "pyobjc-framework-corebluetooth"
-version = "8.5.1"
+version = "9.0.1"
 description = "Wrappers for the framework CoreBluetooth on macOS"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "pyobjc-framework-CoreBluetooth-8.5.1.tar.gz", hash = "sha256:b4f621fc3b5bf289db58e64fd746773b18297f87a0ffc5502de74f69133301c1"},
-    {file = "pyobjc_framework_CoreBluetooth-8.5.1-cp36-abi3-macosx_10_9_universal2.whl", hash = "sha256:bc720f2987a4d28dc73b13146e7c104d717100deb75c244da68f1d0849096661"},
-    {file = "pyobjc_framework_CoreBluetooth-8.5.1-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:2167f22886beb5b3ae69e475e055403f28eab065c49a25e2b98b050b483be799"},
-    {file = "pyobjc_framework_CoreBluetooth-8.5.1-cp36-abi3-macosx_11_0_universal2.whl", hash = "sha256:aa9587a36eca143701731e8bb6c369148f8cc48c28168d41e7323828e5117f2d"},
+    {file = "pyobjc-framework-CoreBluetooth-9.0.1.tar.gz", hash = "sha256:bf008d7bfe13cda12a43ed82346acfad262e90824086b145394c154531b51841"},
+    {file = "pyobjc_framework_CoreBluetooth-9.0.1-cp36-abi3-macosx_10_9_universal2.whl", hash = "sha256:62f15fc6e1d864a5e6afd26fe01947e5879b5322af23719d988981ca65b34a30"},
+    {file = "pyobjc_framework_CoreBluetooth-9.0.1-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:15673b480b3695aba87ce9574154bd1997f03a784969642b0da5e990e9679f48"},
+    {file = "pyobjc_framework_CoreBluetooth-9.0.1-cp36-abi3-macosx_11_0_universal2.whl", hash = "sha256:3560c55de7799cd7468b1282d6c2fca4823896ffbcb7d53be69b55c01a44592e"},
 ]
 
 [package.dependencies]
-pyobjc-core = ">=8.5.1"
-pyobjc-framework-Cocoa = ">=8.5.1"
+pyobjc-core = ">=9.0.1"
+pyobjc-framework-Cocoa = ">=9.0.1"
 
 [[package]]
 name = "pyobjc-framework-libdispatch"
-version = "8.5.1"
+version = "9.0.1"
 description = "Wrappers for libdispatch on macOS"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "pyobjc-framework-libdispatch-8.5.1.tar.gz", hash = "sha256:066fb34fceb326307559104d45532ec2c7b55426f9910b70dbefd5d1b8fd530f"},
-    {file = "pyobjc_framework_libdispatch-8.5.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:a316646ab30ba2a97bc828f8e27e7bb79efdf993d218a9c5118396b4f81dc762"},
-    {file = "pyobjc_framework_libdispatch-8.5.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:7730a29e4d9c7d8c2e8d9ffb60af0ab6699b2186296d2bff0a2dd54527578bc3"},
-    {file = "pyobjc_framework_libdispatch-8.5.1-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:76208d9d2b0071df2950800495ac0300360bb5f25cbe9ab880b65cb809764979"},
-    {file = "pyobjc_framework_libdispatch-8.5.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:1ad9aa4773ff1d89bf4385c081824c4f8708b50e3ac2fe0a9d590153242c0f67"},
-    {file = "pyobjc_framework_libdispatch-8.5.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:81e1833bd26f15930faba678f9efdffafc79ec04e2ea8b6d1b88cafc0883af97"},
-    {file = "pyobjc_framework_libdispatch-8.5.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:73226e224436eb6383e7a8a811c90ed597995adb155b4f46d727881a383ac550"},
-    {file = "pyobjc_framework_libdispatch-8.5.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:d115355ce446fc073c75cedfd7ab0a13958adda8e3a3b1e421e1f1e5f65640da"},
+    {file = "pyobjc-framework-libdispatch-9.0.1.tar.gz", hash = "sha256:988c4c8608f2059c8b80ac520bc8d20a46ff85f65c50749110c45df610141fce"},
+    {file = "pyobjc_framework_libdispatch-9.0.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:6cd32fea76165157a623ef8871f83cfa627ea2e878417704d6ac9c284c4211d5"},
+    {file = "pyobjc_framework_libdispatch-9.0.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:2a0f8ba6b498a095edef07e7a55f11dda3a6b37706caaa0f954f297c9aa1122e"},
+    {file = "pyobjc_framework_libdispatch-9.0.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:906f4e705b40ea878d0a7feddddac85965f9709f7a951c3d5459260d48efd56f"},
+    {file = "pyobjc_framework_libdispatch-9.0.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:0bd94e697e3739eaf093a9b6f5be9a2cc34faa96c66cc21d2c42a996a3b01242"},
+    {file = "pyobjc_framework_libdispatch-9.0.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:7f9798c599acdd21251f57970bafabccc7fa723ae2a6d1fbe82f99ecfa3f7cf9"},
+    {file = "pyobjc_framework_libdispatch-9.0.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:10a877b31960ee958873e5228f7b588c664014be8ad4d13a76a764482a18bf41"},
 ]
 
 [package.dependencies]
-pyobjc-core = ">=8.5.1"
+pyobjc-core = ">=9.0.1"
 
 [[package]]
 name = "pytest"
@@ -1014,23 +1011,6 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
-name = "setuptools"
-version = "67.6.0"
-description = "Easily download, build, install, upgrade, and uninstall Python packages"
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "setuptools-67.6.0-py3-none-any.whl", hash = "sha256:b78aaa36f6b90a074c1fa651168723acbf45d14cb1196b6f02c0fd07f17623b2"},
-    {file = "setuptools-67.6.0.tar.gz", hash = "sha256:2ee892cd5f29f3373097f5a814697e397cf3ce313616df0af11231e2ad118077"},
-]
-
-[package.extras]
-docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-hoverxref (<2)", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (==0.8.3)", "sphinx-reredirects", "sphinxcontrib-towncrier"]
-testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8 (<5)", "flake8-2020", "ini2toml[lite] (>=0.9)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pip (>=19.1)", "pip-run (>=8.8)", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)", "pytest-perf", "pytest-timeout", "pytest-xdist", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel"]
-testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
-
-[[package]]
 name = "snowballstemmer"
 version = "2.2.0"
 description = "This package provides 29 stemmers for 28 languages generated from Snowball algorithms."
@@ -1148,18 +1128,18 @@ test = ["html5lib", "pytest"]
 
 [[package]]
 name = "sphinxcontrib-jquery"
-version = "2.0.0"
+version = "4.1"
 description = "Extension to include jQuery on newer Sphinx releases"
 category = "dev"
 optional = false
 python-versions = ">=2.7"
 files = [
-    {file = "sphinxcontrib-jquery-2.0.0.tar.gz", hash = "sha256:8fb65f6dba84bf7bcd1aea1f02ab3955ac34611d838bcc95d4983b805b234daa"},
-    {file = "sphinxcontrib_jquery-2.0.0-py3-none-any.whl", hash = "sha256:ed47fa425c338ffebe3c37e1cdb56e30eb806116b85f01055b158c7057fdb995"},
+    {file = "sphinxcontrib-jquery-4.1.tar.gz", hash = "sha256:1620739f04e36a2c779f1a131a2dfd49b2fd07351bf1968ced074365933abc7a"},
+    {file = "sphinxcontrib_jquery-4.1-py2.py3-none-any.whl", hash = "sha256:f936030d7d0147dd026a4f2b5a57343d233f1fc7b363f68b3d4f1cb0993878ae"},
 ]
 
 [package.dependencies]
-setuptools = "*"
+Sphinx = ">=1.8"
 
 [[package]]
 name = "sphinxcontrib-jsmath"
@@ -1304,4 +1284,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "717f2d1a0c43977d2a76004005d350b39d9940d74151bf7906cd536843642e60"
+content-hash = "d1438867c5f56463255c72337e23d6fe01ff88033a2bc6050968c5fadc041229"
