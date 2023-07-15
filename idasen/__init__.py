@@ -6,6 +6,7 @@ from typing import Any
 from typing import MutableMapping
 from typing import Optional
 from typing import Tuple
+from typing import Union
 import asyncio
 import logging
 import sys
@@ -56,7 +57,7 @@ class IdasenDesk:
     Idasen desk.
 
     Args:
-        mac: Bluetooth MAC address of the desk.
+        mac: Bluetooth MAC address of the desk, or an instance of a BLEDevice.
         exit_on_fail: If set to True, failing to connect will call ``sys.exit(1)``,
             otherwise the exception will be raised.
 
@@ -83,13 +84,13 @@ class IdasenDesk:
     #: Number of times to retry upon failure to connect.
     RETRY_COUNT: int = 3
 
-    def __init__(self, mac: str, exit_on_fail: bool = False):
-        self._logger = _DeskLoggingAdapter(
-            logger=logging.getLogger(__name__), extra={"mac": mac}
-        )
-        self._mac = mac
+    def __init__(self, mac: Union[BLEDevice, str], exit_on_fail: bool = False):
         self._exit_on_fail = exit_on_fail
-        self._client = BleakClient(self._mac)
+        self._client = BleakClient(mac)
+        self._mac = mac.address if isinstance(mac, BLEDevice) else mac
+        self._logger = _DeskLoggingAdapter(
+            logger=logging.getLogger(__name__), extra={"mac": self.mac}
+        )
 
     async def __aenter__(self):
         await self._connect()
