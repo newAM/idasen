@@ -20,6 +20,11 @@ def event_loop() -> Generator[AbstractEventLoop, None, None]:
     loop.close()
 
 
+# Switch this to a real mac address if you want to do live testing.
+# This will wear out your motors faster than normal usage.
+desk_mac: str = "AA:AA:AA:AA:AA:AA"
+
+
 class MockBleakClient:
     """Mocks the bleak client for unit testing."""
 
@@ -57,10 +62,9 @@ class MockBleakClient:
         high_byte = (norm >> 8) & 0xFF
         return bytearray([low_byte, high_byte, 0x00, 0x00])
 
-
-# Switch this to a real mac address if you want to do live testing.
-# This will wear out your motors faster than normal usage.
-desk_mac: str = "AA:AA:AA:AA:AA:AA"
+    @property
+    def address(self) -> str:
+        return desk_mac
 
 
 @pytest.fixture(scope="session")
