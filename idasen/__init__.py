@@ -1,8 +1,9 @@
 from bleak import BleakClient
 from bleak import BleakScanner
+from bleak import BleakGATTCharacteristic
 from bleak.backends.device import BLEDevice
 from bleak.backends.scanner import AdvertisementData
-from typing import Any
+from typing import Any, Awaitable, Callable
 from typing import MutableMapping
 from typing import Optional
 from typing import Tuple
@@ -116,6 +117,37 @@ class IdasenDesk:
                     f"Failed to connect, retrying ({i}/{self.RETRY_COUNT})..."
                 )
                 time.sleep(0.3 * i)
+
+    async def monitor(self, callback: Callable[[float], Awaitable[None]]):
+        output_service_uuid = "99fa0020-338a-1024-8a49-009c0215f78a"
+        output_char_uuid = "99fa0021-338a-1024-8a49-009c0215f78a"
+
+        previous_height = 0.0
+
+        async def output_listener(char: BleakGATTCharacteristic, data: bytearray):
+            height = _bytes_to_meters(data)
+            self._logger.info(f"Got data: {height}m")
+
+            nonlocal previous_height
+            if abs(height - previous_height) < 0.001:
+                return
+            previous_height = height
+            await callback(height)
+
+        for service in self._client.services:
+            if service.uuid != output_service_uuid:
+                continue
+
+            chr_output = service.get_characteristic(output_char_uuid)
+            if chr_output is None:
+                self._logger.error("No output characteristic found")
+                return
+
+            self._logger.debug("Starting notify")
+            await self._client.start_notify(chr_output, output_listener)
+            return
+
+        self._logger.error("Output service not found")
 
     @property
     def is_connected(self) -> bool:
