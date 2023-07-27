@@ -25,6 +25,17 @@ def event_loop() -> Generator[AbstractEventLoop, None, None]:
 desk_mac: str = "AA:AA:AA:AA:AA:AA"
 
 
+class MockCharacteristic:
+    """Mocks a GATT Characteristic"""
+
+    @property
+    def uuid(self):
+        return "99fa0020-338a-1024-8a49-009c0215f78a"
+
+    def get_characteristic(self, uuid):
+        return ""
+
+
 class MockBleakClient:
     """Mocks the bleak client for unit testing."""
 
@@ -42,8 +53,8 @@ class MockBleakClient:
         return
 
     async def start_notify(self, uuid: str, callback: Callable):
-        callback(uuid, bytearray([0x00, 0x00, 0x00, 0x00]))
-        callback(None, bytearray([0x00, 0x00, 0x00, 0x00]))
+        await callback(uuid, bytearray([0x00, 0x00, 0x00, 0x00]))
+        await callback(None, bytearray([0x10, 0x00, 0x00, 0x00]))
 
     async def write_gatt_char(
         self, uuid: str, command: bytearray, response: bool = False
@@ -65,6 +76,10 @@ class MockBleakClient:
     @property
     def address(self) -> str:
         return desk_mac
+
+    @property
+    def services(self):
+        return [MockCharacteristic()]
 
 
 @pytest.fixture(scope="session")
@@ -102,6 +117,12 @@ async def test_down(desk: IdasenDesk):
 async def test_get_height(desk: IdasenDesk):
     height = await desk.get_height()
     assert isinstance(height, float)
+
+
+async def test_monitor(desk: IdasenDesk):
+    monitor_callback = mock.AsyncMock()
+    await desk.monitor(monitor_callback)
+    monitor_callback.assert_has_calls([mock.call(0.62), mock.call(0.6216)])
 
 
 @pytest.mark.parametrize("target", [0.0, 2.0])

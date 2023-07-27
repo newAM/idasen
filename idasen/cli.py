@@ -158,13 +158,14 @@ async def init(args: argparse.Namespace) -> int:
 async def monitor(args: argparse.Namespace) -> None:
     try:
         async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
-            previous_height = 0.0
+
+            async def printer(height: float):
+                print(f"{height:.3f} meters", flush=True)
+
+            await desk.monitor(printer)
             while True:
-                height = await desk.get_height()
-                if abs(height - previous_height) > 0.001:
-                    print(f"{height:.3f} meters", flush=True)
-                previous_height = height
-    except KeyboardInterrupt:
+                await asyncio.sleep(1000000)
+    except (KeyboardInterrupt, asyncio.exceptions.CancelledError):
         pass
 
 
