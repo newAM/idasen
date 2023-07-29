@@ -105,17 +105,30 @@ class IdasenDesk:
         )
 
     async def __aenter__(self):
-        await self._connect()
+        await self.connect()
         return self
 
-    async def __aexit__(self, *args, **kwargs) -> Optional[bool]:
-        return await self._client.__aexit__(*args, **kwargs)
+    async def __aexit__(self, *args, **kwargs):
+        await self.disconnect()
 
-    async def _connect(self):
+    async def connect(self):
+        """
+        Connect to the desk.
+
+        This method is an alternative to the context manager.
+        When possible the context manager is preferred.
+
+        >>> async def example() -> bool:
+        ...     desk = IdasenDesk(mac="AA:AA:AA:AA:AA:AA")
+        ...     await desk.connect()  # don't forget to call disconnect later!
+        ...     return desk.is_connected
+        >>> asyncio.run(example())
+        True
+        """
         i = 0
         while True:
             try:
-                await self._client.__aenter__()
+                await self._client.connect()
                 return
             except Exception:
                 if i >= self.RETRY_COUNT:
@@ -128,6 +141,23 @@ class IdasenDesk:
                     f"Failed to connect, retrying ({i}/{self.RETRY_COUNT})..."
                 )
                 await asyncio.sleep(0.3 * i)
+
+    async def disconnect(self):
+        """
+        Disconnect from the desk.
+
+        This method is an alternative to the context manager.
+        When possible the context manager is preferred.
+
+        >>> async def example() -> bool:
+        ...     desk = IdasenDesk(mac="AA:AA:AA:AA:AA:AA")
+        ...     await desk.connect()
+        ...     await desk.disconnect()
+        ...     return desk.is_connected
+        >>> asyncio.run(example())
+        False
+        """
+        await self._client.disconnect()
 
     async def monitor(self, callback: Callable[[float], Awaitable[None]]):
         output_service_uuid = "99fa0020-338a-1024-8a49-009c0215f78a"
