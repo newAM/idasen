@@ -51,6 +51,12 @@ class MockBleakClient:
         self.is_connected = False
         return
 
+    async def connect(self):
+        self.is_connected = True
+
+    async def disconnect(self):
+        self.is_connected = False
+
     async def start_notify(self, uuid: str, callback: Callable):
         await callback(uuid, bytearray([0x00, 0x00, 0x00, 0x00]))
         await callback(None, bytearray([0x10, 0x00, 0x00, 0x00]))
@@ -160,7 +166,7 @@ async def test_fail_to_connect(caplog, monkeypatch):
 
     desk = IdasenDesk(mac=desk_mac, exit_on_fail=True)
     client = MockBleakClient()
-    client.__aenter__ = raise_exception
+    client.connect = raise_exception
     desk._client = client
 
     with pytest.raises(SystemExit):
