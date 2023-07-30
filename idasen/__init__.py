@@ -11,7 +11,6 @@ from typing import Union
 import asyncio
 import logging
 import sys
-import time
 
 
 _UUID_HEIGHT: str = "99fa0021-338a-1024-8a49-009c0215f78a"
@@ -116,7 +115,7 @@ class IdasenDesk:
                 self._logger.warning(
                     f"Failed to connect, retrying ({i}/{self.RETRY_COUNT})..."
                 )
-                time.sleep(0.3 * i)
+                await asyncio.sleep(0.3 * i)
 
     async def monitor(self, callback: Callable[[float], Awaitable[None]]):
         output_service_uuid = "99fa0020-338a-1024-8a49-009c0215f78a"
