@@ -10,7 +10,6 @@ import asyncio
 import bleak
 import idasen
 import pytest
-import time
 
 
 @pytest.fixture(scope="session")
@@ -154,8 +153,8 @@ async def test_fail_to_connect(caplog, monkeypatch):
     async def raise_exception(*_):
         raise Exception
 
-    # patch `time.sleep()` to prevent making the tests unnecessarily long.
-    monkeypatch.setattr(time, "sleep", lambda *_: None)
+    # patch `asyncio.sleep()` to prevent making the tests unnecessarily long.
+    monkeypatch.setattr(asyncio, "sleep", mock.AsyncMock())
 
     caplog.set_level("WARNING")
 
