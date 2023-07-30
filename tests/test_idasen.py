@@ -136,6 +136,33 @@ async def test_move_to_target(desk: IdasenDesk, target: float):
     assert abs(await desk.get_height() - target) < 0.005
 
 
+async def test_move_stop():
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    desk._client = client
+    client.write_gatt_char = mock.AsyncMock()
+
+    async def write_gatt_char_mock(
+        uuid: str, command: bytearray, response: bool = False
+    ):
+        if client.write_gatt_char.call_count == 1:
+            assert desk.is_moving
+        # Force this method to behave asynchronously, otherwise it will block the
+        # eventloop
+        await asyncio.sleep(0.1)
+
+    client.write_gatt_char.side_effect = write_gatt_char_mock
+
+    async with desk:
+        move_task = asyncio.create_task(desk.move_to_target(0.7))
+        # Allow the move_task to start looping
+        await asyncio.sleep(0.1)
+
+        await desk.stop()
+        assert not desk.is_moving
+        assert move_task.done()
+
+
 @pytest.mark.parametrize(
     "raw, result",
     [

@@ -103,6 +103,8 @@ class IdasenDesk:
         self._logger = _DeskLoggingAdapter(
             logger=logging.getLogger(__name__), extra={"mac": self.mac}
         )
+        self._moving = False
+        self._move_task: Optional[asyncio.Task] = None
 
     async def __aenter__(self):
         await self._connect()
@@ -137,7 +139,7 @@ class IdasenDesk:
 
         async def output_listener(char: BleakGATTCharacteristic, data: bytearray):
             height = _bytes_to_meters(data)
-            self._logger.info(f"Got data: {height}m")
+            self._logger.debug(f"Got data: {height}m")
 
             nonlocal previous_height
             if abs(height - previous_height) < 0.001:
@@ -175,6 +177,16 @@ class IdasenDesk:
         True
         """
         return self._client.is_connected
+
+    @property
+    def is_moving(self) -> bool:
+        """
+        Check if the desk is currently being moved by this class.
+
+        Returns:
+            Boolean representing movement status.
+        """
+        return self._moving
 
     @property
     def mac(self) -> str:
@@ -235,31 +247,54 @@ class IdasenDesk:
                 f"{self.MIN_HEIGHT:.3f}"
             )
 
-        previous_height = await self.get_height()
-        will_move_up = target > previous_height
-        while True:
-            height = await self.get_height()
-            difference = target - height
-            self._logger.debug(f"{target=} {height=} {difference=}")
-            if (height < previous_height and will_move_up) or (
-                height > previous_height and not will_move_up
-            ):
-                self._logger.warning(
-                    "stopped moving because desk safety feature kicked in"
-                )
-                return
-            if abs(difference) < 0.005:  # tolerance of 0.005 meters
-                self._logger.info(f"reached target of {target:.3f}")
-                await self.stop()
-                return
-            elif difference > 0:
-                await self.move_up()
-            elif difference < 0:
-                await self.move_down()
-            previous_height = height
+        if self._moving:
+            self._logger.error("Already moving")
+            return
+        self._moving = True
+
+        async def do_move():
+            previous_height = await self.get_height()
+            will_move_up = target > previous_height
+            while True:
+                height = await self.get_height()
+                difference = target - height
+                self._logger.debug(f"{target=} {height=} {difference=}")
+                if (height < previous_height and will_move_up) or (
+                    height > previous_height and not will_move_up
+                ):
+                    self._logger.warning(
+                        "stopped moving because desk safety feature kicked in"
+                    )
+                    return
+                if not self._moving:
+                    return
+
+                if abs(difference) < 0.005:  # tolerance of 0.005 meters
+                    self._logger.info(f"reached target of {target:.3f}")
+                    await self._stop()
+                    return
+                elif difference > 0:
+                    await self.move_up()
+                elif difference < 0:
+                    await self.move_down()
+                previous_height = height
+
+        self._move_task = asyncio.create_task(do_move())
+        await self._move_task
+        self._moving = False
 
     async def stop(self):
         """Stop desk movement."""
+        self._moving = False
+        if self._move_task:
+            self._logger.debug("Desk was moving, waiting for it to stop")
+            await self._move_task
+
+        await self._stop()
+
+    async def _stop(self):
+        """Send stop commands"""
+        self._logger.debug("Sending stop commands")
         await asyncio.gather(
             self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_STOP, response=False),
             self._client.write_gatt_char(
