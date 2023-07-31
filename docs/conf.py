@@ -62,7 +62,10 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".tox"]
 pygments_style = "sphinx"
 todo_include_todos = True
 nitpicky = True
-nitpick_ignore = [("py:class", "bleak.backends.device.BLEDevice")]
+nitpick_ignore = [
+    ("py:class", "bleak.backends.device.BLEDevice"),
+    ("py:class", "bleak.BleakClient"),
+]
 
 # HTML Options
 html_theme = "sphinx_rtd_theme"
