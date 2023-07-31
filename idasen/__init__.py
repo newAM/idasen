@@ -60,6 +60,10 @@ class IdasenDesk:
         mac: Bluetooth MAC address of the desk, or an instance of a BLEDevice.
         exit_on_fail: If set to True, failing to connect will call ``sys.exit(1)``,
             otherwise the exception will be raised.
+        disconnected_callback:
+            Callback that will be scheduled in the event loop when the client is
+            disconnected. The callable must take one argument, which will be
+            this client object.
 
     Note:
         There is no locking to prevent you from running multiple movement
@@ -84,9 +88,17 @@ class IdasenDesk:
     #: Number of times to retry upon failure to connect.
     RETRY_COUNT: int = 3
 
-    def __init__(self, mac: Union[BLEDevice, str], exit_on_fail: bool = False):
+    def __init__(
+        self,
+        mac: Union[BLEDevice, str],
+        exit_on_fail: bool = False,
+        disconnected_callback: Optional[Callable[[BleakClient], None]] = None,
+    ):
         self._exit_on_fail = exit_on_fail
-        self._client = BleakClient(mac)
+        self._client = BleakClient(
+            address_or_ble_device=mac,
+            disconnected_callback=disconnected_callback,
+        )
         self._mac = mac.address if isinstance(mac, BLEDevice) else mac
         self._logger = _DeskLoggingAdapter(
             logger=logging.getLogger(__name__), extra={"mac": self.mac}
