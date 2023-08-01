@@ -37,7 +37,7 @@ CONFIG_SCHEMA = vol.Schema(
     extra=False,
 )
 
-RESERVED_NAMES = {"init", "monitor", "height", "save", "delete"}
+RESERVED_NAMES = {"init", "pair", "monitor", "height", "save", "delete"}
 
 
 def save_config(config: dict, path: str = IDASEN_CONFIG_PATH):
@@ -107,6 +107,7 @@ def get_parser(config: dict) -> argparse.ArgumentParser:
     monitor_parser = sub.add_parser("monitor", help="Monitor the desk position.")
     init_parser = sub.add_parser("init", help="Initialize a new configuration file.")
     save_parser = sub.add_parser("save", help="Save current desk position.")
+    pair_parser = sub.add_parser("pair", help="Pair with device.")
     save_parser.add_argument("name", help="Position name")
     delete_parser = sub.add_parser("delete", help="Remove position with given name.")
     delete_parser.add_argument("name", help="Position name")
@@ -124,6 +125,7 @@ def get_parser(config: dict) -> argparse.ArgumentParser:
     )
 
     add_common_args(init_parser)
+    add_common_args(pair_parser)
     add_common_args(height_parser)
     add_common_args(monitor_parser)
     add_common_args(save_parser)
@@ -153,6 +155,11 @@ async def init(args: argparse.Namespace) -> int:
         )
 
     return 0
+
+
+async def pair(args: argparse.Namespace) -> None:
+    async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
+        await desk.pair()
 
 
 async def monitor(args: argparse.Namespace) -> None:
@@ -239,6 +246,8 @@ def count_to_level(count: int) -> int:
 def subcommand_to_callable(sub: str, config: dict) -> Callable:
     if sub == "init":
         return init
+    elif sub == "pair":
+        return pair
     elif sub == "monitor":
         return monitor
     elif sub == "height":
