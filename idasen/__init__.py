@@ -111,6 +111,16 @@ class IdasenDesk:
     async def __aexit__(self, *args, **kwargs):
         await self.disconnect()
 
+    async def pair(self):
+        """
+        Pair with the desk.
+
+        This method is not available on macOS. Instead of manually initiating
+        paring, the user will be prompted to pair automatically as soon as it
+        is required.
+        """
+        await self._client.pair()
+
     async def connect(self):
         """
         Connect to the desk.

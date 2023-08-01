@@ -107,6 +107,15 @@ def test_mac(desk: IdasenDesk):
     assert desk.mac == desk_mac
 
 
+async def test_pair(desk: IdasenDesk):
+    if desk_mac != "AA:AA:AA:AA:AA:AA":
+        return
+
+    desk._client.pair = mock.AsyncMock()  # type: ignore
+    await desk.pair()
+    desk._client.pair.assert_called_once()
+
+
 async def test_up(desk: IdasenDesk):
     initial = await desk.get_height()
     await desk.move_up()
