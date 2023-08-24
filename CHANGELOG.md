@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 # [Unreleased]
 ### Added
 - Added support for initializing `IdasenDesk` with a `BLEDevice` instead of a MAC address.
+- Added `connect` and `disconnect` methods as an alternative to the context manager.
+- Added a `disconnected_callback` argument to the `IdasenDesk` constructor.
 
 ### Changed
 - Changed `build-system.requires` from `["poetry>=0.12"]` to `["poetry-core"]`.
