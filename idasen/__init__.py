@@ -207,10 +207,7 @@ class IdasenDesk:
     @property
     def is_connected(self) -> bool:
         """
-        Check connection status of the desk.
-
-        Returns:
-            Boolean representing connection status.
+        ``True`` if the desk is connected.
 
         >>> async def example() -> bool:
         ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
