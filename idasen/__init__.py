@@ -120,6 +120,8 @@ class IdasenDesk:
         This method is not available on macOS. Instead of manually initiating
         paring, the user will be prompted to pair automatically as soon as it
         is required.
+
+        See :py:meth:`bleak.BleakClient.pair` for more information.
         """
         await self._client.pair()
 
@@ -205,10 +207,7 @@ class IdasenDesk:
     @property
     def is_connected(self) -> bool:
         """
-        Check connection status of the desk.
-
-        Returns:
-            Boolean representing connection status.
+        ``True`` if the desk is connected.
 
         >>> async def example() -> bool:
         ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
@@ -221,16 +220,21 @@ class IdasenDesk:
     @property
     def is_moving(self) -> bool:
         """
-        Check if the desk is currently being moved by this class.
-
-        Returns:
-            Boolean representing movement status.
+        ``True`` if the desk is currently being moved by this class.
         """
         return self._moving
 
     @property
     def mac(self) -> str:
-        """Desk MAC address."""
+        """
+        Desk MAC address.
+
+        >>> async def example() -> str:
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         return desk.mac
+        >>> asyncio.run(example())
+        'AA:AA:AA:AA:AA:AA'
+        """
         return self._mac
 
     async def move_up(self):

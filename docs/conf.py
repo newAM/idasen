@@ -36,8 +36,9 @@ from idasen.cli import get_parser, DEFAULT_CONFIG  # noqa: E402
 
 # Sphinx extensions
 extensions = [
-    "sphinx.ext.linkcode",
     "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.linkcode",
     "sphinx.ext.napoleon",  # google style docstrings
 ]
 
@@ -62,10 +63,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".tox"]
 pygments_style = "sphinx"
 todo_include_todos = True
 nitpicky = True
-nitpick_ignore = [
-    ("py:class", "bleak.backends.device.BLEDevice"),
-    ("py:class", "bleak.BleakClient"),
-]
+nitpick_ignore = []
 
 # HTML Options
 html_theme = "sphinx_rtd_theme"
@@ -79,6 +77,10 @@ html_context = {
     # https://github.com/readthedocs/sphinx_rtd_theme/issues/465
     "github_version": "main",
     "conf_py_path": "/docs/",  # needs leading and trailing slashes
+}
+
+intersphinx_mapping = {
+    "bleak": ("https://bleak.readthedocs.io/en/latest/", None),
 }
 
 parser = get_parser(DEFAULT_CONFIG)
