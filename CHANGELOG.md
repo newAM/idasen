@@ -5,14 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# [Unreleased]
+# [0.10.0] - 2023-08-24
 ### Added
 - Added support for initializing `IdasenDesk` with a `BLEDevice` instead of a MAC address.
 - Added `connect` and `disconnect` methods as an alternative to the context manager.
 - Added a `disconnected_callback` argument to the `IdasenDesk` constructor.
+- Added a `pair` method.
 
 ### Changed
 - Changed `build-system.requires` from `["poetry>=0.12"]` to `["poetry-core"]`.
+
+### Fixed
+- Fixed the `stop` method not stopping the desk.
 
 ## [0.9.6] - 2023-03-18
 ### Added
@@ -126,7 +130,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2020-09-07
 - Initial release
 
-[Unreleased]: https://github.com/newAM/idasen/compare/v0.9.6...HEAD
+[Unreleased]: https://github.com/newAM/idasen/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/newAM/idasen/compare/v0.9.6...v0.10.0
 [0.9.6]: https://github.com/newAM/idasen/compare/v0.9.5...v0.9.6
 [0.9.5]: https://github.com/newAM/idasen/compare/v0.9.4...v0.9.5
 [0.9.4]: https://github.com/newAM/idasen/compare/v0.9.3...v0.9.4
