@@ -226,7 +226,15 @@ class IdasenDesk:
 
     @property
     def mac(self) -> str:
-        """Desk MAC address."""
+        """
+        Desk MAC address.
+
+        >>> async def example() -> str:
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         return desk.mac
+        >>> asyncio.run(example())
+        'AA:AA:AA:AA:AA:AA'
+        """
         return self._mac
 
     async def move_up(self):
