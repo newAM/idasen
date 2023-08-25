@@ -120,6 +120,8 @@ class IdasenDesk:
         This method is not available on macOS. Instead of manually initiating
         paring, the user will be prompted to pair automatically as soon as it
         is required.
+
+        See :py:meth:`bleak.BleakClient.pair` for more information.
         """
         await self._client.pair()
 
