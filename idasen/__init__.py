@@ -223,10 +223,7 @@ class IdasenDesk:
     @property
     def is_moving(self) -> bool:
         """
-        Check if the desk is currently being moved by this class.
-
-        Returns:
-            Boolean representing movement status.
+        ``True`` if the desk is currently being moved by this class.
         """
         return self._moving
 
