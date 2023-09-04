@@ -143,7 +143,7 @@ async def init(args: argparse.Namespace) -> int:
         mac = await IdasenDesk.discover()
         if mac is not None:
             print(f"Discovered desk's MAC address: {mac}", file=sys.stderr)
-            DEFAULT_CONFIG["mac_address"] = mac
+            DEFAULT_CONFIG["mac_address"] = str(mac)
         else:
             print("Failed to discover desk's MAC address", file=sys.stderr)
         os.makedirs(IDASEN_CONFIG_DIRECTORY, exist_ok=True)
