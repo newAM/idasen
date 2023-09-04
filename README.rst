@@ -18,7 +18,7 @@ Set Up
 Prerequisites
 =============
 
-The desk should be connected and paired to the computer.
+*The desk should be connected and paired to the computer.*  On macOS, pairing is only possible through 3rd-party tools (e.g. https://github.com/jnross/Bluetility).
 
 Install
 =======
