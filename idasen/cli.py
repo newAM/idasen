@@ -153,9 +153,7 @@ async def init(args: argparse.Namespace) -> int:
         print(
             f"Created new configuration file at: {IDASEN_CONFIG_PATH}", file=sys.stderr
         )
-        print(
-            "'idasen pair' can be used to pair to desk."
-        )
+        print("'idasen pair' can be used to pair to desk.")
 
     return 0
 
