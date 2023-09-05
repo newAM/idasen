@@ -159,8 +159,16 @@ async def init(args: argparse.Namespace) -> int:
 
 
 async def pair(args: argparse.Namespace) -> None:
-    async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
-        await desk.pair()
+    try:
+        async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
+            await desk.pair()
+    except NotImplementedError:
+        print(
+            "The pair subcommand does not function reliably on macOS.\n"
+            "A pairing dialogue will only be shown if the OS deems that pairing is necessary.\n"
+            "Retrying can help.\n\n"
+            "See https://bleak.readthedocs.io/en/latest/backends/macos.html for more information."
+        )
 
 
 async def monitor(args: argparse.Namespace) -> None:
