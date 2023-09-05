@@ -12,11 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed `idasen init` on MacOS.
 
-# [0.10.1] - 2023-09-03
+## [0.10.1] - 2023-09-03
 ### Added
 - Added support for bleak version `~0.21`.
 
-# [0.10.0] - 2023-08-24
+## [0.10.0] - 2023-08-24
 ### Added
 - Added support for initializing `IdasenDesk` with a `BLEDevice` instead of a MAC address.
 - Added `connect` and `disconnect` methods as an alternative to the context manager.
