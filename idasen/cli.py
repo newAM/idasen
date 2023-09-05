@@ -165,9 +165,9 @@ async def pair(args: argparse.Namespace) -> None:
     except NotImplementedError:
         print(
             "The pair subcommand does not function reliably on macOS.\n"
-            "A pairing dialogue will only be shown if the OS deems that pairing is necessary.\n"
+            "A pairing dialogue is shown if the OS deems that pairing is necessary.\n"
             "Retrying can help.\n\n"
-            "See https://bleak.readthedocs.io/en/latest/backends/macos.html for more information."
+            "See docs at https://bleak.readthedocs.io/en/latest/backends/macos.html"
         )
 
 
