@@ -14,6 +14,7 @@ import os
 import sys
 import voluptuous as vol
 import yaml
+import platform
 
 HOME = os.path.expanduser("~")
 IDASEN_CONFIG_DIRECTORY = os.path.join(HOME, ".config", "idasen")
@@ -158,18 +159,22 @@ async def init(args: argparse.Namespace) -> int:
     return 0
 
 
-async def pair(args: argparse.Namespace) -> None:
+async def pair(args: argparse.Namespace) -> Optional[int]:
+    try:
+        async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
+            await desk.pair()
     except NotImplementedError as e:
         if platform.system() == "Darwin":
             print(
                 "The pair subcommand does not function reliably on macOS.\n"
-                "A pairing dialogue is shown if the OS deems that pairing is necessary.\n"
+                "A pairing dialogue is shown if the OS deems that pairing is needed.\n"
                 "Retrying can help.\n\n"
                 "See docs at https://bleak.readthedocs.io/en/latest/backends/macos.html"
             )
             return 1
         else:
             raise e
+    return None
 
 
 async def monitor(args: argparse.Namespace) -> None:
