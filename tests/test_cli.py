@@ -5,6 +5,7 @@ from idasen.cli import DEFAULT_CONFIG
 from idasen.cli import from_config
 from idasen.cli import get_parser
 from idasen.cli import init
+from idasen.cli import pair
 from idasen.cli import load_config
 from idasen.cli import main
 from idasen.cli import subcommand_to_callable
@@ -19,6 +20,7 @@ import os
 import pytest
 import sys
 import yaml
+import platform
 
 
 def test_get_parser_smoke():
@@ -79,6 +81,45 @@ async def test_init(discover_return: Optional[str]):
     ):
         assert await init(args=argparse.Namespace(force=True)) == 0
         dump_mock.assert_called_once()
+
+
+async def test_pair():
+    with mock.patch.object(
+        IdasenDesk, "disconnect", side_effect=None
+    ), mock.patch.object(IdasenDesk, "connect", side_effect=None), mock.patch.object(
+        IdasenDesk, "pair", side_effect=None
+    ), mock.patch.object(
+        IdasenDesk, "__init__", return_value=None
+    ):
+        assert await pair(args=argparse.Namespace(mac_address="a")) is None
+
+
+async def test_pair_darwin():
+    with mock.patch.object(
+        IdasenDesk, "disconnect", side_effect=None
+    ), mock.patch.object(IdasenDesk, "connect", side_effect=None), mock.patch.object(
+        IdasenDesk, "pair", side_effect=NotImplementedError
+    ), mock.patch.object(
+        platform, "system", return_value="Darwin"
+    ), mock.patch.object(
+        IdasenDesk, "__init__", return_value=None
+    ):
+        assert await pair(args=argparse.Namespace(mac_address="a")) == 1
+
+
+async def test_pair_not_darwin():
+    with mock.patch.object(
+        IdasenDesk, "disconnect", side_effect=None
+    ), mock.patch.object(IdasenDesk, "connect", side_effect=None), mock.patch.object(
+        IdasenDesk, "pair", side_effect=NotImplementedError
+    ), mock.patch.object(
+        platform, "system", return_value="NotDarwin"
+    ), mock.patch.object(
+        IdasenDesk, "__init__", return_value=None
+    ), pytest.raises(
+        NotImplementedError
+    ):
+        await pair(args=argparse.Namespace(mac_address="a"))
 
 
 class Parser:
