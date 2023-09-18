@@ -18,7 +18,7 @@ Set Up
 Prerequisites
 =============
 
-The desk should be connected.
+The desk should be connected to the computer.
 
 Install
 =======
@@ -51,12 +51,11 @@ Configuartion options:
 * ``positions`` - A dictionary of positions with values of desk height from the
   floor in meters, ``sit`` and ``stand`` are provided as examples.
 
-The program will try to discover the device address.  The device will need to
-be in 'discover' mode for this to work.
+The program will try to discover the device address. The device needs to be in
+'discover' mode for this to work.
 
-If discovery fails:
-The device MAC addresses can be found using ``blueoothctl`` and bluetooth
-adapter names can be found with ``hcitool dev`` on linux.
+If discovery fails the device MAC addresses can be found using ``blueoothctl``
+and bluetooth adapter names can be found with ``hcitool dev`` on linux.
 
 If the device has not yet been paired, this can be accomplished with:
 
