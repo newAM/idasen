@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12.0-rc.1"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12.0"]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python ${{ matrix.python-version }}
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.12.0-rc.1"
+          python-version: "3.12.0"
       - uses: abatilo/actions-poetry@v2.3.0
       - name: Install bluetooth
         run: |
@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12.0-rc.1"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12.0"]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python ${{ matrix.python-version }}
@@ -93,7 +93,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.12.0-rc.1"
+          python-version: "3.12.0"
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.3.0
       - run: poetry install
@@ -111,7 +111,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.12.0-rc.1"
+          python-version: "3.12.0"
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.3.0
       - run: poetry install
