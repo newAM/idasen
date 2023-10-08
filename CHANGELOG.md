@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added support for python 3.12.
 
-### Changed
+### Fixed
 - Stop desk movement when interrupted by the physical button.
 
 ## [0.10.2] - 2023-09-05
