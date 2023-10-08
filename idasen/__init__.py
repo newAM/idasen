@@ -300,7 +300,7 @@ class IdasenDesk:
         async def do_move():
             previous_height = await self.get_height()
             will_move_up = target > previous_height
-            last_move_time: float | None = None
+            last_move_time: Optional[float] = None
             while True:
                 height = await self.get_height()
                 difference = target - height
