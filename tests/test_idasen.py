@@ -151,6 +151,26 @@ async def test_move_to_target(desk: IdasenDesk, target: float):
     assert abs(await desk.get_height() - target) < 0.005
 
 
+async def test_move_abort_when_no_movement():
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    desk._client = client
+    client.write_gatt_char = mock.AsyncMock()
+
+    async def write_gatt_char_mock(
+        uuid: str, command: bytearray, response: bool = False
+    ):
+        if client.write_gatt_char.call_count == 1:
+            assert desk.is_moving
+            client._height -= 0.001
+
+    client.write_gatt_char.side_effect = write_gatt_char_mock
+
+    async with desk:
+        await desk.move_to_target(0.7)
+        assert not desk.is_moving
+
+
 async def test_move_stop():
     desk = IdasenDesk(mac=desk_mac)
     client = MockBleakClient()

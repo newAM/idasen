@@ -11,6 +11,7 @@ from typing import Union
 import asyncio
 import logging
 import sys
+import time
 
 
 _UUID_HEIGHT: str = "99fa0021-338a-1024-8a49-009c0215f78a"
@@ -299,6 +300,7 @@ class IdasenDesk:
         async def do_move():
             previous_height = await self.get_height()
             will_move_up = target > previous_height
+            last_move_time: Optional[float] = None
             while True:
                 height = await self.get_height()
                 difference = target - height
@@ -310,6 +312,20 @@ class IdasenDesk:
                         "stopped moving because desk safety feature kicked in"
                     )
                     return
+
+                if height == previous_height:
+                    if (
+                        last_move_time is not None
+                        and time.time() - last_move_time > 0.5
+                    ):
+                        self._logger.warning(
+                            "desk is not moving anymore. physical button probably "
+                            "pressed"
+                        )
+                        return
+                else:
+                    last_move_time = time.time()
+
                 if not self._moving:
                     return
 
