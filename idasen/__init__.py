@@ -297,7 +297,7 @@ class IdasenDesk:
             return
         self._moving = True
 
-        async def do_move():
+        async def do_move() -> None:
             previous_height = await self.get_height()
             will_move_up = target > previous_height
             last_move_time: Optional[float] = None
