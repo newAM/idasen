@@ -18,7 +18,7 @@ _UUID_HEIGHT: str = "99fa0021-338a-1024-8a49-009c0215f78a"
 _UUID_COMMAND: str = "99fa0002-338a-1024-8a49-009c0215f78a"
 _UUID_REFERENCE_INPUT: str = "99fa0031-338a-1024-8a49-009c0215f78a"
 _UUID_ADV_SVC: str = "99fa0001-338a-1024-8a49-009c0215f78a"
-_UUID_DPG: str = "99fa0010-338a-1024-8a49-009c0215f78a"
+_UUID_DPG: str = "99fa0011-338a-1024-8a49-009c0215f78a"
 
 _COMMAND_REFERENCE_INPUT_STOP: bytearray = bytearray([0x01, 0x80])
 _COMMAND_UP: bytearray = bytearray([0x47, 0x00])
@@ -259,7 +259,7 @@ class IdasenDesk:
             _UUID_DPG,
             b"\x7F\x86\x80\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11",
         )
-        await self._client.write_gatt_char(_UUID_COMMAND, COMMAND_WAKEUP)
+        await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_WAKEUP)
 
     async def move_up(self):
         """
