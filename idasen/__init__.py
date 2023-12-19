@@ -247,7 +247,7 @@ class IdasenDesk:
 
         This exists for compatibility with the Linak DPG1C controller.
         Running this with the original idasen controller yields an exception:
-        ``bleak.exc.BleakError: Characteristic 99fa0010-338a-1024-8a49-009c0215f78a was not found!``
+        ``bleak.exc.BleakError: Characteristic ... was not found!``
 
         >>> async def example() -> str:
         ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
@@ -258,7 +258,8 @@ class IdasenDesk:
         await self._client.write_gatt_char(_UUID_DPG, b"\x7F\x86\x00")
         await self._client.write_gatt_char(
             _UUID_DPG,
-            b"\x7F\x86\x80\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11",
+            b"\x7F\x86\x80\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D"
+            b"\x0E\x0F\x10\x11",
         )
         await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_WAKEUP)
 
