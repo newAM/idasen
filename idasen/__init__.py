@@ -245,9 +245,8 @@ class IdasenDesk:
         """
         Wakeup the controller from sleep.
 
-        This exists for compatibility with the Linak DPG1C controller.
-        Running this with the original idasen controller yields an exception:
-        ``bleak.exc.BleakError: Characteristic ... was not found!``
+        This exists for compatibility with the Linak DPG1C controller,
+        it is not necessary with the original idasen controller.
 
         >>> async def example() -> str:
         ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
