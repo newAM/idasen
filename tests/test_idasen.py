@@ -151,7 +151,7 @@ async def test_move_abort_when_no_movement():
     async def write_gatt_char_mock(
         uuid: str, command: bytearray, response: bool = False
     ):
-        if client.write_gatt_char.call_count == 1:
+        if client.write_gatt_char.call_count == 4:
             assert desk.is_moving
             client._height -= 0.001
 
@@ -171,7 +171,7 @@ async def test_move_stop():
     async def write_gatt_char_mock(
         uuid: str, command: bytearray, response: bool = False
     ):
-        if client.write_gatt_char.call_count == 1:
+        if client.write_gatt_char.call_count == 4:
             assert desk.is_moving
         # Force this method to behave asynchronously, otherwise it will block the
         # eventloop
