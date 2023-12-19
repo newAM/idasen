@@ -146,6 +146,7 @@ class IdasenDesk:
         while True:
             try:
                 await self._client.connect()
+                await self.wakeup()
                 return
             except Exception:
                 if i >= self.RETRY_COUNT:
