@@ -18,11 +18,13 @@ _UUID_HEIGHT: str = "99fa0021-338a-1024-8a49-009c0215f78a"
 _UUID_COMMAND: str = "99fa0002-338a-1024-8a49-009c0215f78a"
 _UUID_REFERENCE_INPUT: str = "99fa0031-338a-1024-8a49-009c0215f78a"
 _UUID_ADV_SVC: str = "99fa0001-338a-1024-8a49-009c0215f78a"
+_UUID_DPG: str = "99fa0011-338a-1024-8a49-009c0215f78a"
 
 _COMMAND_REFERENCE_INPUT_STOP: bytearray = bytearray([0x01, 0x80])
 _COMMAND_UP: bytearray = bytearray([0x47, 0x00])
 _COMMAND_DOWN: bytearray = bytearray([0x46, 0x00])
 _COMMAND_STOP: bytearray = bytearray([0xFF, 0x00])
+_COMMAND_WAKEUP: bytearray = bytearray([0xFE, 0x00])
 
 
 # height calculation offset in meters, assumed to be the same for all desks
@@ -144,6 +146,7 @@ class IdasenDesk:
         while True:
             try:
                 await self._client.connect()
+                await self.wakeup()
                 return
             except Exception:
                 if i >= self.RETRY_COUNT:
@@ -237,6 +240,27 @@ class IdasenDesk:
         'AA:AA:AA:AA:AA:AA'
         """
         return self._mac
+
+    async def wakeup(self):
+        """
+        Wakeup the controller from sleep.
+
+        This exists for compatibility with the Linak DPG1C controller,
+        it is not necessary with the original idasen controller.
+
+        >>> async def example() -> str:
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         await desk.wakeup()
+        >>> asyncio.run(example())
+        """
+        # https://github.com/rhyst/linak-controller/issues/32#issuecomment-1784055470
+        await self._client.write_gatt_char(_UUID_DPG, b"\x7F\x86\x00")
+        await self._client.write_gatt_char(
+            _UUID_DPG,
+            b"\x7F\x86\x80\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D"
+            b"\x0E\x0F\x10\x11",
+        )
+        await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_WAKEUP)
 
     async def move_up(self):
         """
