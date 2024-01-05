@@ -1,4 +1,4 @@
-from idasen import _bytes_to_meters, _is_desk
+from idasen import _bytes_to_meters_and_speed, _meters_to_bytes, _is_desk
 from idasen import IdasenDesk
 from types import SimpleNamespace
 from typing import AsyncGenerator
@@ -31,10 +31,12 @@ class MockBleakClient:
 
     def __init__(self):
         self._height = 1.0
+        self._is_moving = False
         self.is_connected = False
 
     async def __aenter__(self):
         self._height = 1.0
+        self._is_moving = False
         self.is_connected = True
         return self
 
@@ -52,22 +54,25 @@ class MockBleakClient:
         await callback(uuid, bytearray([0x00, 0x00, 0x00, 0x00]))
         await callback(None, bytearray([0x10, 0x00, 0x00, 0x00]))
 
-    async def write_gatt_char(
-        self, uuid: str, command: bytearray, response: bool = False
-    ):
+    async def write_gatt_char(self, uuid: str, data: bytearray, response: bool = False):
         if uuid == idasen._UUID_COMMAND:
-            if command == idasen._COMMAND_UP:
+            if data == idasen._COMMAND_UP:
                 self._height += 0.001
-            elif command == idasen._COMMAND_DOWN:
+            elif data == idasen._COMMAND_DOWN:
                 self._height -= 0.001
+        if uuid == idasen._UUID_REFERENCE_INPUT:
+            assert len(data) == 2
+
+            data_with_speed = bytearray([data[0], data[1], 0, 0])
+            requested_height, _ = _bytes_to_meters_and_speed(data_with_speed)
+            self._height += min(0.1, max(-0.1, requested_height - self._height))
+
+            self._is_moving = self._height != requested_height
 
     async def read_gatt_char(self, uuid: str) -> bytearray:
-        norm = self._height - IdasenDesk.MIN_HEIGHT
-        norm *= 10000
-        norm = int(norm)
-        low_byte = norm & 0xFF
-        high_byte = (norm >> 8) & 0xFF
-        return bytearray([low_byte, high_byte, 0x00, 0x00])
+        height_bytes = _meters_to_bytes(self._height)
+        speed_byte = 0x01 if self._is_moving else 0x00
+        return bytearray([height_bytes[0], height_bytes[1], 0x00, speed_byte])
 
     @property
     def address(self) -> str:
@@ -139,7 +144,7 @@ async def test_move_to_target_raises(desk: IdasenDesk, target: float):
 @pytest.mark.parametrize("target", [0.7, 1.1])
 async def test_move_to_target(desk: IdasenDesk, target: float):
     await desk.move_to_target(target)
-    assert abs(await desk.get_height() - target) < 0.005
+    assert abs(await desk.get_height() - target) < 0.001
 
 
 async def test_move_abort_when_no_movement():
@@ -190,16 +195,17 @@ async def test_move_stop():
 
 
 @pytest.mark.parametrize(
-    "raw, result",
+    "raw, height, speed",
     [
-        (bytearray([0x64, 0x19, 0x00, 0x00]), IdasenDesk.MAX_HEIGHT),
-        (bytearray([0x00, 0x00, 0x00, 0x00]), IdasenDesk.MIN_HEIGHT),
-        (bytearray([0x51, 0x04, 0x00, 0x00]), 0.7305),
-        (bytearray([0x08, 0x08, 0x00, 0x00]), 0.8256),
+        (bytearray([0x64, 0x19, 0x00, 0x00]), IdasenDesk.MAX_HEIGHT, 0),
+        (bytearray([0x00, 0x00, 0x00, 0x00]), IdasenDesk.MIN_HEIGHT, 0),
+        (bytearray([0x51, 0x04, 0x00, 0x00]), 0.7305, 0),
+        (bytearray([0x08, 0x08, 0x00, 0x00]), 0.8256, 0),
+        (bytearray([0x08, 0x08, 0x02, 0x01]), 0.8256, 258),
     ],
 )
-def test_bytes_to_meters(raw: bytearray, result: float):
-    assert _bytes_to_meters(raw) == result
+def test_bytes_to_meters_and_speed(raw: bytearray, height: float, speed: int):
+    assert _bytes_to_meters_and_speed(raw) == (height, speed)
 
 
 async def test_fail_to_connect(caplog, monkeypatch):
