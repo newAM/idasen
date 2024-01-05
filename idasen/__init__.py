@@ -10,8 +10,8 @@ from typing import Tuple
 from typing import Union
 import asyncio
 import logging
+import struct
 import sys
-import time
 
 
 _UUID_HEIGHT: str = "99fa0021-338a-1024-8a49-009c0215f78a"
@@ -28,18 +28,24 @@ _COMMAND_WAKEUP: bytearray = bytearray([0xFE, 0x00])
 
 
 # height calculation offset in meters, assumed to be the same for all desks
-def _bytes_to_meters(raw: bytearray) -> float:
-    """Converts a value read from the desk in bytes to meters."""
+def _bytes_to_meters_and_speed(raw: bytearray) -> Tuple[float, int]:
+    """Converts a value read from the desk in bytes to height in meters and speed."""
     raw_len = len(raw)
     expected_len = 4
     assert (
         raw_len == expected_len
     ), f"Expected raw value to be {expected_len} bytes long, got {raw_len} bytes"
 
-    high_byte: int = int(raw[1])
-    low_byte: int = int(raw[0])
-    int_raw: int = (high_byte << 8) + low_byte
-    return float(int_raw / 10000) + IdasenDesk.MIN_HEIGHT
+    int_raw, speed = struct.unpack("<Hh", raw)
+    meters = float(int(int_raw) / 10000) + IdasenDesk.MIN_HEIGHT
+
+    return meters, int(speed)
+
+
+def _meters_to_bytes(meters: float) -> bytearray:
+    """Converts meters to bytes for setting the position on the desk"""
+    int_raw: int = int((meters - IdasenDesk.MIN_HEIGHT) * 10000)
+    return bytearray(struct.pack("<H", int_raw))
 
 
 def _is_desk(device: BLEDevice, adv: AdvertisementData) -> bool:
@@ -184,7 +190,7 @@ class IdasenDesk:
         previous_height = 0.0
 
         async def output_listener(char: BleakGATTCharacteristic, data: bytearray):
-            height = _bytes_to_meters(data)
+            height, _ = _bytes_to_meters_and_speed(data)
             self._logger.debug(f"Got data: {height}m")
 
             nonlocal previous_height
@@ -248,7 +254,7 @@ class IdasenDesk:
         This exists for compatibility with the Linak DPG1C controller,
         it is not necessary with the original idasen controller.
 
-        >>> async def example() -> str:
+        >>> async def example():
         ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
         ...         await desk.wakeup()
         >>> asyncio.run(example())
@@ -322,46 +328,26 @@ class IdasenDesk:
         self._moving = True
 
         async def do_move() -> None:
-            previous_height = await self.get_height()
-            will_move_up = target > previous_height
-            last_move_time: Optional[float] = None
+            current_height = await self.get_height()
+            if current_height == target:
+                return
+
+            # Wakeup and stop commands are needed in order to
+            # start the reference input for setting the position
+            await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_WAKEUP)
+            await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_STOP)
+
+            data = _meters_to_bytes(target)
+
             while True:
-                height = await self.get_height()
-                difference = target - height
-                self._logger.debug(f"{target=} {height=} {difference=}")
-                if (height < previous_height and will_move_up) or (
-                    height > previous_height and not will_move_up
-                ):
-                    self._logger.warning(
-                        "stopped moving because desk safety feature kicked in"
-                    )
-                    return
+                await self._client.write_gatt_char(_UUID_REFERENCE_INPUT, data)
+                await asyncio.sleep(0.4)
 
-                if height == previous_height:
-                    if (
-                        last_move_time is not None
-                        and time.time() - last_move_time > 0.5
-                    ):
-                        self._logger.warning(
-                            "desk is not moving anymore. physical button probably "
-                            "pressed"
-                        )
-                        return
-                else:
-                    last_move_time = time.time()
-
-                if not self._moving:
-                    return
-
-                if abs(difference) < 0.005:  # tolerance of 0.005 meters
-                    self._logger.info(f"reached target of {target:.3f}")
-                    await self._stop()
-                    return
-                elif difference > 0:
-                    await self.move_up()
-                elif difference < 0:
-                    await self.move_down()
-                previous_height = height
+                # Stop as soon as the speed is 0,
+                # which means the desk has reached the target position
+                speed = await self._get_speed()
+                if speed == 0:
+                    break
 
         self._move_task = asyncio.create_task(do_move())
         await self._move_task
@@ -400,7 +386,16 @@ class IdasenDesk:
         >>> asyncio.run(example())
         1.0
         """
-        return _bytes_to_meters(await self._client.read_gatt_char(_UUID_HEIGHT))
+        height, _ = await self._get_height_and_speed()
+        return height
+
+    async def _get_speed(self) -> int:
+        _, speed = await self._get_height_and_speed()
+        return speed
+
+    async def _get_height_and_speed(self) -> Tuple[float, int]:
+        raw = await self._client.read_gatt_char(_UUID_HEIGHT)
+        return _bytes_to_meters_and_speed(raw)
 
     @staticmethod
     async def discover() -> Optional[str]:
