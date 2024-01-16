@@ -24,7 +24,7 @@ voluptuous = ">=0.12"
 black = "23.12.1"
 coveralls = "^3"
 flake8 = { version = "^7", python = ">=3.8.1,<4.0" }
-flake8-bugbear = { version = "^23.12.2", python = ">=3.8.1,<4.0" }
+flake8-bugbear = { version = "^24.1.15", python = ">=3.8.1,<4.0" }
 pep8-naming = "^0.13.3"
 pytest = "^7.4.4"
 pytest-asyncio = "^0.23"
