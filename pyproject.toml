@@ -26,7 +26,7 @@ coveralls = "^3"
 flake8 = { version = "^7", python = ">=3.8.1,<4.0" }
 flake8-bugbear = { version = "^24.1.17", python = ">=3.8.1,<4.0" }
 pep8-naming = "^0.13.3"
-pytest = "^7.4.4"
+pytest = "^8.0.0"
 pytest-asyncio = "^0.23"
 pytest-cov = "^4.1.0"
 sphinx = "^7.1.2"
