@@ -339,9 +339,9 @@ class IdasenDesk:
 
             data = _meters_to_bytes(target)
 
-            while True:
+            while self._moving:
                 await self._client.write_gatt_char(_UUID_REFERENCE_INPUT, data)
-                await asyncio.sleep(0.4)
+                await asyncio.sleep(0.2)
 
                 # Stop as soon as the speed is 0,
                 # which means the desk has reached the target position
