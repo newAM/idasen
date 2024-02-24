@@ -52,7 +52,11 @@ class MockBleakClient:
 
     async def start_notify(self, uuid: str, callback: Callable):
         await callback(uuid, bytearray([0x00, 0x00, 0x00, 0x00]))
-        await callback(None, bytearray([0x10, 0x00, 0x00, 0x00]))
+        await callback(None, bytearray([0x20, 0x0A, 0x00, 0x00]))
+        await callback(None, bytearray([0x20, 0x0A, 0x00, 0x00]))
+        await callback(None, bytearray([0x20, 0x0A, 0x20, 0x00]))
+        await callback(None, bytearray([0x20, 0x0A, 0x20, 0x00]))
+        await callback(None, bytearray([0x20, 0x2A, 0x00, 0x00]))
 
     async def write_gatt_char(self, uuid: str, data: bytearray, response: bool = False):
         if uuid == idasen._UUID_COMMAND:
@@ -129,10 +133,52 @@ async def test_get_height(desk: IdasenDesk):
     assert isinstance(height, float)
 
 
-async def test_monitor(desk: IdasenDesk):
-    monitor_callback = mock.AsyncMock()
+async def test_get_speed(desk: IdasenDesk):
+    speed = await desk.get_speed()
+    assert isinstance(speed, float)
+
+
+async def test_get_height_and_speed(desk: IdasenDesk):
+    height, speed = await desk.get_height_and_speed()
+    assert isinstance(height, float)
+    assert isinstance(speed, float)
+
+
+async def test_monitor_height(desk: IdasenDesk):
+    mock_callback = mock.Mock()
+
+    async def monitor_callback(height: float):
+        mock_callback(height)
+
     await desk.monitor(monitor_callback)
-    monitor_callback.assert_has_calls([mock.call(0.62), mock.call(0.6216)])
+    mock_callback.assert_has_calls(
+        [mock.call(0.62), mock.call(0.8792), mock.call(1.6984)]
+    )
+
+
+async def test_monitor_speed_and_height(desk: IdasenDesk):
+    mock_callback = mock.Mock()
+
+    async def monitor_callback(height: float, speed: float):
+        mock_callback(height, speed)
+
+    await desk.monitor(monitor_callback)
+    mock_callback.assert_has_calls(
+        [
+            mock.call(0.62, 0.0),
+            mock.call(0.8792, 0.0),
+            mock.call(0.8792, 0.0032),
+            mock.call(1.6984, 0.0),
+        ]
+    )
+
+
+async def test_monitoraises(desk: IdasenDesk):
+    async def monitor_callback(height: float, speed: float, third_argument: float):
+        pass
+
+    with pytest.raises(ValueError):
+        await desk.monitor(monitor_callback)
 
 
 @pytest.mark.parametrize("target", [0.0, 2.0])
@@ -201,7 +247,7 @@ async def test_move_stop():
         (bytearray([0x00, 0x00, 0x00, 0x00]), IdasenDesk.MIN_HEIGHT, 0),
         (bytearray([0x51, 0x04, 0x00, 0x00]), 0.7305, 0),
         (bytearray([0x08, 0x08, 0x00, 0x00]), 0.8256, 0),
-        (bytearray([0x08, 0x08, 0x02, 0x01]), 0.8256, 258),
+        (bytearray([0x08, 0x08, 0x02, 0x01]), 0.8256, 0.0258),
     ],
 )
 def test_bytes_to_meters_and_speed(raw: bytearray, height: float, speed: int):

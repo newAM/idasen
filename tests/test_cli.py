@@ -177,7 +177,8 @@ seen_it = []
 
 
 @pytest.mark.parametrize(
-    "sub", ["init", "pair", "monitor", "sit", "height", "stand", "save", "delete"]
+    "sub",
+    ["init", "pair", "monitor", "sit", "height", "speed", "stand", "save", "delete"],
 )
 def test_subcommand_to_callable(sub: str):
     global seen_it
@@ -219,7 +220,19 @@ def test_main_internal_error():
 
 
 @pytest.mark.parametrize(
-    "sub", ["init", "pair", "monitor", "sit", "height", "stand", "add", "delete", None]
+    "sub",
+    [
+        "init",
+        "pair",
+        "monitor",
+        "sit",
+        "height",
+        "speed",
+        "stand",
+        "add",
+        "delete",
+        None,
+    ],
 )
 def test_main_version(sub: Optional[str]):
     with mock.patch.object(
