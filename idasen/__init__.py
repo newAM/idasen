@@ -428,7 +428,7 @@ class IdasenDesk:
 
     async def get_height_and_speed(self) -> Tuple[float, float]:
         """
-        Get a tuple of the desk height in meters and speed in meters per second.
+        Get the desk height in meters and speed in meters per second.
 
         Returns:
             Tuple of desk height in meters and speed in meters per second.
