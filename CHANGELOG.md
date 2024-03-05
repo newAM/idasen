@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2024-03-04
+### Added
+- Added public methods to get the speed, `get_speed` and `get_height_and_speed`.
+- Added a command line option to read the speed of the desk.
+
+### Fixed
+- Fixed the desk not stopping when requested during movement.
+- Fixed the desk pausing during raising / lowering.
+
+### Changed
+- Heights in the configuration file are no longer allowed to be called "speed".
+
 ## [0.11.1] - 2024-01-13
 ### Fixed
 - Fixed the desk stopping at inconsistent heights.
@@ -156,7 +168,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2020-09-07
 - Initial release
 
-[Unreleased]: https://github.com/newAM/idasen/compare/v0.11.1...HEAD
+[Unreleased]: https://github.com/newAM/idasen/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/newAM/idasen/compare/v0.11.1...v0.12.0
 [0.11.1]: https://github.com/newAM/idasen/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/newAM/idasen/compare/v0.10.3...v0.11.0
 [0.10.3]: https://github.com/newAM/idasen/compare/v0.10.2...v0.10.3
