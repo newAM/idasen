@@ -8,6 +8,7 @@ from typing import MutableMapping
 from typing import Optional
 from typing import Tuple
 from typing import Union
+from inspect import signature
 import asyncio
 import logging
 import struct
@@ -28,7 +29,7 @@ _COMMAND_WAKEUP: bytearray = bytearray([0xFE, 0x00])
 
 
 # height calculation offset in meters, assumed to be the same for all desks
-def _bytes_to_meters_and_speed(raw: bytearray) -> Tuple[float, int]:
+def _bytes_to_meters_and_speed(raw: bytearray) -> Tuple[float, float]:
     """Converts a value read from the desk in bytes to height in meters and speed."""
     raw_len = len(raw)
     expected_len = 4
@@ -36,10 +37,11 @@ def _bytes_to_meters_and_speed(raw: bytearray) -> Tuple[float, int]:
         raw_len == expected_len
     ), f"Expected raw value to be {expected_len} bytes long, got {raw_len} bytes"
 
-    int_raw, speed = struct.unpack("<Hh", raw)
+    int_raw, speed_raw = struct.unpack("<Hh", raw)
     meters = float(int(int_raw) / 10000) + IdasenDesk.MIN_HEIGHT
+    speed = float(int(speed_raw) / 10000)
 
-    return meters, int(speed)
+    return meters, speed
 
 
 def _meters_to_bytes(meters: float) -> bytearray:
@@ -183,21 +185,39 @@ class IdasenDesk:
         """
         await self._client.disconnect()
 
-    async def monitor(self, callback: Callable[[float], Awaitable[None]]):
+    async def monitor(self, callback: Callable[..., Awaitable[None]]):
         output_service_uuid = "99fa0020-338a-1024-8a49-009c0215f78a"
         output_char_uuid = "99fa0021-338a-1024-8a49-009c0215f78a"
 
+        # Determine the amount of callback parameters
+        # 1st one is height, optional 2nd one is speed, more is not supported
+        callback_param_count = len(signature(callback).parameters)
+        if callback_param_count != 1 and callback_param_count != 2:
+            raise ValueError(
+                "Invalid callback provided, only 1 or 2 parameters are supported"
+            )
+
+        return_speed_value = callback_param_count == 2
         previous_height = 0.0
+        previous_speed = 0.0
 
         async def output_listener(char: BleakGATTCharacteristic, data: bytearray):
-            height, _ = _bytes_to_meters_and_speed(data)
-            self._logger.debug(f"Got data: {height}m")
+            height, speed = _bytes_to_meters_and_speed(data)
+            self._logger.debug(f"Got data: {height}m {speed}m/s")
 
             nonlocal previous_height
-            if abs(height - previous_height) < 0.001:
+            nonlocal previous_speed
+            if abs(height - previous_height) < 0.001 and (
+                not return_speed_value or abs(speed - previous_speed) < 0.001
+            ):
                 return
             previous_height = height
-            await callback(height)
+            previous_speed = speed
+
+            if return_speed_value:
+                await callback(height, speed)
+            else:
+                await callback(height)
 
         for service in self._client.services:
             if service.uuid != output_service_uuid:
@@ -345,7 +365,7 @@ class IdasenDesk:
 
                 # Stop as soon as the speed is 0,
                 # which means the desk has reached the target position
-                speed = await self._get_speed()
+                speed = await self.get_speed()
                 if speed == 0:
                     break
 
@@ -386,14 +406,40 @@ class IdasenDesk:
         >>> asyncio.run(example())
         1.0
         """
-        height, _ = await self._get_height_and_speed()
+        height, _ = await self.get_height_and_speed()
         return height
 
-    async def _get_speed(self) -> int:
-        _, speed = await self._get_height_and_speed()
+    async def get_speed(self) -> float:
+        """
+        Get the desk speed in meters per second.
+
+        Returns:
+            Desk speed in meters per second.
+
+        >>> async def example() -> float:
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         await desk.move_to_target(1.0)
+        ...         return await desk.get_speed()
+        >>> asyncio.run(example())
+        0.0
+        """
+        _, speed = await self.get_height_and_speed()
         return speed
 
-    async def _get_height_and_speed(self) -> Tuple[float, int]:
+    async def get_height_and_speed(self) -> Tuple[float, float]:
+        """
+        Get a tuple of the desk height in meters and speed in meters per second.
+
+        Returns:
+            Tuple of desk height in meters and speed in meters per second.
+
+        >>> async def example() -> [float, float]:
+        ...     async with IdasenDesk(mac="AA:AA:AA:AA:AA:AA") as desk:
+        ...         await desk.move_to_target(1.0)
+        ...         return await desk.get_height_and_speed()
+        >>> asyncio.run(example())
+        (1.0, 0.0)
+        """
         raw = await self._client.read_gatt_char(_UUID_HEIGHT)
         return _bytes_to_meters_and_speed(raw)
 

@@ -38,7 +38,7 @@ CONFIG_SCHEMA = vol.Schema(
     extra=False,
 )
 
-RESERVED_NAMES = {"init", "pair", "monitor", "height", "save", "delete"}
+RESERVED_NAMES = {"init", "pair", "monitor", "height", "speed", "save", "delete"}
 
 
 def save_config(config: dict, path: str = IDASEN_CONFIG_PATH):
@@ -105,6 +105,7 @@ def get_parser(config: dict) -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="sub", help="Subcommands", required=False)
 
     height_parser = sub.add_parser("height", help="Get the desk height.")
+    speed_parser = sub.add_parser("speed", help="Get the desk speed.")
     monitor_parser = sub.add_parser("monitor", help="Monitor the desk position.")
     init_parser = sub.add_parser("init", help="Initialize a new configuration file.")
     save_parser = sub.add_parser("save", help="Save current desk position.")
@@ -128,6 +129,7 @@ def get_parser(config: dict) -> argparse.ArgumentParser:
     add_common_args(init_parser)
     add_common_args(pair_parser)
     add_common_args(height_parser)
+    add_common_args(speed_parser)
     add_common_args(monitor_parser)
     add_common_args(save_parser)
     add_common_args(delete_parser)
@@ -181,8 +183,8 @@ async def monitor(args: argparse.Namespace) -> None:
     try:
         async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
 
-            async def printer(height: float):
-                print(f"{height:.3f} meters", flush=True)
+            async def printer(height: float, speed: float):
+                print(f"{height:.3f} meters - {speed:.3f} meters/second", flush=True)
 
             await desk.monitor(printer)
             while True:
@@ -195,6 +197,12 @@ async def height(args: argparse.Namespace):
     async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
         height = await desk.get_height()
         print(f"{height:.3f} meters")
+
+
+async def speed(args: argparse.Namespace):
+    async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
+        speed = await desk.get_speed()
+        print(f"{speed:.3f} meters/second")
 
 
 async def move_to(args: argparse.Namespace, position: float) -> None:
@@ -267,6 +275,8 @@ def subcommand_to_callable(sub: str, config: dict) -> Callable:
         return monitor
     elif sub == "height":
         return height
+    elif sub == "speed":
+        return speed
     elif sub == "save":
         return functools.partial(save, config=config)
     elif sub == "delete":
