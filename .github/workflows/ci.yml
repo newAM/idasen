@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: abatilo/actions-poetry@v3.0.0
+      - uses: abatilo/actions-poetry@v3.0.1
       - run: poetry install
       - run: poetry run flake8
       - run: poetry run black --check .
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - uses: abatilo/actions-poetry@v3.0.0
+      - uses: abatilo/actions-poetry@v3.0.1
       - name: Install bluetooth
         run: |
             sudo apt update
@@ -70,7 +70,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: abatilo/actions-poetry@v3.0.0
+      - uses: abatilo/actions-poetry@v3.0.1
       - name: Install bluetooth
         run: |
             sudo apt update
@@ -95,7 +95,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v3.0.0
+        uses: abatilo/actions-poetry@v3.0.1
       - run: poetry install
       - name: Finished
         run: poetry run coveralls --finish --service=github
@@ -113,7 +113,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v3.0.0
+        uses: abatilo/actions-poetry@v3.0.1
       - run: poetry install
       - run: poetry publish --build
         env:
