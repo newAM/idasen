@@ -68,7 +68,6 @@ nitpick_ignore = []
 # HTML Options
 html_theme = "sphinx_rtd_theme"
 htmlhelp_basename = pyproject["tool"]["poetry"]["name"]
-html_theme_options = {"display_version": True}
 github_user = "newAM"
 html_context = {
     "display_github": True,
