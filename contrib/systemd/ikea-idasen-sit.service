@@ -1,0 +1,10 @@
+[Unit]
+Description=Send 'sit' command to IKEA IDÅSEN desk
+After=bluetooth.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/idasen sit
+
+[Install]
+WantedBy=default.target

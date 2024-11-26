@@ -101,6 +101,14 @@ Assuming the config file is populated to move the desk to sitting position:
 
     idasen sit
 
+systemd user timer
+============
+
+It can be useful to setup a systemd user timer to trigger ``idasen [sit|stand]`` periodically.
+
+See the ``contrib/systemd`` folder for examples.
+
+
 Community
 *********
 
