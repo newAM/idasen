@@ -14,7 +14,7 @@ documentation = "https://newam.github.io/idasen"
 keywords = ["ikea", "idasen", "bluetooth", "linak", "ble"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 
 bleak = ">=0.15"
 pyyaml = ">=5.3.1"
