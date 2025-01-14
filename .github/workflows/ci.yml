@@ -16,31 +16,28 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: abatilo/actions-poetry@v4.0.0
-      - run: poetry install
-      - run: poetry run ruff check
-      - run: poetry run ruff format --check
-      - run: poetry run mypy idasen tests
+      - run: uv sync --all-extras --dev
+      - run: uv run ruff check
+      - run: uv run ruff format --check
+      - run: uv run mypy idasen tests
 
   docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
-      - uses: abatilo/actions-poetry@v4.0.0
+      - run: uv sync --all-extras --dev
       - name: Install bluetooth
         run: |
             sudo apt update
             sudo apt install bluetooth
-      - run: poetry install
       - name: Run sphinx
-        run: poetry run sphinx-build -W -b html docs public
+        run: uv run sphinx-build -W -b html docs public
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
@@ -66,20 +63,18 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: abatilo/actions-poetry@v4.0.0
+      - run: uv sync --all-extras --dev
       - name: Install bluetooth
         run: |
             sudo apt update
             sudo apt install bluetooth
-      - run: poetry install
       - name: Run pytest
-        run: poetry run pytest -vvv --cov=idasen --doctest-modules
+        run: uv run pytest -vvv --cov=idasen --doctest-modules
       - name: Upload coverage data to coveralls.io
-        run: poetry run coveralls --service=github
+        run: uv run coveralls --service=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: py${{ matrix.python-version }}
@@ -91,14 +86,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v4.0.0
-      - run: poetry install
+      - run: uv sync --all-extras --dev
       - name: Finished
-        run: poetry run coveralls --finish --service=github
+        run: uv run coveralls --finish --service=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -109,12 +102,10 @@ jobs:
     needs: [pytest, docs, style]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v4.0.0
-      - run: poetry install
-      - run: poetry publish --build
+      - run: uv sync --all-extras --dev
+      - run: uv publish
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
