@@ -1,7 +1,7 @@
 idasen
 ######
 
-|PyPi Version| |Build Status| |Documentation Status| |Black|
+|PyPi Version| |Build Status| |Documentation Status| |Ruff|
 
 The IDÅSEN is an electric sitting standing desk with a Linak controller sold by
 ikea.
@@ -124,5 +124,6 @@ Related projects and packaging:
    :target: https://github.com/newAM/idasen/actions
 .. |Documentation Status| image:: https://img.shields.io/badge/docs-latest-blue
    :target: https://newam.github.io/idasen
-.. |Black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/psf/black
+.. |Ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+    :target: https://github.com/astral-sh/ruff
+    :alt: Ruff

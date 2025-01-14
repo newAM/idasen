@@ -33,9 +33,9 @@ def _bytes_to_meters_and_speed(raw: bytearray) -> Tuple[float, float]:
     """Converts a value read from the desk in bytes to height in meters and speed."""
     raw_len = len(raw)
     expected_len = 4
-    assert (
-        raw_len == expected_len
-    ), f"Expected raw value to be {expected_len} bytes long, got {raw_len} bytes"
+    assert raw_len == expected_len, (
+        f"Expected raw value to be {expected_len} bytes long, got {raw_len} bytes"
+    )
 
     int_raw, speed_raw = struct.unpack("<Hh", raw)
     meters = float(int(int_raw) / 10000) + IdasenDesk.MIN_HEIGHT
@@ -280,11 +280,11 @@ class IdasenDesk:
         >>> asyncio.run(example())
         """
         # https://github.com/rhyst/linak-controller/issues/32#issuecomment-1784055470
-        await self._client.write_gatt_char(_UUID_DPG, b"\x7F\x86\x00")
+        await self._client.write_gatt_char(_UUID_DPG, b"\x7f\x86\x00")
         await self._client.write_gatt_char(
             _UUID_DPG,
-            b"\x7F\x86\x80\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D"
-            b"\x0E\x0F\x10\x11",
+            b"\x7f\x86\x80\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d"
+            b"\x0e\x0f\x10\x11",
         )
         await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_WAKEUP)
 

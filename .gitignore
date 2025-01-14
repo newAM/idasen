@@ -1,3 +1,5 @@
+.ruff_cache/
+
 # docs
 public/
 docs/cli.txt
