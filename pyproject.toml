@@ -1,39 +1,47 @@
-[tool.poetry]
+[project]
 name = "idasen"
 description = "ikea IDÅSEN desk API and CLI."
-authors = ["Alex Martens <alex@thinglab.org>"]
+authors = [{ name = "Alex Martens", email = "alex+idasen@thinglab.org" }]
 version = "0.12.0"
-license = "MIT"
+license.file = "LICENSE"
 readme = "README.rst"
-repository = "https://github.com/newAM/idasen"
-documentation = "https://newam.github.io/idasen"
 keywords = ["ikea", "idasen", "bluetooth", "linak", "ble"]
+requires-python = ">= 3.9"
+dependencies = [
+    "bleak>=0.15",
+    "pyyaml>=5.3.1",
+    "voluptuous>=0.12",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
+[project.urls]
+Repository = "https://github.com/newAM/idasen"
+Documentation = "https://newam.github.io/idasen"
+Changelog = "https://github.com/newAM/idasen/blob/main/CHANGELOG.md"
+Issues = "https://github.com/newAM/idasen/issues"
 
-bleak = ">=0.15"
-pyyaml = ">=5.3.1"
-voluptuous = ">=0.12"
-
-[tool.poetry.dev-dependencies]
-coveralls = "^3"
-mypy = "^1.14"
-pytest = "^8.3.4"
-pytest-asyncio = "^0.24"
-pytest-cov = "^5.0.0"
-ruff = "^0.9.1"
-sphinx = "^7.1.2"
-sphinx-rtd-theme = "^3.0.2"
-toml = "^0.10.2"
-types-PyYAML = "^6.0.12"
-
-[tool.poetry.scripts]
+[project.scripts]
 idasen = "idasen.cli:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["idasen"]
+
+[dependency-groups]
+dev = [
+    "coveralls>=4.0.1",
+    "mypy>=1.14.1",
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.25.2",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.9.1",
+    "sphinx>=7.4.7",
+    "sphinx-rtd-theme>=3.0.2",
+    "toml>=0.10.2",
+    "types-pyyaml>=6.0.12.20241230",
+]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
