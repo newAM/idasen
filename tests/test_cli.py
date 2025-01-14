@@ -68,56 +68,50 @@ async def test_init_exists_no_force():
 
 @pytest.mark.parametrize("discover_return", ["AA:AA:AA:AA:AA:AA", None])
 async def test_init(discover_return: Optional[str]):
-    with mock.patch.object(os.path, "isfile", return_value=True), mock.patch.object(
-        yaml, "dump"
-    ) as dump_mock, mock.patch.object(
-        IdasenDesk,
-        "discover",
-        return_value=discover_return,
-    ), mock.patch.object(
-        os, "makedirs"
-    ), mock.patch(
-        "builtins.open"
+    with (
+        mock.patch.object(os.path, "isfile", return_value=True),
+        mock.patch.object(yaml, "dump") as dump_mock,
+        mock.patch.object(
+            IdasenDesk,
+            "discover",
+            return_value=discover_return,
+        ),
+        mock.patch.object(os, "makedirs"),
+        mock.patch("builtins.open"),
     ):
         assert await init(args=argparse.Namespace(force=True)) == 0
         dump_mock.assert_called_once()
 
 
 async def test_pair():
-    with mock.patch.object(
-        IdasenDesk, "disconnect", side_effect=None
-    ), mock.patch.object(IdasenDesk, "connect", side_effect=None), mock.patch.object(
-        IdasenDesk, "pair", side_effect=None
-    ), mock.patch.object(
-        IdasenDesk, "__init__", return_value=None
+    with (
+        mock.patch.object(IdasenDesk, "disconnect", side_effect=None),
+        mock.patch.object(IdasenDesk, "connect", side_effect=None),
+        mock.patch.object(IdasenDesk, "pair", side_effect=None),
+        mock.patch.object(IdasenDesk, "__init__", return_value=None),
     ):
         assert await pair(args=argparse.Namespace(mac_address="a")) is None
 
 
 async def test_pair_darwin():
-    with mock.patch.object(
-        IdasenDesk, "disconnect", side_effect=None
-    ), mock.patch.object(IdasenDesk, "connect", side_effect=None), mock.patch.object(
-        IdasenDesk, "pair", side_effect=NotImplementedError
-    ), mock.patch.object(
-        platform, "system", return_value="Darwin"
-    ), mock.patch.object(
-        IdasenDesk, "__init__", return_value=None
+    with (
+        mock.patch.object(IdasenDesk, "disconnect", side_effect=None),
+        mock.patch.object(IdasenDesk, "connect", side_effect=None),
+        mock.patch.object(IdasenDesk, "pair", side_effect=NotImplementedError),
+        mock.patch.object(platform, "system", return_value="Darwin"),
+        mock.patch.object(IdasenDesk, "__init__", return_value=None),
     ):
         assert await pair(args=argparse.Namespace(mac_address="a")) == 1
 
 
 async def test_pair_not_darwin():
-    with mock.patch.object(
-        IdasenDesk, "disconnect", side_effect=None
-    ), mock.patch.object(IdasenDesk, "connect", side_effect=None), mock.patch.object(
-        IdasenDesk, "pair", side_effect=NotImplementedError
-    ), mock.patch.object(
-        platform, "system", return_value="NotDarwin"
-    ), mock.patch.object(
-        IdasenDesk, "__init__", return_value=None
-    ), pytest.raises(
-        NotImplementedError
+    with (
+        mock.patch.object(IdasenDesk, "disconnect", side_effect=None),
+        mock.patch.object(IdasenDesk, "connect", side_effect=None),
+        mock.patch.object(IdasenDesk, "pair", side_effect=NotImplementedError),
+        mock.patch.object(platform, "system", return_value="NotDarwin"),
+        mock.patch.object(IdasenDesk, "__init__", return_value=None),
+        pytest.raises(NotImplementedError),
     ):
         await pair(args=argparse.Namespace(mac_address="a"))
 
@@ -195,27 +189,30 @@ def test_main_to_exit():
     async def do_nothing(args: argparse.Namespace):
         assert args == mock_args
 
-    with mock.patch.object(
-        argparse.ArgumentParser,
-        "parse_args",
-        return_value=mock_args,
-    ), mock.patch.object(
-        cli, "subcommand_to_callable", return_value=do_nothing
-    ), mock.patch.object(
-        sys, "exit"
-    ) as sys_exit_mock:
+    with (
+        mock.patch.object(
+            argparse.ArgumentParser,
+            "parse_args",
+            return_value=mock_args,
+        ),
+        mock.patch.object(cli, "subcommand_to_callable", return_value=do_nothing),
+        mock.patch.object(sys, "exit") as sys_exit_mock,
+    ):
         main()
         sys_exit_mock.assert_called_once_with(0)
 
 
 def test_main_internal_error():
-    with mock.patch.object(
-        argparse.ArgumentParser,
-        "parse_args",
-        return_value=SimpleNamespace(
-            sub="not_a_real_sub_command", version=False, verbose=0
+    with (
+        mock.patch.object(
+            argparse.ArgumentParser,
+            "parse_args",
+            return_value=SimpleNamespace(
+                sub="not_a_real_sub_command", version=False, verbose=0
+            ),
         ),
-    ), pytest.raises(AssertionError):
+        pytest.raises(AssertionError),
+    ):
         main()
 
 
@@ -235,20 +232,28 @@ def test_main_internal_error():
     ],
 )
 def test_main_version(sub: Optional[str]):
-    with mock.patch.object(
-        argparse.ArgumentParser,
-        "parse_args",
-        return_value=SimpleNamespace(sub=sub, version=True, verbose=0, force=False),
-    ), mock.patch.object(sys, "exit") as sys_exit_mock:
+    with (
+        mock.patch.object(
+            argparse.ArgumentParser,
+            "parse_args",
+            return_value=SimpleNamespace(sub=sub, version=True, verbose=0, force=False),
+        ),
+        mock.patch.object(sys, "exit") as sys_exit_mock,
+    ):
         main()
         sys_exit_mock.assert_called_once_with(0)
 
 
 def test_main_no_sub():
-    with mock.patch.object(
-        argparse.ArgumentParser,
-        "parse_args",
-        return_value=SimpleNamespace(sub=None, version=False, verbose=0, force=False),
-    ), mock.patch.object(sys, "exit") as sys_exit_mock:
+    with (
+        mock.patch.object(
+            argparse.ArgumentParser,
+            "parse_args",
+            return_value=SimpleNamespace(
+                sub=None, version=False, verbose=0, force=False
+            ),
+        ),
+        mock.patch.object(sys, "exit") as sys_exit_mock,
+    ):
         main()
         sys_exit_mock.assert_called_once_with(1)

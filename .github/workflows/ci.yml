@@ -22,8 +22,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: abatilo/actions-poetry@v4.0.0
       - run: poetry install
-      - run: poetry run flake8
-      - run: poetry run black --check .
+      - run: poetry run ruff check
+      - run: poetry run ruff format --check
       - run: poetry run mypy idasen tests
 
   docs:
