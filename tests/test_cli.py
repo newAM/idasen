@@ -120,7 +120,7 @@ class Parser:
     def __init__(self):
         self.error_called = False
 
-    def error(self, msg: str):
+    def error(self, msg: str):  # noqa: ARG002
         self.error_called = True
 
 
