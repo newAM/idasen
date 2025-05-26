@@ -3,7 +3,7 @@ name = "idasen"
 description = "ikea IDÅSEN desk API and CLI."
 authors = [{ name = "Alex Martens", email = "alex+idasen@thinglab.org" }]
 version = "0.12.0"
-license.file = "LICENSE"
+license = "MIT"
 readme = "README.rst"
 keywords = ["ikea", "idasen", "bluetooth", "linak", "ble"]
 requires-python = ">= 3.9"
@@ -23,11 +23,8 @@ Issues = "https://github.com/newAM/idasen/issues"
 idasen = "idasen.cli:main"
 
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
-
-[tool.setuptools]
-packages = ["idasen"]
 
 [dependency-groups]
 dev = [
