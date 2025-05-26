@@ -107,6 +107,4 @@ jobs:
           python-version: "3.12"
       - run: uv sync --all-extras --dev
       - run: uv build
-      - run: uv publish
-        env:
-          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      - run: uv publish --trusted-publishing always
