@@ -22,7 +22,7 @@ class MockCharacteristic:
     def uuid(self):
         return "99fa0020-338a-1024-8a49-009c0215f78a"
 
-    def get_characteristic(self, uuid):
+    def get_characteristic(self, uuid):  # noqa: ARG002
         return ""
 
 
@@ -58,7 +58,7 @@ class MockBleakClient:
         await callback(None, bytearray([0x20, 0x0A, 0x20, 0x00]))
         await callback(None, bytearray([0x20, 0x2A, 0x00, 0x00]))
 
-    async def write_gatt_char(self, uuid: str, data: bytearray, response: bool = False):
+    async def write_gatt_char(self, uuid: str, data: bytearray, response: bool = False):  # noqa: ARG002
         if uuid == idasen._UUID_COMMAND:
             if data == idasen._COMMAND_UP:
                 self._height += 0.001
@@ -73,7 +73,7 @@ class MockBleakClient:
 
             self._is_moving = self._height != requested_height
 
-    async def read_gatt_char(self, uuid: str) -> bytearray:
+    async def read_gatt_char(self, uuid: str) -> bytearray:  # noqa: ARG002
         height_bytes = _meters_to_bytes(self._height)
         speed_byte = 0x01 if self._is_moving else 0x00
         return bytearray([height_bytes[0], height_bytes[1], 0x00, speed_byte])
@@ -200,7 +200,9 @@ async def test_move_abort_when_no_movement():
     client.write_gatt_char = mock.AsyncMock()
 
     async def write_gatt_char_mock(
-        uuid: str, command: bytearray, response: bool = False
+        uuid: str,  # noqa: ARG001
+        command: bytearray,  # noqa: ARG001
+        response: bool = False,  # noqa: ARG001
     ):
         if client.write_gatt_char.call_count == 4:
             assert desk.is_moving
@@ -220,7 +222,9 @@ async def test_move_stop():
     client.write_gatt_char = mock.AsyncMock()
 
     async def write_gatt_char_mock(
-        uuid: str, command: bytearray, response: bool = False
+        uuid: str,  # noqa: ARG001
+        command: bytearray,  # noqa: ARG001
+        response: bool = False,  # noqa: ARG001
     ):
         if client.write_gatt_char.call_count == 4:
             assert desk.is_moving

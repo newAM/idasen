@@ -42,11 +42,22 @@ dev = [
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
 
 [tool.mypy]
 warn_unused_configs = true
 ignore_missing_imports = true
 
 [tool.ruff.lint]
-# Add flake8-bugbear and pep8-naming rules
-extend-select = ["B", "N"]
+extend-select = [
+    # flake8-builtins
+    "A",
+    # flake8-unused-arguments
+    "ARG",
+    # flake8-bugbear
+    "B",
+    # pep8-naming
+    "N",
+    # unused-noqa
+    "RUF100",
+]

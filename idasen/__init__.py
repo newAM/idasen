@@ -50,7 +50,7 @@ def _meters_to_bytes(meters: float) -> bytearray:
     return bytearray(struct.pack("<H", int_raw))
 
 
-def _is_desk(device: BLEDevice, adv: AdvertisementData) -> bool:
+def _is_desk(device: BLEDevice, adv: AdvertisementData) -> bool:  # noqa: ARG001
     return _UUID_ADV_SVC in adv.service_uuids
 
 
@@ -201,7 +201,7 @@ class IdasenDesk:
         previous_height = 0.0
         previous_speed = 0.0
 
-        async def output_listener(char: BleakGATTCharacteristic, data: bytearray):
+        async def output_listener(char: BleakGATTCharacteristic, data: bytearray):  # noqa: ARG001
             height, speed = _bytes_to_meters_and_speed(data)
             self._logger.debug(f"Got data: {height}m {speed}m/s")
 
