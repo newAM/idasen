@@ -25,7 +25,10 @@ import datetime
 import inspect
 import os
 import sys
-import toml
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 repo_root = os.path.abspath(os.path.join(this_dir, ".."))
@@ -45,8 +48,8 @@ extensions = [
 templates_path = []
 source_suffix = ".rst"
 
-with open(os.path.join(repo_root, "pyproject.toml"), "r") as f:
-    pyproject = toml.load(f)
+with open(os.path.join(repo_root, "pyproject.toml"), "rb") as f:
+    pyproject = tomllib.load(f)
 
 # The master toctree document.
 master_doc = "index"
