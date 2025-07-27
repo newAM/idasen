@@ -36,7 +36,7 @@ dev = [
     "ruff>=0.9.1",
     "sphinx>=7.4.7",
     "sphinx-rtd-theme>=3.0.2",
-    "tomli;python_version<3.11",
+    "tomli;python_version<'3.11'",
     "types-pyyaml>=6.0.12.20241230",
 ]
 
