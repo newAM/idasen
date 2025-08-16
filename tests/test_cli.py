@@ -5,22 +5,44 @@ from idasen.cli import DEFAULT_CONFIG
 from idasen.cli import from_config
 from idasen.cli import get_parser
 from idasen.cli import init
-from idasen.cli import pair
 from idasen.cli import load_config
 from idasen.cli import main
+from idasen.cli import pair
 from idasen.cli import subcommand_to_callable
+from idasen.cli import xdg_config_home
+from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 from typing import Dict
 from typing import Optional
 from unittest import mock
+from unittest.mock import patch
 import argparse
 import logging
 import os
+import platform
 import pytest
 import sys
 import yaml
-import platform
+
+
+@pytest.mark.parametrize(
+    ("env", "output"),
+    [
+        pytest.param(None, Path.home() / ".config", id="none"),
+        pytest.param("", Path.home() / ".config", id="empty_string"),
+        pytest.param("/abs/../path", Path("/abs/../path"), id="traversal"),
+        pytest.param("relative/path", Path.home() / ".config", id="relative"),
+        pytest.param("/home/user/CONFIG", Path("/home/user/CONFIG"), id="absolute"),
+    ],
+)
+def test_xdg_config_home(env: Optional[str], output: Path):
+    if env is None:
+        test_env = {}
+    else:
+        test_env = {"XDG_CONFIG_HOME": env}
+    with patch.dict(os.environ, test_env):
+        assert xdg_config_home() == output
 
 
 def test_get_parser_smoke():

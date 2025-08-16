@@ -1,6 +1,5 @@
-import functools
-
 from . import IdasenDesk
+from pathlib import Path
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -8,16 +7,25 @@ from typing import List
 from typing import Optional
 import argparse
 import asyncio
+import functools
 import importlib.metadata
 import logging
 import os
+import platform
 import sys
 import voluptuous as vol
 import yaml
-import platform
 
-HOME = os.path.expanduser("~")
-IDASEN_CONFIG_DIRECTORY = os.path.join(HOME, ".config", "idasen")
+
+def xdg_config_home() -> Path:
+    config_home = os.environ.get("XDG_CONFIG_HOME", None)
+    if config_home is not None and Path(config_home).is_absolute():
+        return Path(config_home)
+    else:
+        return Path.home() / ".config"
+
+
+IDASEN_CONFIG_DIRECTORY = os.path.join(xdg_config_home(), "idasen")
 IDASEN_CONFIG_PATH = os.path.join(IDASEN_CONFIG_DIRECTORY, "idasen.yaml")
 
 DEFAULT_CONFIG: Dict[str, Any] = {
