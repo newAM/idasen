@@ -38,7 +38,7 @@ jobs:
             sudo apt install bluetooth
       - name: Run sphinx
         run: uv run sphinx-build -W -b html docs public
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: public
 
