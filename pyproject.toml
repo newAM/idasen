@@ -6,7 +6,7 @@ version = "0.12.0"
 license = "MIT"
 readme = "README.rst"
 keywords = ["ikea", "idasen", "bluetooth", "linak", "ble"]
-requires-python = ">= 3.9"
+requires-python = ">= 3.10"
 dependencies = [
     "bleak>=0.15",
     "pyyaml>=5.3.1",
