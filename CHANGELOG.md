@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the build system from poetry-core to setuptools.
 
 ### Removed
-- Removed support for end-of-life python version 3.8.
+- Removed support for end-of-life python versions 3.8 and 3.9.
 
 ## [0.12.0] - 2024-03-04
 ### Added
