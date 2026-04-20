@@ -1,0 +1,8 @@
+[Unit]
+Description=Trigger 'sit' command on IKEA IDÅSEN desk every first quarter every hour between 8 AM and 22 PM
+
+[Timer]
+OnCalendar=*-*-* 08..22:15:00
+
+[Install]
+WantedBy=timers.target
