@@ -244,6 +244,69 @@ async def test_move_stop():
         assert move_task.done()
 
 
+async def test_move_to_target_already_at_target_with_tolerance():
+    """A height within the tolerance of the target is treated as already there."""
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    desk._client = client
+    # 4 mm above the target is within the 5 mm arrival tolerance.
+    client._height = 0.704
+
+    async with desk:
+        await desk.move_to_target(0.7)
+        # No reference input writes should have happened.
+        assert client._height == 0.704
+
+
+async def test_move_to_target_tolerates_transient_zero_speed():
+    """A single ``speed == 0`` mid-travel must not stop the loop."""
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    desk._client = client
+    client._height = 1.0
+    client.write_gatt_char = mock.AsyncMock()
+
+    # Speeds returned by consecutive get_height_and_speed() calls.  The
+    # first reading reports ``speed == 0`` (transient), then movement
+    # resumes, and finally ``speed == 0`` at the target.
+    speeds_iter = iter([0.0, 0.5, 0.0, 0.0])
+    heights_iter = iter([0.95, 0.85, 0.7, 0.7])
+
+    async def read_gatt_char_mock(uuid: str) -> bytearray:  # noqa: ARG001
+        height = next(heights_iter)
+        speed = next(speeds_iter)
+        client._height = height
+        height_bytes = _meters_to_bytes(height)
+        speed_raw = int(speed * 10000)
+        return bytearray(
+            [height_bytes[0], height_bytes[1], speed_raw & 0xFF, speed_raw >> 8]
+        )
+
+    client.read_gatt_char = read_gatt_char_mock
+
+    async with desk:
+        await desk.move_to_target(0.7)
+        # Loop must have run at least 4 iterations (one per speed sample)
+        # before exiting at the target.
+        assert not desk.is_moving
+
+
+async def test_move_to_target_stalled_away_from_target_aborts():
+    """If the desk repeatedly stalls away from the target, the loop aborts."""
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    desk._client = client
+    client._height = 1.0
+    # The mock client's read_gatt_char reports speed 0 when _is_moving is
+    # False; combined with the height never reaching the target, the loop
+    # must exit via the stall-retry guard rather than hanging.
+    client.write_gatt_char = mock.AsyncMock()
+
+    async with desk:
+        await desk.move_to_target(0.7)
+        assert not desk.is_moving
+
+
 @pytest.mark.parametrize(
     "raw, height, speed",
     [

@@ -27,6 +27,26 @@ _COMMAND_DOWN: bytearray = bytearray([0x46, 0x00])
 _COMMAND_STOP: bytearray = bytearray([0xFF, 0x00])
 _COMMAND_WAKEUP: bytearray = bytearray([0xFE, 0x00])
 
+# Reference input write interval during ``move_to_target``.
+# Shorter than the historic 200ms to keep the desk controller from stalling
+# between writes when latency varies (e.g. over Bluetooth proxies).
+_MOVE_LOOP_INTERVAL: float = 0.1
+
+# Distance in meters considered "at target" for arrival detection.
+_MOVE_HEIGHT_TOLERANCE: float = 0.005
+
+# Number of consecutive ``speed == 0`` readings required before treating the
+# desk as stopped.  Filters out transient ``speed == 0`` samples that can
+# occur mid-travel (e.g. controller momentarily decelerating between
+# reference input writes, or BLE proxy latency between samples).
+_MOVE_CONSECUTIVE_ZERO_SPEED: int = 2
+
+# Maximum number of stall recoveries before giving up.  A stall is a run of
+# consecutive ``speed == 0`` readings while the desk is not at the target
+# height.  Bounded retries let the loop recover from transient pauses
+# without spinning forever if the desk is physically stuck.
+_MOVE_MAX_STALL_RETRIES: int = 3
+
 
 # height calculation offset in meters, assumed to be the same for all desks
 def _bytes_to_meters_and_speed(raw: bytearray) -> Tuple[float, float]:
@@ -349,7 +369,7 @@ class IdasenDesk:
 
         async def do_move() -> None:
             current_height = await self.get_height()
-            if current_height == target:
+            if abs(current_height - target) < _MOVE_HEIGHT_TOLERANCE:
                 return
 
             # Wakeup and stop commands are needed in order to
@@ -358,16 +378,36 @@ class IdasenDesk:
             await self._client.write_gatt_char(_UUID_COMMAND, _COMMAND_STOP)
 
             data = _meters_to_bytes(target)
+            consecutive_zero_speed = 0
+            stall_retries = 0
 
             while self._moving:
                 await self._client.write_gatt_char(_UUID_REFERENCE_INPUT, data)
-                await asyncio.sleep(0.2)
+                await asyncio.sleep(_MOVE_LOOP_INTERVAL)
 
-                # Stop as soon as the speed is 0,
-                # which means the desk has reached the target position
-                speed = await self.get_speed()
+                height, speed = await self.get_height_and_speed()
                 if speed == 0:
-                    break
+                    consecutive_zero_speed += 1
+                else:
+                    consecutive_zero_speed = 0
+
+                # Treat the desk as stopped only after several consecutive
+                # ``speed == 0`` readings.  A single ``speed == 0`` sample
+                # mid-travel can happen when the controller momentarily
+                # decelerates between writes, or when the reading races a
+                # write; exiting on the first zero would stop movement
+                # prematurely.
+                if consecutive_zero_speed >= _MOVE_CONSECUTIVE_ZERO_SPEED:
+                    if abs(height - target) < _MOVE_HEIGHT_TOLERANCE:
+                        break
+                    # Stalled away from the target.  Allow a bounded
+                    # number of stall recoveries before giving up; this
+                    # lets the loop ride out transient pauses while still
+                    # exiting if the desk is physically stuck.
+                    stall_retries += 1
+                    if stall_retries >= _MOVE_MAX_STALL_RETRIES:
+                        break
+                    consecutive_zero_speed = 0
 
         self._move_task = asyncio.create_task(do_move())
         await self._move_task
