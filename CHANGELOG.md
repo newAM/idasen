@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Fixed the CLI ignoring the `XDG_CONFIG_HOME` environment variable.
+- Fixed `move_to_target` exiting prematurely on transient `speed == 0`
+  readings, which could leave the desk short of its target height,
+  especially over Bluetooth proxies.
 
 ### Changed
 - Changed the build system from poetry-core to setuptools.
