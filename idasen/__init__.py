@@ -390,6 +390,10 @@ class IdasenDesk:
                     consecutive_zero_speed += 1
                 else:
                     consecutive_zero_speed = 0
+                    # Forward progress clears the stall budget so a long
+                    # move that pauses several times along the way is
+                    # not aborted prematurely.
+                    stall_retries = 0
 
                 # Treat the desk as stopped only after several consecutive
                 # ``speed == 0`` readings.  A single ``speed == 0`` sample

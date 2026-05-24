@@ -307,6 +307,62 @@ async def test_move_to_target_stalled_away_from_target_aborts():
         assert not desk.is_moving
 
 
+async def test_move_to_target_recovers_from_multiple_stalls():
+    """Multiple stall-recover cycles in one move must not abort the loop.
+
+    A long move over a BLE proxy can have the controller pause several
+    times along the way.  Each pause is a stall, but forward progress
+    between pauses must reset the stall budget so the move completes.
+    """
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    desk._client = client
+    client._height = 1.0
+    client.write_gatt_char = mock.AsyncMock()
+
+    # Alternate stall and movement samples: four distinct stalls (each
+    # cleared by a non-zero-speed sample) before arriving at the target.
+    # Each "stall" must be at least ``_MOVE_CONSECUTIVE_ZERO_SPEED``
+    # consecutive zero-speed readings to trip the stall-retry guard.
+    samples: list[tuple[float, float]] = [
+        (0.95, 0.0),
+        (0.95, 0.0),
+        (0.90, 0.5),
+        (0.85, 0.0),
+        (0.85, 0.0),
+        (0.80, 0.5),
+        (0.75, 0.0),
+        (0.75, 0.0),
+        (0.72, 0.5),
+        (0.71, 0.0),
+        (0.71, 0.0),
+        (0.70, 0.5),
+        (0.70, 0.0),
+        (0.70, 0.0),
+    ]
+    samples_iter = iter(samples)
+
+    async def read_gatt_char_mock(uuid: str) -> bytearray:  # noqa: ARG001
+        height, speed = next(samples_iter)
+        client._height = height
+        height_bytes = _meters_to_bytes(height)
+        speed_raw = int(speed * 10000)
+        return bytearray(
+            [height_bytes[0], height_bytes[1], speed_raw & 0xFF, speed_raw >> 8]
+        )
+
+    client.read_gatt_char = read_gatt_char_mock
+
+    async with desk:
+        await desk.move_to_target(0.7)
+        assert not desk.is_moving
+        # If the stall budget had not been reset between recoveries the
+        # loop would have aborted before consuming all samples.  We
+        # consumed exactly the number of samples expected for arrival.
+        with pytest.raises(StopIteration):
+            next(samples_iter)
+
+
 @pytest.mark.parametrize(
     "raw, height, speed",
     [
