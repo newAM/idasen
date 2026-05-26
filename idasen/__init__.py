@@ -94,7 +94,15 @@ class IdasenDesk:
         disconnected_callback:
             Callback that will be scheduled in the event loop when the client is
             disconnected. The callable must take one argument, which will be
-            this client object.
+            this client object. Ignored when ``client`` is provided; in that
+            case the caller is responsible for configuring the disconnected
+            callback on the injected client.
+        client:
+            Optional pre-configured :class:`bleak.BleakClient` to use instead
+            of letting :class:`IdasenDesk` create one internally.  Useful for
+            downstream wrappers that manage their own connection lifecycle
+            (e.g. via ``bleak-retry-connector``).  When provided,
+            ``disconnected_callback`` is ignored.
 
     Note:
         There is no locking to prevent you from running multiple movement
@@ -124,12 +132,16 @@ class IdasenDesk:
         mac: Union[BLEDevice, str],
         exit_on_fail: bool = False,
         disconnected_callback: Optional[Callable[[BleakClient], None]] = None,
+        client: Optional[BleakClient] = None,
     ):
         self._exit_on_fail = exit_on_fail
-        self._client = BleakClient(
-            address_or_ble_device=mac,
-            disconnected_callback=disconnected_callback,
-        )
+        if client is None:
+            self._client = BleakClient(
+                address_or_ble_device=mac,
+                disconnected_callback=disconnected_callback,
+            )
+        else:
+            self._client = client
         self._mac = mac.address if isinstance(mac, BLEDevice) else mac
         self._logger = _DeskLoggingAdapter(
             logger=logging.getLogger(__name__), extra={"mac": self.mac}

@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Added an optional ``client`` argument to ``IdasenDesk.__init__`` for
+  injecting a pre-configured ``BleakClient``. Useful for downstream
+  wrappers that manage their own connection lifecycle (e.g. via
+  ``bleak-retry-connector``). When provided, ``disconnected_callback``
+  is ignored.
+
 ## [0.13.0] - 2026-05-25
 ### Fixed
 - Fixed the CLI ignoring the `XDG_CONFIG_HOME` environment variable.
