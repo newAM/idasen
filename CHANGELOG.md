@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Added an optional ``client`` argument to ``IdasenDesk.__init__`` for
-  injecting a pre-configured ``BleakClient``. Useful for downstream
+- Added an optional `client` argument to `IdasenDesk.__init__` for
+  injecting a pre-configured `BleakClient`. Useful for downstream
   wrappers that manage their own connection lifecycle (e.g. via
-  ``bleak-retry-connector``). When provided, ``disconnected_callback``
+  `bleak-retry-connector`). When provided, `disconnected_callback`
   is ignored.
 
 ## [0.13.0] - 2026-05-25
