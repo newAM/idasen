@@ -107,6 +107,35 @@ def test_mac(desk: IdasenDesk):
     assert desk.mac == desk_mac
 
 
+def test_init_creates_default_client():
+    """Without ``client``, ``__init__`` creates its own ``BleakClient``."""
+    desk = IdasenDesk(mac=desk_mac)
+    assert isinstance(desk._client, bleak.BleakClient)
+
+
+def test_init_uses_injected_client():
+    """An injected ``client`` is used as-is, with no replacement."""
+    injected = MockBleakClient()
+    desk = IdasenDesk(mac=desk_mac, client=injected)  # type: ignore[arg-type]
+    assert desk._client is injected
+
+
+def test_init_ignores_disconnected_callback_when_client_provided():
+    """``disconnected_callback`` is ignored when ``client`` is provided.
+
+    The caller is expected to configure the disconnected callback on the
+    client they pass in.
+    """
+    injected = MockBleakClient()
+    callback = mock.Mock()
+    desk = IdasenDesk(
+        mac=desk_mac,
+        client=injected,  # type: ignore[arg-type]
+        disconnected_callback=callback,
+    )
+    assert desk._client is injected
+
+
 async def test_pair(desk: IdasenDesk):
     if desk_mac != "AA:AA:AA:AA:AA:AA":
         return
