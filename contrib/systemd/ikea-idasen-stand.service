@@ -1,0 +1,10 @@
+[Unit]
+Description=Send 'stand' command to IKEA IDÅSEN desk
+After=bluetooth.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/idasen stand
+
+[Install]
+WantedBy=default.target

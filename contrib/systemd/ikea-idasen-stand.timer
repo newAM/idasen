@@ -1,0 +1,8 @@
+[Unit]
+Description=Trigger 'stand' command on IKEA IDÅSEN desk every hour between 8 AM and 22 PM
+
+[Timer]
+OnCalendar=*-*-* 08..22:00:00
+
+[Install]
+WantedBy=timers.target
