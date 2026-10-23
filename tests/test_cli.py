@@ -1,29 +1,31 @@
-from idasen import cli
-from idasen import IdasenDesk
-from idasen.cli import count_to_level
-from idasen.cli import DEFAULT_CONFIG
-from idasen.cli import from_config
-from idasen.cli import get_parser
-from idasen.cli import init
-from idasen.cli import load_config
-from idasen.cli import main
-from idasen.cli import pair
-from idasen.cli import subcommand_to_callable
-from idasen.cli import xdg_config_home
-from pathlib import Path
-from types import SimpleNamespace
-from typing import Any
-from typing import Dict
-from typing import Optional
-from unittest import mock
-from unittest.mock import patch
 import argparse
 import logging
 import os
 import platform
-import pytest
 import sys
+from collections.abc import Callable
+from pathlib import Path
+from types import SimpleNamespace
+from typing import Any
+from unittest import mock
+from unittest.mock import patch
+
+import pytest
 import yaml
+
+from idasen import IdasenDesk, cli
+from idasen.cli import (
+    DEFAULT_CONFIG,
+    count_to_level,
+    from_config,
+    get_parser,
+    init,
+    load_config,
+    main,
+    pair,
+    subcommand_to_callable,
+    xdg_config_home,
+)
 
 
 @pytest.mark.parametrize(
@@ -36,7 +38,7 @@ import yaml
         pytest.param("/home/user/CONFIG", Path("/home/user/CONFIG"), id="absolute"),
     ],
 )
-def test_xdg_config_home(env: Optional[str], output: Path):
+def test_xdg_config_home(env: str | None, output: Path):
     if env is None:
         test_env = {}
     else:
@@ -64,7 +66,7 @@ def test_load_config_invalid_schema(tmpdir: str):
 
 def test_load_config_reserved_position(tmpdir: str):
     file_path = os.path.join(tmpdir, "config.yaml")
-    config: Dict[str, Any] = {
+    config: dict[str, Any] = {
         "mac_address": "AA:AA:AA:AA:AA:AA",
         "positions": {"sit": 0.90},
     }
@@ -89,7 +91,7 @@ async def test_init_exists_no_force():
 
 
 @pytest.mark.parametrize("discover_return", ["AA:AA:AA:AA:AA:AA", None])
-async def test_init(discover_return: Optional[str]):
+async def test_init(discover_return: str | None):
     with (
         mock.patch.object(os.path, "isfile", return_value=True),
         mock.patch.object(yaml, "dump") as dump_mock,
@@ -189,7 +191,7 @@ def test_count_to_level(count: int, level: int):
     assert count_to_level(count) == level
 
 
-seen_it = []
+seen_it: list[Callable] = []
 
 
 @pytest.mark.parametrize(
@@ -197,8 +199,6 @@ seen_it = []
     ["init", "pair", "monitor", "sit", "height", "speed", "stand", "save", "delete"],
 )
 def test_subcommand_to_callable(sub: str):
-    global seen_it
-
     func = subcommand_to_callable(sub, DEFAULT_CONFIG)
     assert callable(func)
     assert func not in seen_it
@@ -253,7 +253,7 @@ def test_main_internal_error():
         None,
     ],
 )
-def test_main_version(sub: Optional[str]):
+def test_main_version(sub: str | None):
     with (
         mock.patch.object(
             argparse.ArgumentParser,

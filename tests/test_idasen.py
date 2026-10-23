@@ -1,14 +1,13 @@
-from idasen import _bytes_to_meters_and_speed, _meters_to_bytes, _is_desk
-from idasen import IdasenDesk
-from types import SimpleNamespace
-from typing import AsyncGenerator
-from typing import Callable
-from unittest import mock
 import asyncio
+from collections.abc import AsyncGenerator, Callable
+from types import SimpleNamespace
+from unittest import mock
+
 import bleak
-import idasen
 import pytest
 
+import idasen
+from idasen import IdasenDesk, _bytes_to_meters_and_speed, _is_desk, _meters_to_bytes
 
 # Switch this to a real mac address if you want to do live testing.
 # This will wear out your motors faster than normal usage.
@@ -42,7 +41,6 @@ class MockBleakClient:
 
     async def __aexit__(self, *args, **kwargs):
         self.is_connected = False
-        return
 
     async def connect(self):
         self.is_connected = True
@@ -408,7 +406,7 @@ def test_bytes_to_meters_and_speed(raw: bytearray, height: float, speed: int):
 
 async def test_fail_to_connect(caplog, monkeypatch):
     async def raise_exception(*_):
-        raise Exception
+        raise RuntimeError("failed to connect")
 
     # patch `asyncio.sleep()` to prevent making the tests unnecessarily long.
     monkeypatch.setattr(asyncio, "sleep", mock.AsyncMock())

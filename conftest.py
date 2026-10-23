@@ -1,8 +1,9 @@
-from typing import Optional
+import asyncio
+
+import pytest
+
 from idasen import IdasenDesk
 from tests.test_idasen import MockBleakClient
-import asyncio
-import pytest
 
 
 @pytest.fixture(autouse=True)
@@ -13,7 +14,7 @@ def add_desk(doctest_namespace: dict):
             self._client = MockBleakClient()
 
         @staticmethod
-        async def discover() -> Optional[str]:
+        async def discover() -> str | None:
             return "AA:AA:AA:AA:AA:AA"
 
     doctest_namespace["IdasenDesk"] = DoctestDesk
