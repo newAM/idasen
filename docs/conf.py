@@ -25,11 +25,7 @@ import datetime
 import inspect
 import os
 import sys
-
-try:
-    import tomllib
-except ImportError:
-    import tomli as tomllib
+import tomllib
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 repo_root = os.path.abspath(os.path.join(this_dir, ".."))
