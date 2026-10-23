@@ -1,19 +1,14 @@
-from bleak import BleakClient
-from bleak import BleakScanner
-from bleak import BleakGATTCharacteristic
-from bleak.backends.device import BLEDevice
-from bleak.backends.scanner import AdvertisementData
-from typing import Any, Awaitable, Callable
-from typing import MutableMapping
-from typing import Optional
-from typing import Tuple
-from typing import Union
-from inspect import signature
 import asyncio
 import logging
 import struct
 import sys
+from collections.abc import Awaitable, Callable, MutableMapping
+from inspect import signature
+from typing import Any
 
+from bleak import BleakClient, BleakGATTCharacteristic, BleakScanner
+from bleak.backends.device import BLEDevice
+from bleak.backends.scanner import AdvertisementData
 
 _UUID_HEIGHT: str = "99fa0021-338a-1024-8a49-009c0215f78a"
 _UUID_COMMAND: str = "99fa0002-338a-1024-8a49-009c0215f78a"
@@ -49,7 +44,7 @@ _MOVE_MAX_STALL_RETRIES: int = 3
 
 
 # height calculation offset in meters, assumed to be the same for all desks
-def _bytes_to_meters_and_speed(raw: bytearray) -> Tuple[float, float]:
+def _bytes_to_meters_and_speed(raw: bytearray) -> tuple[float, float]:
     """Converts a value read from the desk in bytes to height in meters and speed."""
     raw_len = len(raw)
     expected_len = 4
@@ -79,7 +74,7 @@ class _DeskLoggingAdapter(logging.LoggerAdapter):
 
     def process(
         self, msg: str, kwargs: MutableMapping[str, Any]
-    ) -> Tuple[str, MutableMapping[str, Any]]:
+    ) -> tuple[str, MutableMapping[str, Any]]:
         return f"[{self.extra['mac']}] {msg}", kwargs  # type: ignore
 
 
@@ -129,10 +124,10 @@ class IdasenDesk:
 
     def __init__(
         self,
-        mac: Union[BLEDevice, str],
+        mac: BLEDevice | str,
         exit_on_fail: bool = False,
-        disconnected_callback: Optional[Callable[[BleakClient], None]] = None,
-        client: Optional[BleakClient] = None,
+        disconnected_callback: Callable[[BleakClient], None] | None = None,
+        client: BleakClient | None = None,
     ):
         self._exit_on_fail = exit_on_fail
         if client is None:
@@ -147,7 +142,7 @@ class IdasenDesk:
             logger=logging.getLogger(__name__), extra={"mac": self.mac}
         )
         self._moving = False
-        self._move_task: Optional[asyncio.Task] = None
+        self._move_task: asyncio.Task | None = None
 
     async def __aenter__(self):
         await self.connect()
@@ -482,7 +477,7 @@ class IdasenDesk:
         _, speed = await self.get_height_and_speed()
         return speed
 
-    async def get_height_and_speed(self) -> Tuple[float, float]:
+    async def get_height_and_speed(self) -> tuple[float, float]:
         """
         Get the desk height in meters and speed in meters per second.
 
@@ -500,7 +495,7 @@ class IdasenDesk:
         return _bytes_to_meters_and_speed(raw)
 
     @staticmethod
-    async def discover() -> Optional[str]:
+    async def discover() -> str | None:
         """
         Try to find the desk's MAC address by discovering currently connected devices.
 
@@ -512,7 +507,7 @@ class IdasenDesk:
         """
         try:
             device = await BleakScanner.find_device_by_filter(_is_desk)
-        except Exception:
+        except Exception:  # noqa: BLE001
             return None
 
         if device is None:

@@ -20,7 +20,6 @@
 # SOFTWARE.
 ###############################################################################
 
-from typing import Optional
 import datetime
 import inspect
 import os
@@ -32,7 +31,7 @@ repo_root = os.path.abspath(os.path.join(this_dir, ".."))
 if repo_root not in sys.path:
     sys.path.insert(0, repo_root)
 
-from idasen.cli import get_parser, DEFAULT_CONFIG  # noqa: E402
+from idasen.cli import DEFAULT_CONFIG, get_parser
 
 # Sphinx extensions
 extensions = [
@@ -53,7 +52,7 @@ master_doc = "index"
 
 # General information about the project.
 project = pyproject["project"]["name"]
-year = datetime.datetime.now().year
+year = datetime.datetime.now(tz=datetime.UTC).year
 author = pyproject["project"]["authors"][0]["name"]
 copyright = f"{year}, {author}"  # noqa: A001
 version = pyproject["project"]["version"]
@@ -80,6 +79,7 @@ html_context = {
 
 intersphinx_mapping = {
     "bleak": ("https://bleak.readthedocs.io/en/latest/", None),
+    "python": ("https://docs.python.org/3", None),
 }
 
 parser = get_parser(DEFAULT_CONFIG)
@@ -87,7 +87,7 @@ with open(os.path.join(this_dir, "cli.txt"), "w") as f:
     parser.print_help(f)
 
 
-def linkcode_resolve(domain: str, info: dict) -> Optional[str]:
+def linkcode_resolve(domain: str, info: dict) -> str | None:
     # https://github.com/Lasagne/Lasagne/blob/5d3c63cb315c50b1cbd27a6bc8664b406f34dd99/docs/conf.py
     import idasen
 
@@ -107,7 +107,7 @@ def linkcode_resolve(domain: str, info: dict) -> Optional[str]:
 
     try:
         filename = f"{project}/%s#L%d-L%d" % find_source()
-    except Exception:
+    except Exception:  # noqa: BLE001
         filename = f"{project}/__init__.py"
     print(filename)
     return f"https://github.com/{github_user}/{project}/blob/main/{filename}"

@@ -1,10 +1,3 @@
-from . import IdasenDesk
-from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
 import argparse
 import asyncio
 import functools
@@ -13,8 +6,14 @@ import logging
 import os
 import platform
 import sys
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
 import voluptuous as vol
 import yaml
+
+from . import IdasenDesk
 
 
 def xdg_config_home() -> Path:
@@ -28,7 +27,7 @@ def xdg_config_home() -> Path:
 IDASEN_CONFIG_DIRECTORY = os.path.join(xdg_config_home(), "idasen")
 IDASEN_CONFIG_PATH = os.path.join(IDASEN_CONFIG_DIRECTORY, "idasen.yaml")
 
-DEFAULT_CONFIG: Dict[str, Any] = {
+DEFAULT_CONFIG: dict[str, Any] = {
     "positions": {"stand": 1.1, "sit": 0.75},
     "mac_address": "AA:AA:AA:AA:AA:AA",
 }
@@ -64,7 +63,7 @@ def load_config(path: str = IDASEN_CONFIG_PATH) -> dict:
 
     # convert old config file format
     if "positions" not in config:
-        config["positions"] = dict()
+        config["positions"] = {}
         config["positions"]["sit"] = config.pop(
             "sit_height", DEFAULT_CONFIG["positions"]["sit"]
         )
@@ -158,7 +157,7 @@ async def init(args: argparse.Namespace) -> int:
         else:
             print("Failed to discover desk's MAC address", file=sys.stderr)
         os.makedirs(IDASEN_CONFIG_DIRECTORY, exist_ok=True)
-        with open(IDASEN_CONFIG_PATH, "w") as f:
+        with open(IDASEN_CONFIG_PATH, "w") as f:  # noqa: ASYNC230
             f.write("# https://newam.github.io/idasen/index.html#configuration\n")
             yaml.dump(DEFAULT_CONFIG, f)
         print(
@@ -169,11 +168,11 @@ async def init(args: argparse.Namespace) -> int:
     return 0
 
 
-async def pair(args: argparse.Namespace) -> Optional[int]:
+async def pair(args: argparse.Namespace) -> int | None:
     try:
         async with IdasenDesk(args.mac_address, exit_on_fail=True) as desk:
             await desk.pair()
-    except NotImplementedError as e:
+    except NotImplementedError:
         if platform.system() == "Darwin":
             print(
                 "The pair subcommand does not function reliably on macOS.\n"
@@ -183,7 +182,7 @@ async def pair(args: argparse.Namespace) -> Optional[int]:
             )
             return 1
         else:
-            raise e
+            raise
     return None
 
 
@@ -296,7 +295,7 @@ def subcommand_to_callable(sub: str, config: dict) -> Callable:
         raise AssertionError(f"internal error, please report this bug {sub=}")
 
 
-def main(argv: Optional[List[str]] = None):
+def main(argv: list[str] | None = None):
     config = load_config()
     parser = get_parser(config)
     args = parser.parse_args(argv)
