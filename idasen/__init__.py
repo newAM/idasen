@@ -420,9 +420,19 @@ class IdasenDesk:
                         break
                     consecutive_zero_speed = 0
 
-        self._move_task = asyncio.create_task(do_move())
-        await self._move_task
-        self._moving = False
+        move_task = asyncio.create_task(do_move())
+        self._move_task = move_task
+        try:
+            await move_task
+        finally:
+            # Reset even when the caller is cancelled or the move raises.
+            # Otherwise the desk stays flagged as moving, later moves are
+            # refused with "Already moving", and stop() awaits the dead task.
+            # stop() can admit another move while awaiting this task. Only
+            # clear state if it still belongs to this move.
+            if self._move_task is move_task:
+                self._moving = False
+                self._move_task = None
 
     async def stop(self):
         """Stop desk movement."""
