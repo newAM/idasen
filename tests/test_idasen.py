@@ -271,6 +271,147 @@ async def test_move_stop():
         assert move_task.done()
 
 
+async def test_move_to_target_cancelled_resets_moving():
+    """Cancelling the caller must not leave the desk flagged as moving."""
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    desk._client = client
+    write_gatt_char = client.write_gatt_char
+    move_started = asyncio.Event()
+
+    async def blocked_write_gatt_char(
+        uuid: str, command: bytearray, response: bool = False
+    ):
+        if uuid == idasen._UUID_REFERENCE_INPUT:
+            move_started.set()
+            await asyncio.Event().wait()
+        await write_gatt_char(uuid, command, response)
+
+    async with desk:
+        client.write_gatt_char = blocked_write_gatt_char  # type: ignore
+        move_task = asyncio.create_task(desk.move_to_target(0.7))
+        await asyncio.wait_for(move_started.wait(), timeout=1)
+        assert desk.is_moving
+
+        move_task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await move_task
+
+        assert not desk.is_moving
+
+        # A cancelled move must not block stop() or a following move.
+        client.write_gatt_char = write_gatt_char  # type: ignore
+        with mock.patch.object(
+            client, "write_gatt_char", wraps=write_gatt_char
+        ) as write:
+            await desk.stop()
+            write.assert_has_awaits(
+                [
+                    mock.call(
+                        idasen._UUID_COMMAND, idasen._COMMAND_STOP, response=False
+                    ),
+                    mock.call(
+                        idasen._UUID_REFERENCE_INPUT,
+                        idasen._COMMAND_REFERENCE_INPUT_STOP,
+                        response=False,
+                    ),
+                ],
+                any_order=True,
+            )
+        await desk.move_to_target(0.7)
+        assert abs(await desk.get_height() - 0.7) < 0.001
+
+
+async def test_move_to_target_error_resets_moving():
+    """An error during the move must not leave the desk flagged as moving."""
+    desk = IdasenDesk(mac=desk_mac)
+    client = MockBleakClient()
+    desk._client = client
+    write_gatt_char = client.write_gatt_char
+
+    async def failing_write_gatt_char(
+        uuid: str,  # noqa: ARG001
+        command: bytearray,  # noqa: ARG001
+        response: bool = False,  # noqa: ARG001
+    ):
+        raise bleak.exc.BleakError("connection lost")
+
+    async with desk:
+        # Fail only after connecting, since connecting also writes to the desk.
+        client.write_gatt_char = failing_write_gatt_char  # type: ignore
+
+        with pytest.raises(bleak.exc.BleakError):
+            await desk.move_to_target(0.7)
+
+        assert not desk.is_moving
+
+        client.write_gatt_char = write_gatt_char  # type: ignore
+        with mock.patch.object(
+            client, "write_gatt_char", wraps=write_gatt_char
+        ) as write:
+            await desk.stop()
+            write.assert_has_awaits(
+                [
+                    mock.call(
+                        idasen._UUID_COMMAND, idasen._COMMAND_STOP, response=False
+                    ),
+                    mock.call(
+                        idasen._UUID_REFERENCE_INPUT,
+                        idasen._COMMAND_REFERENCE_INPUT_STOP,
+                        response=False,
+                    ),
+                ],
+                any_order=True,
+            )
+        await desk.move_to_target(0.7)
+        assert abs(await desk.get_height() - 0.7) < 0.001
+
+
+@pytest.mark.parametrize("cancel", [False, True])
+async def test_old_move_cleanup_preserves_new_move(cancel: bool):
+    """An older move must not clear the task installed during stop()."""
+    desk = IdasenDesk(mac=desk_mac)
+    desk._client = MockBleakClient()  # type: ignore
+    first_started = asyncio.Event()
+    second_started = asyncio.Event()
+    fail_first = asyncio.Event()
+    reads = 0
+
+    async def blocked_height():
+        nonlocal reads
+        reads += 1
+        if reads == 1:
+            first_started.set()
+            await fail_first.wait()
+            raise bleak.exc.BleakError("connection lost")
+        second_started.set()
+        await asyncio.Event().wait()
+
+    async with desk:
+        desk.get_height = blocked_height  # type: ignore
+        first = asyncio.create_task(desk.move_to_target(0.7))
+        await asyncio.wait_for(first_started.wait(), timeout=1)
+        stopping = asyncio.create_task(desk.stop())
+        # stop() clears the flag before waiting for the first move.
+        await asyncio.sleep(0)
+        assert not desk.is_moving
+        second = asyncio.create_task(desk.move_to_target(0.8))
+        await asyncio.wait_for(second_started.wait(), timeout=1)
+        second_inner = desk._move_task
+        try:
+            if cancel:
+                first.cancel()
+            else:
+                fail_first.set()
+            await asyncio.gather(first, stopping, return_exceptions=True)
+            assert desk.is_moving
+            assert desk._move_task is second_inner
+            assert not second.done()
+        finally:
+            second.cancel()
+            await asyncio.gather(second, return_exceptions=True)
+
+
 async def test_move_to_target_already_at_target_with_tolerance():
     """A height within the tolerance of the target is treated as already there."""
     desk = IdasenDesk(mac=desk_mac)

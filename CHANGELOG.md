@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added support for python 3.15.
 
+### Fixed
+- Fixed `move_to_target` leaving the desk flagged as moving when the caller is
+  cancelled or the move raises. Later calls to `move_to_target` returned
+  immediately with "Already moving", and `stop` re-raised the cancellation.
+
 ### Removed
 - Removed support for end-of-life python version 3.10.
 
